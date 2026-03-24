@@ -582,7 +582,9 @@
 </div>
 
 <script>
-const US_STATES = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
+const US_STATES = [
+  {name:"Alabama",abbr:"AL"},{name:"Alaska",abbr:"AK"},{name:"Arizona",abbr:"AZ"},{name:"Arkansas",abbr:"AR"},{name:"California",abbr:"CA"},{name:"Colorado",abbr:"CO"},{name:"Connecticut",abbr:"CT"},{name:"Delaware",abbr:"DE"},{name:"Florida",abbr:"FL"},{name:"Georgia",abbr:"GA"},{name:"Hawaii",abbr:"HI"},{name:"Idaho",abbr:"ID"},{name:"Illinois",abbr:"IL"},{name:"Indiana",abbr:"IN"},{name:"Iowa",abbr:"IA"},{name:"Kansas",abbr:"KS"},{name:"Kentucky",abbr:"KY"},{name:"Louisiana",abbr:"LA"},{name:"Maine",abbr:"ME"},{name:"Maryland",abbr:"MD"},{name:"Massachusetts",abbr:"MA"},{name:"Michigan",abbr:"MI"},{name:"Minnesota",abbr:"MN"},{name:"Mississippi",abbr:"MS"},{name:"Missouri",abbr:"MO"},{name:"Montana",abbr:"MT"},{name:"Nebraska",abbr:"NE"},{name:"Nevada",abbr:"NV"},{name:"New Hampshire",abbr:"NH"},{name:"New Jersey",abbr:"NJ"},{name:"New Mexico",abbr:"NM"},{name:"New York",abbr:"NY"},{name:"North Carolina",abbr:"NC"},{name:"North Dakota",abbr:"ND"},{name:"Ohio",abbr:"OH"},{name:"Oklahoma",abbr:"OK"},{name:"Oregon",abbr:"OR"},{name:"Pennsylvania",abbr:"PA"},{name:"Rhode Island",abbr:"RI"},{name:"South Carolina",abbr:"SC"},{name:"South Dakota",abbr:"SD"},{name:"Tennessee",abbr:"TN"},{name:"Texas",abbr:"TX"},{name:"Utah",abbr:"UT"},{name:"Vermont",abbr:"VT"},{name:"Virginia",abbr:"VA"},{name:"Washington",abbr:"WA"},{name:"West Virginia",abbr:"WV"},{name:"Wisconsin",abbr:"WI"},{name:"Wyoming",abbr:"WY"}
+];
 
 const QUESTIONS = [
   {
@@ -1022,7 +1024,7 @@ function renderDob(q) {
 function renderStateSelect(q) {
   const prev = answers[q.id] || '';
   let opts = '<option value="">Select a state</option>';
-  US_STATES.forEach(s => { opts += `<option value="${s}"${prev === s ? ' selected' : ''}>${s}</option>`; });
+  US_STATES.forEach(s => { opts += `<option value="${s.abbr}"${prev === s.abbr ? ' selected' : ''}>${s.name}</option>`; });
   return `<div class="question-subtext" style="margin-top:-16px;margin-bottom:16px;">What state will this be shipped to?</div>
     <div class="form-field"><select id="stateSelect">${opts}</select></div>`;
 }
@@ -1268,8 +1270,8 @@ function showDQ(message) {
 // ============================================================================
 // DOSABLE INTEGRATION
 // ============================================================================
-const DOSABLE_API = 'https://staging.intake.dosable.com';
-const DOSABLE_KEY = '87ec5703cae0c6bc2d6795c73a5f4b61f95a96c93a241c86c2169b98872e310b';
+const DOSABLE_API = 'https://intake.dosable.com';
+const DOSABLE_KEY = '53ab7a351a38db480de181d196ae99d7a051921c3ab411afeceb31991ee42ec4';
 // Monthly subscription: Trazodone/Pyridoxine/Melatonin/L-Theanine $99.99/mo
 const DOSABLE_MED = 'C-3pLxA7tWjMbEZKc64oYvRqdXnFuHgTNs';
 
@@ -1285,6 +1287,8 @@ function mapMultiValues(arr, mapping) {
   if (!Array.isArray(arr)) return [];
   return arr.map(v => mapping[norm(v)] || norm(v)).filter(Boolean);
 }
+
+const INSOMNIA_CONSENT_HTML = '<div>\n                                <h2>General Insomnia Consent</h2>\n                                <p>Please read this important safety information about this treatment. You have been prescribed a sleep medication to help manage your insomnia. This consent form is designed to provide information about the benefits, risks, and responsibilities associated with its use. Please read the following carefully and ask any questions before signing.</p>\n                                <h3>Purpose of Medication</h3>\n                                <p>The prescribed sleep medication is intended to assist with difficulty falling asleep, staying asleep, or improving overall sleep quality. It is not a cure for insomnia but may provide temporary relief as part of a broader treatment plan.</p>\n                                <h3>Potential Benefits</h3>\n                                <ul>\n                                    <li>Improved ability to fall asleep and/or stay asleep</li>\n                                    <li>Increased total sleep duration</li>\n                                    <li>Enhanced daytime functioning and alertness</li>\n                                </ul>\n                                <h3>Potential Risks and Side Effects</h3>\n                                <p>While this medication may improve sleep, it also carries certain risks and potential side effects, including but not limited to:</p>\n                                <ul>\n                                    <li>Drowsiness, dizziness, or difficulty concentrating</li>\n                                    <li>Increased risk of falls or injuries, especially in older adults</li>\n                                    <li>Next-day grogginess or impairment, including while driving or operating machinery</li>\n                                    <li>Dependency, tolerance, or withdrawal symptoms with long-term use</li>\n                                    <li>Unusual behaviors such as sleepwalking, sleep-driving, or engaging in activities while not fully awake</li>\n                                    <li>Interactions with other medications, alcohol, or underlying medical conditions</li>\n                                </ul>\n                                <h3>Precautions</h3>\n                                <ul>\n                                    <li>Avoid alcohol and other sedatives while using this medication.</li>\n                                    <li>Do not drive or operate heavy machinery until you know how this medication affects you.</li>\n                                    <li>Take the medication as prescribed and do not exceed the recommended dose.</li>\n                                    <li>Inform your healthcare provider of any other medications or supplements you are taking.</li>\n                                    <li>Notify your healthcare provider immediately if you experience any unusual side effects, worsening symptoms, or signs of dependency.</li>\n                                </ul>\n                                <h3>Alternative Treatment Options</h3>\n                                <p>Non-medication treatments for insomnia may include:</p>\n                                <ul>\n                                    <li>Cognitive behavioral therapy for insomnia (CBT-I)</li>\n                                    <li>Sleep hygiene practices (e.g., consistent bedtime, reducing screen time)</li>\n                                    <li>Lifestyle modifications, including stress management and regular exercise</li>\n                                </ul>\n                                <h3>Consent and Acknowledgment</h3>\n                                <p>I acknowledge that I have read and understand the information provided above. I understand the benefits, risks, and responsibilities associated with the use of this sleep medication. I agree to take the medication as prescribed and follow up with my healthcare provider as necessary.</p>\n                            </div>';
 
 function mapAnswersToDosable(a) {
   const d = {};
@@ -1392,10 +1396,10 @@ function mapAnswersToDosable(a) {
   // 3028: Additional info
   if (a.q25) q('3028', a.q25 === 'Skipped' ? 'N/A' : a.q25, 'Is there any other information you feel is relevant to your sleep issues or overall health or do you have any questions for the doctor?');
 
-  // 3029: General Insomnia Consent
-  if (a.q27 === 'agreed') q('3029', 'I have read the above information and I do consent and wish to move forward', 'General Insomnia Consent');
+  // 3029: General Insomnia Consent (included in answer update)
+  if (a.q27 === 'agreed') q('3029', 'I have read the above information and I do consent and wish to move forward', INSOMNIA_CONSENT_HTML);
 
-  // 3030: Truthfulness Consent (category_final_question)
+  // 3030: Truthfulness Consent (category_final_question — sent in both PUT and Complete)
   if (a.q28 === 'agreed') q('3030', 'I have read the above information and I do consent and wish to move forward', 'Consent (Truthfulness)');
 
   return d;
@@ -1443,14 +1447,14 @@ async function submitToDosable(a) {
   console.log('Mapped Dosable answers:', dosableAnswers);
   await dosableFetch('/sessions/' + sessionId, 'PUT', dosableAnswers);
 
-  // 3. Complete session with final answer + med → returns checkout_url
-  const finalAnswers = {};
-  if (dosableAnswers['3030']) finalAnswers['3030'] = dosableAnswers['3030'];
+  // 3. Complete session with final_question (3030 truthfulness consent) + med array → returns checkout_url
+  const finalQuestion = {};
+  if (dosableAnswers['3030']) finalQuestion['3030'] = dosableAnswers['3030'];
 
   const completeRes = await fetch(DOSABLE_API + '/sessions/' + sessionId + '/complete', {
     method: 'POST',
     headers: { 'X-API-KEY': DOSABLE_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ final_answers: finalAnswers, med: DOSABLE_MED })
+    body: JSON.stringify({ final_question: finalQuestion, med: [DOSABLE_MED] })
   });
   const result = await completeRes.json();
   if (!completeRes.ok) {

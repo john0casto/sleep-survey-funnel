@@ -394,77 +394,6 @@
     }
     .plan-select-btn:hover { background: #b69872; }
 
-    /* ── Checkout Form ── */
-    .checkout-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 32px 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
-    }
-    .form-row {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .form-row > * { flex: 1; }
-    .form-group { margin-bottom: 12px; }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 500;
-      color: #888;
-      margin-bottom: 4px;
-    }
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1.5px solid #e0e3ea;
-      border-radius: 10px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      background: #fff;
-      transition: border-color 0.2s;
-    }
-    .form-group input:focus, .form-group select:focus { border-color: #c4a882; }
-    .form-group select {
-      -webkit-appearance: none; appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 16px center;
-      padding-right: 40px;
-    }
-
-    .checkout-btn {
-      display: block;
-      width: 100%;
-      padding: 18px;
-      background: #2d6a4f;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.2s;
-      margin-top: 16px;
-      letter-spacing: 0.5px;
-    }
-    .checkout-btn:hover { background: #245a42; }
-
-    .security-badges {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 16px;
-      font-size: 12px;
-      color: #999;
-    }
-    .security-badges span { display: flex; align-items: center; gap: 4px; }
-
     /* ── Testimonials ── */
     .testimonial {
       background: #fff;
@@ -552,8 +481,6 @@
       h1 { font-size: 20px; }
       h2 { font-size: 18px; }
       .card { padding: 24px 18px; }
-      .checkout-card { padding: 24px 18px; }
-      .form-row { flex-direction: column; gap: 0; }
       .info-cell-value { font-size: 14px; }
     }
   </style>
@@ -706,78 +633,6 @@
     </div>
   </div>
 
-  <!-- ── CHECKOUT FORM ── -->
-  <div class="checkout-card" id="checkoutSection">
-    <h2>Enter your <span class="highlight">shipping details</span></h2>
-
-    <form id="checkoutForm" onsubmit="handleCheckout(event)">
-      <div class="form-row">
-        <div class="form-group">
-          <label>First Name</label>
-          <input type="text" id="coFirstName" placeholder="First Name" required>
-        </div>
-        <div class="form-group">
-          <label>Last Name</label>
-          <input type="text" id="coLastName" placeholder="Last Name" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="coEmail" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-          <label>Phone</label>
-          <input type="tel" id="coPhone" placeholder="(555) 123-4567" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Shipping Address</label>
-        <input type="text" id="coAddress" placeholder="Street Address" required>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>City</label>
-          <input type="text" id="coCity" placeholder="City" required>
-        </div>
-        <div class="form-group">
-          <label>State</label>
-          <input type="text" id="coState" placeholder="State" required>
-        </div>
-        <div class="form-group">
-          <label>Zip</label>
-          <input type="text" id="coZip" placeholder="Zip" required>
-        </div>
-      </div>
-
-      <div style="border-top:1px solid #e0e3ea;margin:20px 0;padding-top:20px;">
-        <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">Payment Information</h3>
-        <div class="form-group">
-          <label>Card Number</label>
-          <input type="text" id="coCard" placeholder="1234 5678 9012 3456" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Expiration</label>
-            <input type="text" id="coExp" placeholder="MM/YY" required>
-          </div>
-          <div class="form-group">
-            <label>CVV</label>
-            <input type="text" id="coCvv" placeholder="123" required>
-          </div>
-        </div>
-      </div>
-
-      <button type="submit" class="checkout-btn" id="checkoutBtn">CHECKOUT &#10132;</button>
-    </form>
-
-    <div class="security-badges">
-      <span>&#128274; HIPAA Compliant</span>
-      <span>&#128274; 256-bit SSL</span>
-      <span>&#128274; Secure Checkout</span>
-    </div>
-  </div>
-
   <!-- ── TESTIMONIALS ── -->
   <div class="card">
     <h2>Real results from <span class="highlight">real patients</span></h2>
@@ -915,13 +770,6 @@ document.getElementById('infoSeverity').textContent = severity;
 document.getElementById('infoSleep').textContent = avgSleep;
 document.getElementById('infoDuration').textContent = duration;
 
-// Pre-fill checkout
-if (firstName) document.getElementById('coFirstName').value = firstName;
-if (lastName) document.getElementById('coLastName').value = lastName;
-if (email) document.getElementById('coEmail').value = email;
-if (phone) document.getElementById('coPhone').value = phone;
-if (state) document.getElementById('coState').value = state;
-
 // ── Timer ──
 let timerSeconds = 11 * 60;
 function updateTimer() {
@@ -944,16 +792,12 @@ function selectPlan(planId) {
   fbq('track', 'InitiateCheckout', { content_name: planId }, { eventID: eid });
   fireCapiEvent('InitiateCheckout', eid, {}, { content_name: planId });
 
-  // If Dosable returned a checkout URL, redirect there (CheckoutChamp)
+  // Redirect to CheckoutChamp checkout
   if (checkoutUrl) {
     window.location.href = checkoutUrl;
-    return;
+  } else {
+    alert('Checkout is not available. Please try again.');
   }
-
-  // Fallback: scroll to local checkout form
-  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-  document.getElementById(planId).classList.add('selected');
-  document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ── FAQ Toggle ──
@@ -964,78 +808,6 @@ function toggleFaq(el) {
   arrow.classList.toggle('open');
 }
 
-// ── Phone formatting ──
-document.getElementById('coPhone')?.addEventListener('input', function(e) {
-  let digits = e.target.value.replace(/\D/g, '').slice(0, 10);
-  let formatted = '';
-  if (digits.length > 0) formatted = '(' + digits.slice(0, 3);
-  if (digits.length >= 3) formatted += ') ';
-  if (digits.length > 3) formatted += digits.slice(3, 6);
-  if (digits.length >= 6) formatted += '-';
-  if (digits.length > 6) formatted += digits.slice(6, 10);
-  e.target.value = formatted;
-});
-
-// ── Card formatting ──
-document.getElementById('coCard')?.addEventListener('input', function(e) {
-  let digits = e.target.value.replace(/\D/g, '').slice(0, 16);
-  e.target.value = digits.replace(/(.{4})/g, '$1 ').trim();
-});
-document.getElementById('coExp')?.addEventListener('input', function(e) {
-  let digits = e.target.value.replace(/\D/g, '').slice(0, 4);
-  if (digits.length > 2) digits = digits.slice(0, 2) + '/' + digits.slice(2);
-  e.target.value = digits;
-});
-document.getElementById('coCvv')?.addEventListener('input', function(e) {
-  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
-});
-
-// ── Checkout ──
-async function handleCheckout(e) {
-  e.preventDefault();
-  const btn = document.getElementById('checkoutBtn');
-  btn.textContent = 'Processing...';
-  btn.disabled = true;
-
-  // Fire Purchase pixel
-  const planPrices = { plan1: 99, plan2: 149 };
-  const price = planPrices[selectedPlan] || 99;
-  const eid = generateEventId();
-  const em = document.getElementById('coEmail').value;
-  const ph = document.getElementById('coPhone').value.replace(/\D/g, '');
-  const fn = document.getElementById('coFirstName').value;
-  const ln = document.getElementById('coLastName').value;
-
-  trackFunnelStep('offer_sale');
-  fbq('track', 'Purchase', { value: price, currency: 'USD', content_name: selectedPlan }, { eventID: eid });
-  const hashedData = {
-    em: await hashSHA256(em), ph: await hashSHA256(ph),
-    fn: await hashSHA256(fn), ln: await hashSHA256(ln),
-    country: await hashSHA256('us')
-  };
-  fireCapiEvent('Purchase', eid, hashedData, { value: price, currency: 'USD', content_name: selectedPlan });
-
-  // TODO: Submit to your payment processor
-  console.log('Checkout submitted:', {
-    plan: selectedPlan,
-    price: price,
-    firstName: fn, lastName: ln,
-    email: em, phone: ph,
-    address: document.getElementById('coAddress').value,
-    city: document.getElementById('coCity').value,
-    state: document.getElementById('coState').value,
-    zip: document.getElementById('coZip').value,
-  });
-
-  setTimeout(() => {
-    document.getElementById('checkoutSection').innerHTML = `
-      <div style="text-align:center;padding:40px 0;">
-        <div style="font-size:48px;margin-bottom:16px;">&#10003;</div>
-        <h2>Order Confirmed!</h2>
-        <p style="color:#555;margin-top:12px;">Thank you, ${fn}. Your sleep treatment plan is being processed. A board-certified physician will review your information and you'll receive a confirmation email at <strong>${em}</strong> shortly.</p>
-      </div>`;
-  }, 2000);
-}
 </script>
 </body>
 </html>
