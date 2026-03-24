@@ -1060,7 +1060,7 @@ function renderPhoneForm(q) {
 function renderHipaa(q) {
   return `<div class="hipaa-row">
       <input type="checkbox" id="hipaaCheck">
-      <label for="hipaaCheck">I understand that my information is never shared, is protected by HIPAA and agree to the terms and privacy policies and to be contacted as necessary by Health Renewal Rx and its medical partners and can opt-out at anytime. *</label>
+      <label for="hipaaCheck" style="font-size:11px;line-height:1.5;">I understand that my information is never shared, is protected by HIPAA and agree to the <a href="#" style="color:#c4a882;">terms</a> and <a href="#" style="color:#c4a882;">privacy policy</a>. By checking this box, I also consent to receive calls, text messages (including autodialed and pre-recorded messages) from Health Renewal Rx and its healthcare partners regarding my treatment plan. Message &amp; data rates may apply. Consent is not a condition of purchase. Reply STOP to opt out at any time.</label>
     </div>
     <button class="next-btn" id="nextBtn" disabled>Complete Assessment</button>`;
 }
@@ -1178,9 +1178,28 @@ function bindEvents(q) {
         if (digits.length > 6) formatted += digits.slice(6, 10);
         e.target.value = formatted;
       });
-      document.getElementById('nextBtn')?.addEventListener('click', () => {
+      document.getElementById('nextBtn')?.addEventListener('click', async () => {
         const digits = document.getElementById('phoneInput').value.replace(/\D/g, '');
-        if (digits.length === 10) { answers[q.id] = document.getElementById('phoneInput').value; goNext(q); }
+        if (digits.length === 10) {
+          answers[q.id] = document.getElementById('phoneInput').value;
+
+          // Fire Lead event on phone submit (last contact field)
+          const leadEventId = generateEventId();
+          const email = answers.q32 || '';
+          const firstName = answers.q29?.first || '';
+          const lastName = answers.q29?.last || '';
+          const state = answers.q31 || '';
+          fbq('track', 'Lead', { content_name: 'Sleep Survey Complete' }, { eventID: leadEventId });
+          const hashedUserData = {
+            em: await hashSHA256(email), ph: await hashSHA256(digits),
+            fn: await hashSHA256(firstName), ln: await hashSHA256(lastName),
+            st: await hashSHA256(state), country: await hashSHA256('us')
+          };
+          fireCapiEvent('Lead', leadEventId, hashedUserData, { content_name: 'Sleep Survey Complete' });
+          fireClickFlareConversion(0, leadEventId);
+
+          goNext(q);
+        }
       });
       break;
     case 'hipaa':
@@ -1494,28 +1513,11 @@ async function handleSubmit() {
 
   console.log('Survey answers:', answers);
 
-  // Fire Lead event — Pixel + CAPI
-  const leadEventId = generateEventId();
   const email = answers.q32 || '';
   const phone = (answers.q33 || '').replace(/\D/g, '');
   const firstName = answers.q29?.first || '';
   const lastName = answers.q29?.last || '';
   const state = answers.q31 || '';
-
-  fbq('track', 'Lead', { content_name: 'Sleep Survey Complete' }, { eventID: leadEventId });
-
-  // ClickFlare lead conversion
-  fireClickFlareConversion(0, leadEventId);
-
-  const hashedUserData = {
-    em: await hashSHA256(email),
-    ph: await hashSHA256(phone),
-    fn: await hashSHA256(firstName),
-    ln: await hashSHA256(lastName),
-    st: await hashSHA256(state),
-    country: await hashSHA256('us')
-  };
-  fireCapiEvent('Lead', leadEventId, hashedUserData, { content_name: 'Sleep Survey Complete' });
 
   // Submit to Dosable
   let checkoutUrl = '';
