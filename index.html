@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SleepWell - Personalized Sleep Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f0f2f8;
+      min-height: 100vh;
+      color: #1a1a2e;
+    }
+
+    .survey-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 16px 40px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 24px 0 16px;
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 0;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #888;
+      cursor: pointer;
+      padding: 8px;
+      display: none;
+    }
+
+    .back-btn.visible { display: block; }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2d6a4f;
+      line-height: 1.1;
+    }
+
+    .logo-text span {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #c4a882;
+      letter-spacing: 1px;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .stars { display: flex; gap: 2px; }
+    .star { color: #f5a623; font-size: 16px; }
+
+    /* Progress Bar */
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 12px 0 24px;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d4d8e0;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+
+    .progress-dot.completed { background: #d4874a; }
+
+    .progress-line {
+      width: 40px;
+      height: 2px;
+      background: #d4d8e0;
+      transition: background 0.3s;
+    }
+
+    .progress-line.completed { background: #d4874a; }
+
+    /* Question Card */
+    .question-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-text {
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    .question-subtext {
+      font-size: 14px;
+      font-weight: 400;
+      color: #888;
+      text-align: center;
+      margin-top: -16px;
+      margin-bottom: 24px;
+    }
+
+    /* Options */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border: 1.5px solid #e0e3ea;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 15px;
+      color: #1a1a2e;
+      text-align: left;
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .option-btn:hover { border-color: #bbb; }
+
+    .option-btn.selected {
+      border-color: #c4a882;
+      background: #faf6f0;
+    }
+
+    .option-radio {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .option-btn.selected .option-radio { border-color: #c4a882; }
+
+    .option-btn.selected .option-radio::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #c4a882;
+    }
+
+    .option-checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      border: 2px solid #ccc;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .option-btn.selected .option-checkbox {
+      border-color: #c4a882;
+      background: #c4a882;
+    }
+
+    .option-btn.selected .option-checkbox::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 12 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 5L4.5 8.5L11 1.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
+      background-size: contain;
+    }
+
+    .option-label { flex: 1; line-height: 1.4; }
+
+    .select-hint {
+      font-size: 13px;
+      color: #999;
+      text-align: left;
+      max-width: 500px;
+      margin: 8px auto 0;
+    }
+
+    /* Text Input */
+    .text-input {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      display: block;
+      padding: 14px 18px;
+      border: 1.5px solid #e0e3ea;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .text-input:focus { border-color: #c4a882; }
+
+    textarea.text-input { min-height: 100px; resize: vertical; }
+
+    /* Labeled input */
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 6px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .form-field {
+      max-width: 500px;
+      margin: 0 auto 16px;
+    }
+
+    .form-field input, .form-field select {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid #e0e3ea;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      background: #fff;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+
+    .form-field input:focus, .form-field select:focus { border-color: #c4a882; }
+
+    /* Height dropdowns */
+    .height-row {
+      display: flex;
+      gap: 16px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .height-group { flex: 1; }
+
+    .height-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .height-group select {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid #e0e3ea;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      background: #fff;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      -webkit-appearance: none;
+      appearance: none;
+      padding-right: 40px;
+    }
+
+    /* Or-type-below divider */
+    .or-divider {
+      display: flex;
+      align-items: center;
+      max-width: 500px;
+      margin: 16px auto;
+      gap: 12px;
+      color: #999;
+      font-size: 13px;
+    }
+
+    .or-divider::before, .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e0e3ea;
+    }
+
+    /* Next / Continue Button — tan/gold like original */
+    .next-btn {
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto 0;
+      padding: 16px;
+      background: #c4a882;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .next-btn:hover { background: #b69872; }
+    .next-btn:disabled { background: #d4c8b8; cursor: not-allowed; }
+
+    /* Consent */
+    .consent-box {
+      max-width: 500px;
+      margin: 0 auto 16px;
+      border: 1.5px solid #e0e3ea;
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .consent-agree-btn {
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      margin: 12px auto 0;
+      padding: 16px;
+      background: #c4a882;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .consent-agree-btn:hover { background: #b69872; }
+
+    .consent-decline-btn {
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      margin: 8px auto 0;
+      padding: 16px;
+      background: #fff;
+      color: #555;
+      border: 1.5px solid #e0e3ea;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .consent-decline-btn:hover { background: #f8f8f8; }
+
+    /* Skip link */
+    .skip-link {
+      display: block;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      margin-top: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .skip-link:hover { color: #555; }
+
+    /* HIPAA checkbox */
+    .hipaa-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      max-width: 500px;
+      margin: 0 auto 20px;
+    }
+
+    .hipaa-row input[type="checkbox"] {
+      margin-top: 4px;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .hipaa-row label {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* DQ */
+    .dq-screen { text-align: center; padding: 40px 20px; }
+    .dq-screen h2 { font-size: 22px; margin-bottom: 12px; }
+    .dq-screen p { font-size: 16px; color: #555; line-height: 1.6; }
+
+    /* Review */
+    .review-screen { max-width: 500px; margin: 0 auto; text-align: center; }
+    .review-screen p { font-size: 16px; color: #444; line-height: 1.6; margin-bottom: 16px; }
+
+    .loading-spinner {
+      width: 48px; height: 48px;
+      border: 4px solid #e0e3ea;
+      border-top-color: #c4a882;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .question-card { padding: 28px 20px; border-radius: 12px; }
+      .question-text { font-size: 16px; }
+      .option-btn { padding: 14px 16px; font-size: 14px; }
+      .header { padding: 20px 0 12px; }
+      .progress-line { width: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="survey-wrapper">
+  <div class="header">
+    <button class="back-btn" id="backBtn" onclick="goBack()">&#8592;</button>
+    <div class="logo">
+      <img src="logo.png" alt="Health Renewal Rx" style="height:48px;">
+    </div>
+    <div class="rating">
+      Excellent 4.7
+      <div class="stars">
+        <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="question-card" id="questionCard"></div>
+</div>
+
+<script>
+const US_STATES = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
+
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'Do you struggle with your sleep?',
+    type: 'single',
+    options: ['Yes', 'No'],
+    dqOn: 'No',
+    dqMessage: "Based on your response, this program may not be the right fit for you at this time. This program is designed for individuals currently experiencing sleep difficulties."
+  },
+  {
+    id: 'q2',
+    text: 'What sleep problems are you experiencing?',
+    subtext: '(select all that apply)',
+    type: 'multi',
+    options: ['Falling asleep', 'Staying asleep', 'Early morning awakening']
+  },
+  {
+    id: 'q3',
+    text: 'How long have you had a problem falling or staying asleep?',
+    type: 'single',
+    options: ['Less than 1 month', '1\u20133 months', 'Over 3 months']
+  },
+  {
+    id: 'q4',
+    text: 'Has sleep caused problems with your work or daily life?',
+    type: 'single',
+    options: ['Yes', 'No']
+  },
+  {
+    id: 'q5',
+    text: 'What have you tried to fix your sleep?',
+    type: 'multi',
+    options: [
+      "I haven't tried anything to fix my sleep",
+      "I've tried changing my routine/habits",
+      'Cognitive behavioral therapy',
+      'Medications or supplements',
+      'Other'
+    ]
+  },
+  {
+    id: 'q6',
+    text: 'What is your primary reason for taking your sleep seriously?',
+    type: 'single',
+    options: ['I want to live longer', 'I want to feel better', 'I want to have more energy']
+  },
+  {
+    id: 'q7',
+    text: 'What is your height in feet and inches?',
+    type: 'height'
+  },
+  {
+    id: 'q8',
+    text: 'What is your weight in pounds?',
+    type: 'number',
+    placeholder: 'Enter weight in pounds'
+  },
+  {
+    id: 'q9',
+    text: 'What was your sex assigned at birth?',
+    type: 'single',
+    options: ['Male', 'Female'],
+    next: (answer) => answer === 'Female' ? 'q9a' : 'q10'
+  },
+  {
+    id: 'q9a',
+    text: 'Are you currently pregnant, breastfeeding, or planning to become pregnant?',
+    type: 'single',
+    options: ['Yes', 'No'],
+    dqOn: 'Yes',
+    dqMessage: "Unfortunately, we are unable to proceed with your assessment at this time. Because you are currently pregnant, breastfeeding, or planning to become pregnant, certain sleep medications may not be safe. Please consult with your OB/GYN or primary care provider for safe treatment options."
+  },
+  {
+    id: 'q10',
+    text: 'Are you 65 years or older?',
+    type: 'single',
+    options: ['No', 'Yes'],
+    dqOn: 'Yes',
+    dqMessage: "Unfortunately, we are unable to proceed with your assessment at this time. Due to your age, we recommend consulting directly with your primary care provider for personalized sleep treatment options that account for age-related considerations."
+  },
+  {
+    id: 'q11',
+    text: 'Please identify all your current medical conditions',
+    type: 'none_or_text',
+    noneLabel: "I don't have any current medical conditions",
+    textPlaceholder: 'List your current medical conditions'
+  },
+  {
+    id: 'q12',
+    text: 'Please list all your current medications including dosages',
+    type: 'none_or_text',
+    noneLabel: 'I am not currently taking any medications',
+    textPlaceholder: 'List medications and dosages'
+  },
+  {
+    id: 'q13',
+    text: 'Please list all of your known allergies',
+    type: 'none_or_text',
+    noneLabel: 'I do not have any known allergies',
+    textPlaceholder: 'List your known allergies'
+  },
+  {
+    id: 'q14',
+    text: 'How many hours do you sleep on average per night?',
+    type: 'single',
+    options: ['Less than 3 hours', '3\u20135 hours', '5\u20137 hours', 'More than 7 hours']
+  },
+  {
+    id: 'q15',
+    text: 'How would you classify the severity of your insomnia?',
+    type: 'single',
+    options: ['Mild', 'Moderate', 'Severe']
+  },
+  {
+    id: 'q16',
+    text: 'Do you have sleep apnea?',
+    type: 'single',
+    options: ['No', 'Yes'],
+    next: (answer) => answer === 'Yes' ? 'q16a' : 'q17'
+  },
+  {
+    id: 'q16a',
+    text: 'Is this well controlled with a sleep device such as an oral appliance or CPAP/BiPAP?',
+    type: 'single',
+    options: ['Yes', 'No'],
+    dqOn: 'No',
+    dqMessage: "Unfortunately, we are unable to proceed with your assessment at this time. Because your sleep apnea is not well controlled, we recommend consulting with your healthcare provider to address this before pursuing additional sleep treatments."
+  },
+  {
+    id: 'q17',
+    text: 'Do you operate heavy machinery, drive for extended periods, or perform tasks that require high levels of focus and coordination as part of your job?',
+    type: 'single',
+    options: ['No', 'Yes'],
+    dqOn: 'Yes',
+    dqMessage: "Unfortunately, we are unable to proceed with your assessment at this time. Because your occupation involves operating heavy machinery or tasks requiring high levels of focus, certain sleep medications may pose safety risks. Please consult with your healthcare provider for treatment options appropriate for your situation."
+  },
+  {
+    id: 'q18',
+    text: 'Do any of these apply to you?',
+    subtext: '(select all that apply)',
+    type: 'multi',
+    options: [
+      'None apply',
+      'I have had a heart attack within the last 6 months',
+      'I have atrial fibrillation, atrial flutter, QT prolongation and/or any cardiac conduction abnormalities (electrical abnormalities)',
+      'I have a history of acute closed angle glaucoma',
+      'I have emphysema or chronic obstructive pulmonary disorder (COPD)',
+      'I have chronic kidney disease or liver disease'
+    ]
+  },
+  {
+    id: 'q19',
+    text: 'How often do you consume caffeine in the afternoon?',
+    subtext: '(coffee, tea, soda)',
+    type: 'single',
+    options: ['Rarely or never', '1\u20132 times a day', '3\u20134 times a day', 'More than 4 times a day']
+  },
+  {
+    id: 'q20',
+    text: 'How frequently do you consume alcohol?',
+    type: 'single',
+    options: ['Never', 'Occasionally (1\u20132 times a week)', 'Regularly (3 or more times a week)']
+  },
+  {
+    id: 'q21',
+    text: 'Do you engage in regular physical activity?',
+    type: 'single',
+    options: ['Yes', 'No']
+  },
+  {
+    id: 'q22',
+    text: 'Is your bedroom set up for good sleep?',
+    subtext: '(e.g., comfortable bedding, dark room, minimal noise)',
+    type: 'single',
+    options: ['Yes', 'No'],
+    next: (answer) => answer === 'No' ? 'q22a' : 'q23'
+  },
+  {
+    id: 'q22a',
+    text: "What about your sleep environment isn't working for you?",
+    type: 'textarea',
+    placeholder: 'Describe what about your sleep environment is not working...'
+  },
+  {
+    id: 'q23',
+    text: 'Do you use electronic devices (phone, computer, TV) shortly before bedtime?',
+    type: 'single',
+    options: ['Yes', 'No']
+  },
+  {
+    id: 'q24',
+    text: 'Do you have a consistent sleep schedule?',
+    type: 'single',
+    options: ['Yes', 'No']
+  },
+  {
+    id: 'q26',
+    text: 'Are you experiencing symptoms of anxiety, depression, or stress which is causing your sleep difficulty?',
+    type: 'single',
+    options: ['Yes', 'No']
+  },
+  {
+    id: 'q25',
+    text: 'Is there any other information you feel is relevant to your sleep issues or overall health or do you have any questions for the doctor?',
+    type: 'textarea_skip',
+    placeholder: 'Share any additional information or questions'
+  },
+  {
+    id: 'q27',
+    text: 'General Insomnia Consent',
+    type: 'consent_scroll',
+    consentText: 'Please read this important safety information about this treatment. You have been prescribed a sleep medication to help manage your insomnia. This consent form is designed to provide information about the benefits, risks, and responsibilities associated with its use. Please read the following carefully and ask any questions before signing.\n\nPurpose of Medication\nThe prescribed sleep medication is intended to assist with difficulty falling asleep, staying asleep, or improving overall sleep quality. It is not a cure for insomnia but may provide temporary relief as part of a broader treatment plan.\n\nPotential Benefits\n\u2022 Improved ability to fall asleep and/or stay asleep\n\u2022 Increased total sleep duration\n\u2022 Enhanced daytime functioning and alertness\n\nPotential Risks and Side Effects\nWhile this medication may improve sleep, it also carries certain risks and potential side effects, including but not limited to:\n\u2022 Drowsiness, dizziness, or difficulty concentrating\n\u2022 Increased risk of falls or injuries, especially in older adults\n\u2022 Next-day grogginess or impairment, including while driving or operating machinery\n\u2022 Dependency, tolerance, or withdrawal symptoms with long-term use\n\u2022 Unusual behaviors such as sleepwalking, sleep-driving, or engaging in activities while not fully awake\n\u2022 Interactions with other medications, alcohol, or underlying medical conditions\n\nPrecautions\n\u2022 Avoid alcohol and other sedatives while using this medication.\n\u2022 Do not drive or operate heavy machinery until you know how this medication affects you.\n\u2022 Take the medication as prescribed and do not exceed the recommended dose.\n\u2022 Inform your healthcare provider of any other medications or supplements you are taking.\n\u2022 Notify your healthcare provider immediately if you experience any unusual side effects, worsening symptoms, or signs of dependency.\n\nAlternative Treatment Options\nNon-medication treatments for insomnia may include:\n\u2022 Cognitive behavioral therapy for insomnia (CBT-I)\n\u2022 Sleep hygiene practices (e.g., consistent bedtime, reducing screen time)\n\u2022 Lifestyle modifications, including stress management and regular exercise\n\nConsent and Acknowledgment\nI acknowledge that I have read and understand the information provided above. I understand the benefits, risks, and responsibilities associated with the use of this sleep medication. I agree to take the medication as prescribed and follow up with my healthcare provider as necessary.'
+  },
+  {
+    id: 'q28',
+    text: 'Consent (Truthfulness)',
+    type: 'consent_scroll',
+    consentText: 'Please attest to the following confirming that all information you have provided to us is true and complete.\n\nConsent: I verify that I am the patient and that I have answered the questions asked in this intake form.  I confirm that I have reviewed and understood all the questions asked of me.  I attest that the answers and information I have provided in this questionnaire is true and complete to the best of my knowledge. I understand that it is critical to my health to share complete health information with my doctor.  I will not hold the doctor or affiliated medical practice responsible for any oversights or omissions, whether intentional or not, in the information that I provided.'
+  },
+  {
+    id: 'q29',
+    text: 'Your Medical Review',
+    type: 'name_form'
+  },
+  {
+    id: 'q30',
+    text: 'Date of Birth',
+    type: 'dob'
+  },
+  {
+    id: 'q31',
+    text: 'Shipping State',
+    type: 'state_select'
+  },
+  {
+    id: 'q32',
+    text: 'Email Address',
+    type: 'email_form'
+  },
+  {
+    id: 'q33',
+    text: 'Phone Number',
+    type: 'phone_form'
+  },
+  {
+    id: 'q34',
+    text: 'HIPAA Consent',
+    type: 'hipaa'
+  }
+];
+
+const QUESTION_MAP = {};
+QUESTIONS.forEach((q, i) => { QUESTION_MAP[q.id] = i; });
+
+const PROGRESS_STAGES = 6;
+
+let currentQuestionIndex = 0;
+let answers = {};
+let questionHistory = [];
+
+// ============================================================================
+// PROGRESS
+// ============================================================================
+
+function getProgressStage() {
+  const totalQ = QUESTIONS.length;
+  const stage = Math.floor((currentQuestionIndex / totalQ) * PROGRESS_STAGES);
+  return Math.min(stage, PROGRESS_STAGES - 1);
+}
+
+function renderProgress() {
+  const bar = document.getElementById('progressBar');
+  const stage = getProgressStage();
+  let html = '';
+  for (let i = 0; i < PROGRESS_STAGES; i++) {
+    html += `<div class="progress-dot${i <= stage ? ' completed' : ''}"></div>`;
+    if (i < PROGRESS_STAGES - 1) {
+      html += `<div class="progress-line${i < stage ? ' completed' : ''}"></div>`;
+    }
+  }
+  bar.innerHTML = html;
+}
+
+// ============================================================================
+// RENDER
+// ============================================================================
+
+function renderQuestion() {
+  const q = QUESTIONS[currentQuestionIndex];
+  const card = document.getElementById('questionCard');
+  renderProgress();
+
+  // Back button
+  const backBtn = document.getElementById('backBtn');
+  backBtn.className = questionHistory.length > 0 ? 'back-btn visible' : 'back-btn';
+
+  let html = `<div class="question-text">${q.text}</div>`;
+  if (q.subtext) html += `<div class="question-subtext">${q.subtext}</div>`;
+
+  switch (q.type) {
+    case 'single': html += renderSingle(q); break;
+    case 'multi': html += renderMulti(q); break;
+    case 'height': html += renderHeight(q); break;
+    case 'number': html += renderNumber(q); break;
+    case 'textarea': html += renderTextarea(q); break;
+    case 'textarea_skip': html += renderTextareaSkip(q); break;
+    case 'none_or_text': html += renderNoneOrText(q); break;
+    case 'consent_scroll': html += renderConsentScroll(q); break;
+    case 'name_form': html += renderNameForm(q); break;
+    case 'dob': html += renderDob(q); break;
+    case 'state_select': html += renderStateSelect(q); break;
+    case 'email_form': html += renderEmailForm(q); break;
+    case 'phone_form': html += renderPhoneForm(q); break;
+    case 'hipaa': html += renderHipaa(q); break;
+  }
+
+  card.innerHTML = html;
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'fadeIn 0.3s ease';
+  bindEvents(q);
+}
+
+function renderSingle(q) {
+  const prev = answers[q.id];
+  return '<div class="options-list">' +
+    q.options.map(opt => {
+      const sel = prev === opt ? ' selected' : '';
+      return `<button class="option-btn${sel}" data-value="${opt}"><div class="option-radio"></div><div class="option-label">${opt}</div></button>`;
+    }).join('') + '</div>';
+}
+
+function renderMulti(q) {
+  const prev = answers[q.id] || [];
+  return '<div class="options-list">' +
+    q.options.map(opt => {
+      const sel = prev.includes(opt) ? ' selected' : '';
+      return `<button class="option-btn${sel}" data-value="${opt}"><div class="option-checkbox"></div><div class="option-label">${opt}</div></button>`;
+    }).join('') + '</div>' +
+    '<div class="select-hint">* Please select at least one option</div>' +
+    `<button class="next-btn" id="nextBtn" ${prev.length === 0 ? 'disabled' : ''}>Next &rarr;</button>`;
+}
+
+function renderHeight(q) {
+  const prev = answers[q.id] || {};
+  let feetOpts = '<option value="0">0</option>';
+  for (let i = 3; i <= 7; i++) feetOpts += `<option value="${i}"${prev.feet == i ? ' selected' : ''}>${i}</option>`;
+  let inchOpts = '';
+  for (let i = 0; i <= 11; i++) inchOpts += `<option value="${i}"${prev.inches == i ? ' selected' : ''}>${i}</option>`;
+  return `<div class="question-text">What is your height in feet and inches? *</div>
+    <div class="height-row">
+      <div class="height-group"><label>Feet</label><select id="heightFeet">${feetOpts}</select></div>
+      <div class="height-group"><label>Inches</label><select id="heightInches">${inchOpts}</select></div>
+    </div>
+    <button class="next-btn" id="nextBtn">Next &rarr;</button>`;
+}
+
+function renderNumber(q) {
+  const prev = answers[q.id] || '';
+  return `<input type="number" class="text-input" id="numberInput" placeholder="${q.placeholder || ''}" value="${prev}">
+    <button class="next-btn" id="nextBtn">Next &rarr;</button>`;
+}
+
+function renderTextarea(q) {
+  const prev = answers[q.id] || '';
+  return `<textarea class="text-input" id="textInput" placeholder="${q.placeholder || ''}">${prev}</textarea>
+    <button class="next-btn" id="nextBtn">Next &rarr;</button>`;
+}
+
+function renderTextareaSkip(q) {
+  const prev = answers[q.id] || '';
+  return `<textarea class="text-input" id="textInput" placeholder="${q.placeholder || ''}">${prev}</textarea>
+    <div class="skip-link" id="skipLink">Skip this question</div>
+    <button class="next-btn" id="nextBtn">Next &rarr;</button>`;
+}
+
+function renderNoneOrText(q) {
+  const prev = answers[q.id] || {};
+  const noneSelected = prev.none ? ' selected' : '';
+  return `<div class="options-list">
+      <button class="option-btn${noneSelected}" data-value="none" id="noneBtn"><div class="option-radio"></div><div class="option-label">${q.noneLabel}</div></button>
+    </div>
+    <div class="or-divider">or type below</div>
+    <textarea class="text-input" id="textInput" placeholder="${q.textPlaceholder || ''}">${prev.text || ''}</textarea>
+    <button class="next-btn" id="nextBtn">Next &rarr;</button>`;
+}
+
+function renderConsentScroll(q) {
+  return `<div class="question-subtext" style="margin-top:-16px;margin-bottom:16px;">(Scroll down to confirm)</div>
+    <div class="consent-box">${q.consentText.replace(/\n/g, '<br>')}</div>
+    <button class="consent-agree-btn" id="agreeBtn">I have read the above information and I do consent and wish to move forward</button>
+    <button class="consent-decline-btn" id="declineBtn">I have read the above information and I do not wish to continue</button>`;
+}
+
+function renderNameForm(q) {
+  const prev = answers[q.id] || {};
+  return `<div class="form-field"><label class="form-label">First Name</label><input type="text" id="firstName" placeholder="Enter your first name" value="${prev.first || ''}"></div>
+    <div class="form-field"><label class="form-label">Last Name</label><input type="text" id="lastName" placeholder="Enter your last name" value="${prev.last || ''}"></div>
+    <button class="next-btn" id="nextBtn">Next &rarr;</button>`;
+}
+
+function renderDob(q) {
+  const prev = answers[q.id] || {};
+  let months = '<option value="">Month</option>';
+  const mNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  mNames.forEach((m,i) => { months += `<option value="${i+1}"${prev.month == i+1 ? ' selected' : ''}>${m}</option>`; });
+  let days = '<option value="">Day</option>';
+  for (let i = 1; i <= 31; i++) days += `<option value="${i}"${prev.day == i ? ' selected' : ''}>${i}</option>`;
+  let years = '<option value="">Year</option>';
+  const curYear = new Date().getFullYear();
+  for (let i = curYear - 18; i >= curYear - 100; i--) years += `<option value="${i}"${prev.year == i ? ' selected' : ''}>${i}</option>`;
+  return `<div class="form-field"><label class="form-label">Month</label><select id="dobMonth">${months}</select></div>
+    <div class="form-field"><label class="form-label">Day</label><select id="dobDay">${days}</select></div>
+    <div class="form-field"><label class="form-label">Year</label><select id="dobYear">${years}</select></div>
+    <div class="select-hint">You must be at least 18 years old</div>
+    <button class="next-btn" id="nextBtn">Next &rarr;</button>`;
+}
+
+function renderStateSelect(q) {
+  const prev = answers[q.id] || '';
+  let opts = '<option value="">Select a state</option>';
+  US_STATES.forEach(s => { opts += `<option value="${s}"${prev === s ? ' selected' : ''}>${s}</option>`; });
+  return `<div class="question-subtext" style="margin-top:-16px;margin-bottom:16px;">What state will this be shipped to?</div>
+    <div class="form-field"><select id="stateSelect">${opts}</select></div>`;
+}
+
+function renderEmailForm(q) {
+  const prev = answers[q.id] || '';
+  return `<div class="form-field"><label class="form-label">Email</label><input type="email" id="emailInput" placeholder="Enter your email" value="${prev}"></div>
+    <button class="next-btn" id="nextBtn">Next &rarr;</button>`;
+}
+
+function renderPhoneForm(q) {
+  const prev = answers[q.id] || '';
+  return `<div class="form-field"><label class="form-label">Phone Number</label><input type="tel" id="phoneInput" placeholder="(555) 123-4567" value="${prev}"></div>
+    <button class="next-btn" id="nextBtn">Next &rarr;</button>`;
+}
+
+function renderHipaa(q) {
+  return `<div class="hipaa-row">
+      <input type="checkbox" id="hipaaCheck">
+      <label for="hipaaCheck">I understand that my information is never shared, is protected by HIPAA and agree to the terms and privacy policies and to be contacted as necessary by Health Renewal Rx and its medical partners and can opt-out at anytime. *</label>
+    </div>
+    <button class="next-btn" id="nextBtn" disabled>Complete Assessment</button>`;
+}
+
+// ============================================================================
+// EVENTS
+// ============================================================================
+
+function bindEvents(q) {
+  switch (q.type) {
+    case 'single':
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => handleSingleSelect(q, btn.dataset.value, e));
+      });
+      break;
+    case 'multi':
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleMultiSelect(q, btn));
+      });
+      document.getElementById('nextBtn')?.addEventListener('click', () => goNext(q));
+      break;
+    case 'height':
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        const f = document.getElementById('heightFeet').value;
+        const i = document.getElementById('heightInches').value;
+        if (f && f !== '0') { answers[q.id] = { feet: f, inches: i }; goNext(q); }
+      });
+      break;
+    case 'number':
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        const v = document.getElementById('numberInput').value;
+        if (v) { answers[q.id] = v; goNext(q); }
+      });
+      break;
+    case 'textarea':
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        const v = document.getElementById('textInput').value.trim();
+        if (v) { answers[q.id] = v; goNext(q); }
+      });
+      break;
+    case 'textarea_skip':
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        answers[q.id] = document.getElementById('textInput').value.trim() || 'None';
+        goNext(q);
+      });
+      document.getElementById('skipLink')?.addEventListener('click', () => {
+        answers[q.id] = 'Skipped';
+        goNext(q);
+      });
+      break;
+    case 'none_or_text':
+      document.getElementById('noneBtn')?.addEventListener('click', () => {
+        const noneBtn = document.getElementById('noneBtn');
+        noneBtn.classList.add('selected');
+        document.getElementById('textInput').value = '';
+        answers[q.id] = { none: true, text: '' };
+        setTimeout(() => goNext(q), 400);
+      });
+      document.getElementById('textInput')?.addEventListener('input', () => {
+        document.getElementById('noneBtn').classList.remove('selected');
+      });
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        const isNone = document.getElementById('noneBtn').classList.contains('selected');
+        const text = document.getElementById('textInput').value.trim();
+        if (isNone || text) {
+          answers[q.id] = { none: isNone, text: isNone ? '' : text };
+          goNext(q);
+        }
+      });
+      break;
+    case 'consent_scroll':
+      document.getElementById('agreeBtn')?.addEventListener('click', () => {
+        answers[q.id] = 'agreed';
+        goNext(q);
+      });
+      document.getElementById('declineBtn')?.addEventListener('click', () => {
+        showDQ("You have chosen not to continue. If you change your mind, you can restart the assessment.");
+      });
+      break;
+    case 'name_form':
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        const first = document.getElementById('firstName').value.trim();
+        const last = document.getElementById('lastName').value.trim();
+        if (first && last) { answers[q.id] = { first, last }; goNext(q); }
+      });
+      break;
+    case 'dob':
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        const m = document.getElementById('dobMonth').value;
+        const d = document.getElementById('dobDay').value;
+        const y = document.getElementById('dobYear').value;
+        if (m && d && y) { answers[q.id] = { month: m, day: d, year: y }; goNext(q); }
+      });
+      break;
+    case 'state_select':
+      document.getElementById('stateSelect')?.addEventListener('change', () => {
+        const v = document.getElementById('stateSelect').value;
+        if (v) { answers[q.id] = v; goNext(q); }
+      });
+      break;
+    case 'email_form':
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        const v = document.getElementById('emailInput').value.trim();
+        if (v && v.includes('@')) { answers[q.id] = v; goNext(q); }
+      });
+      break;
+    case 'phone_form':
+      document.getElementById('phoneInput')?.addEventListener('input', (e) => {
+        let digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+        let formatted = '';
+        if (digits.length > 0) formatted = '(' + digits.slice(0, 3);
+        if (digits.length >= 3) formatted += ') ';
+        if (digits.length > 3) formatted += digits.slice(3, 6);
+        if (digits.length >= 6) formatted += '-';
+        if (digits.length > 6) formatted += digits.slice(6, 10);
+        e.target.value = formatted;
+      });
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        const digits = document.getElementById('phoneInput').value.replace(/\D/g, '');
+        if (digits.length === 10) { answers[q.id] = document.getElementById('phoneInput').value; goNext(q); }
+      });
+      break;
+    case 'hipaa':
+      document.getElementById('hipaaCheck')?.addEventListener('change', (e) => {
+        document.getElementById('nextBtn').disabled = !e.target.checked;
+      });
+      document.getElementById('nextBtn')?.addEventListener('click', () => {
+        if (document.getElementById('hipaaCheck').checked) {
+          answers[q.id] = 'agreed';
+          handleSubmit();
+        }
+      });
+      break;
+  }
+}
+
+function handleSingleSelect(q, value, e) {
+  answers[q.id] = value;
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  e.currentTarget.classList.add('selected');
+  if (q.dqOn && value === q.dqOn) { setTimeout(() => showDQ(q.dqMessage), 400); return; }
+  setTimeout(() => goNext(q), 400);
+}
+
+function handleMultiSelect(q, btn) {
+  const value = btn.dataset.value;
+
+  // "None apply" acts like a single-select auto-advance
+  if (value === 'None apply') {
+    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    answers[q.id] = ['None apply'];
+    setTimeout(() => goNext(q), 400);
+    return;
+  }
+
+  // Deselect "None apply" if user picks a real option
+  document.querySelectorAll('.option-btn').forEach(b => {
+    if (b.dataset.value === 'None apply') b.classList.remove('selected');
+  });
+
+  btn.classList.toggle('selected');
+  const selected = [];
+  document.querySelectorAll('.option-btn.selected').forEach(b => selected.push(b.dataset.value));
+  answers[q.id] = selected;
+  const nextBtn = document.getElementById('nextBtn');
+  if (nextBtn) nextBtn.disabled = selected.length === 0;
+}
+
+// ============================================================================
+// NAVIGATION
+// ============================================================================
+
+function goNext(q) {
+  questionHistory.push(currentQuestionIndex);
+  if (q.next) {
+    const nextId = q.next(answers[q.id]);
+    if (QUESTION_MAP[nextId] !== undefined) {
+      currentQuestionIndex = QUESTION_MAP[nextId];
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+  }
+  let nextIdx = currentQuestionIndex + 1;
+  while (nextIdx < QUESTIONS.length) {
+    const nextQ = QUESTIONS[nextIdx];
+    if (/\d+[a-b]$/.test(nextQ.id)) { nextIdx++; continue; }
+    break;
+  }
+  if (nextIdx >= QUESTIONS.length) { handleSubmit(); return; }
+  currentQuestionIndex = nextIdx;
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+  if (questionHistory.length === 0) return;
+  currentQuestionIndex = questionHistory.pop();
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showDQ(message) {
+  document.getElementById('questionCard').innerHTML = `<div class="dq-screen">
+    <h2>Thank You for Your Interest</h2>
+    <p>${message}</p>
+    <p style="margin-top:24px;font-size:14px;color:#888;">Did you answer the question correctly? If not, click below to go back.</p>
+    <button onclick="goBack()" style="margin-top:8px;padding:10px 24px;background:#fff;border:1.5px solid #e0e3ea;border-radius:8px;font-size:14px;color:#555;cursor:pointer;font-family:inherit;">Return</button>
+  </div>`;
+}
+
+function handleSubmit() {
+  document.getElementById('questionCard').innerHTML = `<div class="review-screen">
+    <div class="loading-spinner"></div>
+    <p><strong>Submitting your assessment...</strong></p>
+    <p>A licensed provider will review your information and determine the best treatment plan for your sleep concerns.</p>
+  </div>`;
+
+  console.log('Survey answers:', answers);
+
+  // TODO: POST answers to your backend
+  // fetch('/api/survey/submit', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(answers) })
+
+  setTimeout(() => {
+    document.getElementById('questionCard').innerHTML = `<div class="review-screen">
+      <div style="font-size:48px;margin-bottom:16px;color:#c4a882;">&#10003;</div>
+      <p><strong>Assessment Complete!</strong></p>
+      <p>Thank you, ${answers.q29?.first || ''}. Your responses have been submitted successfully. A licensed provider will reach out to you shortly.</p>
+    </div>`;
+  }, 3000);
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
