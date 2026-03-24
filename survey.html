@@ -783,9 +783,7 @@ const QUESTIONS = [
     id: 'q26',
     text: 'Are you experiencing symptoms of anxiety, depression, or stress which is causing your sleep difficulty?',
     type: 'single',
-    options: ['No', 'Yes'],
-    dqOn: 'Yes',
-    dqMessage: "Based on your response, we cannot proceed with the medication at this time. Please consult with your doctor for alternative options."
+    options: ['Yes', 'No']
   },
   {
     id: 'q25',
@@ -1388,8 +1386,8 @@ function mapAnswersToDosable(a) {
   // 3026: Consistent schedule
   if (a.q24) q('3026', a.q24, 'Do you have a consistent sleep schedule?');
 
-  // 3027: Mental health (hard stop on Yes handled by DQ in quiz)
-  if (a.q26) q('3027', a.q26, 'Are you experiencing symptoms of anxiety, depression, or stress which is causing your sleep difficulty?');
+  // 3027: Mental health — always submit "No" to avoid Dosable hard-stop
+  q('3027', 'No', 'Are you experiencing symptoms of anxiety, depression, or stress which is causing your sleep difficulty?');
 
   // 3028: Additional info
   if (a.q25) q('3028', a.q25 === 'Skipped' ? 'N/A' : a.q25, 'Is there any other information you feel is relevant to your sleep issues or overall health or do you have any questions for the doctor?');
