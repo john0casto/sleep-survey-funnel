@@ -879,6 +879,21 @@
 </div>
 
 <script>
+// ── Funnel Tracking ──
+(function() {
+  const SK = 'funnel_session_id', EK = 'funnel_events';
+  function getSid() { let s = sessionStorage.getItem(SK); if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem(SK,s); } return s; }
+  window.trackFunnelStep = function(step) {
+    try {
+      const evts = JSON.parse(localStorage.getItem(EK)||'[]'), sid = getSid();
+      if (evts.some(e => e.session===sid && e.step===step)) return;
+      evts.push({session:sid, step:step, ts:Date.now()});
+      localStorage.setItem(EK, JSON.stringify(evts));
+    } catch(e) {}
+  };
+})();
+trackFunnelStep('offer_view');
+
 // ── URL Params ──
 const params = new URLSearchParams(window.location.search);
 const firstName = params.get('first') || '';
@@ -926,6 +941,7 @@ function selectPlan(planId) {
   document.getElementById(planId).classList.add('selected');
   document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+  trackFunnelStep('offer_checkout');
   // Fire InitiateCheckout pixel
   const eid = generateEventId();
   fbq('track', 'InitiateCheckout', { content_name: planId }, { eventID: eid });
@@ -982,6 +998,7 @@ async function handleCheckout(e) {
   const fn = document.getElementById('coFirstName').value;
   const ln = document.getElementById('coLastName').value;
 
+  trackFunnelStep('offer_sale');
   fbq('track', 'Purchase', { value: price, currency: 'USD', content_name: selectedPlan }, { eventID: eid });
   const hashedData = {
     em: await hashSHA256(em), ph: await hashSHA256(ph),

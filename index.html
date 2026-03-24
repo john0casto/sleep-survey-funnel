@@ -666,9 +666,33 @@
 </footer>
 
 <script>
+// ── Funnel Tracking ──
+(function() {
+  const SK = 'funnel_session_id', EK = 'funnel_events';
+  function getSid() { let s = sessionStorage.getItem(SK); if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem(SK,s); } return s; }
+  window.trackFunnelStep = function(step) {
+    try {
+      const evts = JSON.parse(localStorage.getItem(EK)||'[]'), sid = getSid();
+      if (evts.some(e => e.session===sid && e.step===step)) return;
+      evts.push({session:sid, step:step, ts:Date.now()});
+      localStorage.setItem(EK, JSON.stringify(evts));
+    } catch(e) {}
+  };
+})();
+trackFunnelStep('adv_view');
+
+// Track scroll depth
+let scrollTracked50 = false;
+window.addEventListener('scroll', function() {
+  if (scrollTracked50) return;
+  const scrollPct = (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100;
+  if (scrollPct >= 50) { scrollTracked50 = true; trackFunnelStep('adv_scroll_50'); }
+});
+
 // Track CTA clicks
 document.querySelectorAll('.cta-button').forEach(btn => {
   btn.addEventListener('click', function() {
+    trackFunnelStep('adv_cta');
     const eid = generateEventId();
     fbq('trackCustom', 'CTAClick', { content_name: 'Advertorial CTA' }, { eventID: eid });
     fireCapiEvent('ViewContent', eid, {}, { content_name: 'Advertorial CTA Click' });

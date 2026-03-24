@@ -845,6 +845,22 @@ let answers = {};
 let questionHistory = [];
 
 // ============================================================================
+// FUNNEL TRACKING (localStorage)
+// ============================================================================
+(function() {
+  const SK = 'funnel_session_id', EK = 'funnel_events';
+  function getSid() { let s = sessionStorage.getItem(SK); if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem(SK,s); } return s; }
+  window.trackFunnelStep = function(step) {
+    try {
+      const evts = JSON.parse(localStorage.getItem(EK)||'[]'), sid = getSid();
+      if (evts.some(e => e.session===sid && e.step===step)) return;
+      evts.push({session:sid, step:step, ts:Date.now()});
+      localStorage.setItem(EK, JSON.stringify(evts));
+    } catch(e) {}
+  };
+})();
+
+// ============================================================================
 // PROGRESS
 // ============================================================================
 
@@ -875,6 +891,7 @@ function renderQuestion() {
   const q = QUESTIONS[currentQuestionIndex];
   const card = document.getElementById('questionCard');
   renderProgress();
+  trackFunnelStep(q.id);
 
   // Back button
   const backBtn = document.getElementById('backBtn');

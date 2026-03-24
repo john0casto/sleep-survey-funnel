@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funnel Dashboard — Health Renewal Rx</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f7; color: #1a1a2e; min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .dash-header { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .dash-header h1 { font-size: 22px; font-weight: 700; }
+  .dash-header h1 span { color: #c4a882; }
+  .header-controls { display: flex; gap: 12px; align-items: center; }
+  .header-controls select, .header-controls button {
+    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-family: inherit; cursor: pointer;
+  }
+  .header-controls select { border: 1px solid #e5e7eb; background: #fff; color: #333; }
+  .header-controls .btn-secondary { border: 1px solid #e5e7eb; background: #fff; color: #555; }
+  .header-controls .btn-secondary:hover { background: #f9fafb; }
+  .header-controls .btn-danger { border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; }
+  .header-controls .btn-danger:hover { background: #fee2e2; }
+  .header-controls .btn-primary { border: none; background: #c4a882; color: #fff; font-weight: 600; }
+  .header-controls .btn-primary:hover { background: #b39771; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px 32px; }
+
+  /* ── SUMMARY CARDS ── */
+  .summary-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+  .summary-card { background: #fff; border-radius: 12px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .summary-card .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-bottom: 8px; font-weight: 600; }
+  .summary-card .value { font-size: 28px; font-weight: 700; color: #1a1a2e; }
+  .summary-card .sub { font-size: 12px; color: #888; margin-top: 4px; }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 0; background: #fff; border-radius: 12px 12px 0 0; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border-bottom: 1px solid #e5e7eb; overflow: hidden; }
+  .tab-btn { padding: 14px 28px; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; border: none; background: transparent; color: #888; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .tab-btn:hover { color: #555; }
+  .tab-btn.active { color: #1a1a2e; border-bottom-color: #c4a882; }
+
+  /* ── TABLE PANEL ── */
+  .table-panel { background: #fff; border-radius: 0 0 12px 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 24px; margin-bottom: 24px; }
+  .table-panel h2 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #c4a882; font-weight: 700; padding: 12px 0 6px; border-bottom: none; }
+  .section-label td { padding: 14px 0 6px !important; }
+
+  /* ── FUNNEL TABLE ── */
+  .funnel-table { width: 100%; border-collapse: collapse; }
+  .funnel-table thead th {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #999;
+    font-weight: 600; padding: 0 12px 12px; text-align: right; white-space: nowrap;
+  }
+  .funnel-table thead th:first-child { text-align: left; }
+  .funnel-table tbody td {
+    padding: 10px 12px; border-top: 1px solid #f3f4f6; font-size: 14px; text-align: right; white-space: nowrap;
+  }
+  .funnel-table tbody td:first-child { text-align: left; font-weight: 500; color: #333; }
+
+  /* Bar cell */
+  .bar-cell { width: 220px; padding-right: 24px !important; }
+  .bar-wrap { width: 100%; height: 18px; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: #5b6fe6; border-radius: 4px; min-width: 2px; transition: width 0.4s ease; }
+
+  /* Color classes */
+  .pct-green { color: #16a34a; font-weight: 600; }
+  .pct-orange { color: #ea580c; font-weight: 600; }
+  .pct-red { color: #dc2626; font-weight: 600; }
+  .pct-gray { color: #ccc; font-weight: 400; }
+
+  /* ── POSTBACK SECTION ── */
+  .postback-panel { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 24px; margin-bottom: 24px; }
+  .postback-panel h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .postback-panel .desc { font-size: 13px; color: #888; margin-bottom: 16px; }
+  .postback-url { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px 16px; font-family: 'SF Mono', Menlo, monospace; font-size: 12px; color: #555; word-break: break-all; margin-bottom: 16px; }
+  .postback-form { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group label { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-group input, .form-group select { padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-family: inherit; }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: #c4a882; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align: center; padding: 60px 20px; color: #888; }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+  .empty-state h3 { font-size: 16px; color: #555; margin-bottom: 8px; }
+  .empty-state p { font-size: 13px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .summary-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .container { padding: 16px; }
+    .dash-header { padding: 16px; flex-direction: column; gap: 12px; }
+    .bar-cell { width: 120px; }
+    .funnel-table { font-size: 12px; }
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="dash-header">
+  <h1>Health Renewal <span>Rx</span> — Funnel Dashboard</h1>
+  <div class="header-controls">
+    <select id="dateRange" onchange="refreshDashboard()">
+      <option value="today">Today</option>
+      <option value="7d">Last 7 Days</option>
+      <option value="30d" selected>Last 30 Days</option>
+      <option value="all">All Time</option>
+    </select>
+    <button class="btn-primary" onclick="generateDemoData()">Generate Demo Data</button>
+    <button class="btn-danger" onclick="if(confirm('Clear all tracking data?')){localStorage.removeItem('funnel_events');localStorage.removeItem('funnel_sales');refreshDashboard();}">Reset Data</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">Quiz Visitors</div>
+      <div class="value" id="sumVisitors">0</div>
+      <div class="sub" id="sumVisitorsSub">unique sessions</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Quiz Completions</div>
+      <div class="value" id="sumCompletions">0</div>
+      <div class="sub" id="sumCompletionRate">0% completion rate</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Leads</div>
+      <div class="value" id="sumLeads">0</div>
+      <div class="sub" id="sumLeadRate">0% of visitors</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Sales</div>
+      <div class="value" id="sumSales">0</div>
+      <div class="sub" id="sumConvRate">0% conversion</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Revenue</div>
+      <div class="value" id="sumRevenue">$0</div>
+      <div class="sub" id="sumEPC">$0.00 EPC</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('quiz')">Quiz Funnel</button>
+    <button class="tab-btn" onclick="switchTab('advertorial')">Advertorial</button>
+  </div>
+
+  <!-- QUIZ FUNNEL TAB -->
+  <div class="tab-content active" id="tab-quiz">
+    <div class="table-panel">
+      <h2>Funnel Performance by Question</h2>
+      <table class="funnel-table" id="quizTable">
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>Visitors</th>
+            <th class="bar-cell"></th>
+            <th>Clicked Through</th>
+            <th>Click %</th>
+            <th>Dropped Off</th>
+            <th>Drop % (of total)</th>
+          </tr>
+        </thead>
+        <tbody id="quizTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ADVERTORIAL TAB -->
+  <div class="tab-content" id="tab-advertorial">
+    <div class="table-panel">
+      <h2>Advertorial Funnel Performance</h2>
+      <table class="funnel-table" id="advTable">
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>Visitors</th>
+            <th class="bar-cell"></th>
+            <th>Clicked Through</th>
+            <th>Click %</th>
+            <th>Dropped Off</th>
+            <th>Drop % (of total)</th>
+          </tr>
+        </thead>
+        <tbody id="advTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- POSTBACK / MANUAL SALE ENTRY -->
+  <div class="postback-panel">
+    <h2>Sale Postback</h2>
+    <p class="desc">Record sales from CheckoutChamp, Stripe, or your CRM. Use the URL below as a postback webhook or manually enter sales.</p>
+    <div class="postback-url" id="postbackUrl"></div>
+    <div class="postback-form">
+      <div class="form-group">
+        <label>Amount ($)</label>
+        <input type="number" id="saleAmount" value="99" min="0" step="0.01" style="width:100px;">
+      </div>
+      <div class="form-group">
+        <label>Source</label>
+        <select id="saleSource" style="width:160px;">
+          <option value="checkoutchamp">CheckoutChamp</option>
+          <option value="stripe">Stripe</option>
+          <option value="crm">CRM</option>
+          <option value="manual">Manual</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Session ID (optional)</label>
+        <input type="text" id="saleSession" placeholder="auto" style="width:160px;">
+      </div>
+      <button class="btn-primary" onclick="recordManualSale()" style="padding:8px 20px;border-radius:8px;border:none;background:#c4a882;color:#fff;font-weight:600;cursor:pointer;height:36px;">Add Sale</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================================
+// STEP DEFINITIONS
+// ============================================================================
+
+const QUIZ_STEPS = [
+  // Screening
+  { id: 'q1', label: 'Sleep Struggles', section: 'Screening' },
+  { id: 'q2', label: 'Sleep Problems' },
+  { id: 'q3', label: 'Duration' },
+  { id: 'q4', label: 'Daily Impact' },
+  { id: 'q5', label: 'Remedies Tried' },
+  { id: 'q6', label: 'Primary Goal' },
+  // Health Profile
+  { id: 'q7', label: 'Height', section: 'Health Profile' },
+  { id: 'q8', label: 'Weight' },
+  { id: 'q9', label: 'Sex at Birth' },
+  { id: 'q10', label: 'Age Check' },
+  { id: 'q11', label: 'Medical Conditions' },
+  { id: 'q12', label: 'Medications' },
+  { id: 'q13', label: 'Allergies' },
+  // Sleep Assessment
+  { id: 'q14', label: 'Sleep Hours', section: 'Sleep Assessment' },
+  { id: 'q15', label: 'Severity' },
+  { id: 'q16', label: 'Sleep Apnea' },
+  { id: 'q17', label: 'Heavy Machinery' },
+  { id: 'q18', label: 'Conditions Check' },
+  // Lifestyle
+  { id: 'q19', label: 'Caffeine Intake', section: 'Lifestyle' },
+  { id: 'q20', label: 'Alcohol Use' },
+  { id: 'q21', label: 'Exercise' },
+  { id: 'q22', label: 'Bedroom Setup' },
+  { id: 'q23', label: 'Electronics Use' },
+  { id: 'q24', label: 'Sleep Schedule' },
+  { id: 'q26', label: 'Mental Health' },
+  { id: 'q25', label: 'Additional Info' },
+  // Consent & Contact
+  { id: 'q27', label: 'Consent (Insomnia)', section: 'Consent & Contact' },
+  { id: 'q28', label: 'Consent (Truthfulness)' },
+  { id: 'q29', label: 'Name' },
+  { id: 'q30', label: 'Date of Birth' },
+  { id: 'q31', label: 'State' },
+  { id: 'q32', label: 'Email' },
+  { id: 'q33', label: 'Phone' },
+  { id: 'q34', label: 'HIPAA Consent' },
+  // Conversion
+  { id: 'offer_view', label: 'Sales Page', section: 'Conversion' },
+  { id: 'offer_checkout', label: 'Checkout Started' },
+  { id: 'offer_sale', label: 'Sale' },
+];
+
+const ADV_STEPS = [
+  { id: 'adv_view', label: 'Page View', section: 'Advertorial' },
+  { id: 'adv_scroll_50', label: 'Scrolled 50%' },
+  { id: 'adv_cta', label: 'CTA Click' },
+  { id: 'q1', label: 'Quiz Started', section: 'Quiz' },
+  { id: 'q34', label: 'Quiz Completed' },
+  { id: 'offer_view', label: 'Sales Page', section: 'Conversion' },
+  { id: 'offer_checkout', label: 'Checkout Started' },
+  { id: 'offer_sale', label: 'Sale' },
+];
+
+// ============================================================================
+// DATA LAYER
+// ============================================================================
+
+function getEvents() {
+  return JSON.parse(localStorage.getItem('funnel_events') || '[]');
+}
+
+function getSales() {
+  return JSON.parse(localStorage.getItem('funnel_sales') || '[]');
+}
+
+function getFilteredEvents() {
+  const range = document.getElementById('dateRange').value;
+  let events = getEvents();
+  const now = Date.now();
+  if (range === 'today') {
+    const start = new Date(); start.setHours(0,0,0,0);
+    events = events.filter(e => e.ts >= start.getTime());
+  } else if (range === '7d') {
+    events = events.filter(e => e.ts >= now - 7*86400000);
+  } else if (range === '30d') {
+    events = events.filter(e => e.ts >= now - 30*86400000);
+  }
+  return events;
+}
+
+function getFilteredSales() {
+  const range = document.getElementById('dateRange').value;
+  let sales = getSales();
+  const now = Date.now();
+  if (range === 'today') {
+    const start = new Date(); start.setHours(0,0,0,0);
+    sales = sales.filter(s => s.ts >= start.getTime());
+  } else if (range === '7d') {
+    sales = sales.filter(s => s.ts >= now - 7*86400000);
+  } else if (range === '30d') {
+    sales = sales.filter(s => s.ts >= now - 30*86400000);
+  }
+  return sales;
+}
+
+function countUniqueSessions(events, stepId) {
+  const sessions = new Set();
+  events.forEach(e => {
+    if (e.step === stepId) sessions.add(e.session);
+  });
+  return sessions.size;
+}
+
+// ============================================================================
+// RENDER FUNNEL TABLE
+// ============================================================================
+
+function renderFunnelTable(steps, events, sales, tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = '';
+
+  // Merge sale events into counts
+  const saleSessions = new Set(sales.map(s => s.session));
+
+  // Build visitor counts per step
+  const counts = {};
+  const maxCount = Math.max(...steps.map(s => {
+    if (s.id === 'offer_sale') {
+      counts[s.id] = saleSessions.size + countUniqueSessions(events, 'offer_sale');
+    } else {
+      counts[s.id] = countUniqueSessions(events, s.id);
+    }
+    return counts[s.id];
+  }), 1);
+
+  const totalVisitors = counts[steps[0]?.id] || 0;
+
+  steps.forEach((step, i) => {
+    // Section header
+    if (step.section) {
+      const sectionRow = document.createElement('tr');
+      sectionRow.className = 'section-label';
+      sectionRow.innerHTML = `<td colspan="7">${step.section}</td>`;
+      tbody.appendChild(sectionRow);
+    }
+
+    const visitors = counts[step.id] || 0;
+    const nextStep = steps[i + 1];
+    const clickedThrough = nextStep ? (counts[nextStep.id] || 0) : 0;
+    const clickPct = visitors > 0 ? (clickedThrough / visitors * 100) : 0;
+    const droppedOff = visitors - clickedThrough;
+    const dropPctTotal = totalVisitors > 0 ? (droppedOff / totalVisitors * 100) : 0;
+    const barWidth = maxCount > 0 ? (visitors / maxCount * 100) : 0;
+
+    // Last step has no "next" so show differently
+    const isLast = !nextStep;
+
+    const clickPctClass = clickPct >= 90 ? 'pct-green' : clickPct >= 70 ? 'pct-orange' : clickPct > 0 ? 'pct-red' : 'pct-gray';
+    const dropPctClass = dropPctTotal === 0 ? 'pct-green' : dropPctTotal <= 5 ? 'pct-orange' : 'pct-red';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${step.label}</td>
+      <td>${visitors.toLocaleString()}</td>
+      <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill" style="width:${barWidth}%"></div></div></td>
+      <td>${isLast ? '—' : clickedThrough.toLocaleString()}</td>
+      <td class="${isLast ? 'pct-gray' : clickPctClass}">${isLast ? '—' : clickPct.toFixed(1) + '%'}</td>
+      <td>${isLast ? '—' : droppedOff.toLocaleString()}</td>
+      <td class="${isLast ? 'pct-gray' : (droppedOff === 0 ? 'pct-green' : dropPctClass)}">${isLast ? '—' : dropPctTotal.toFixed(1) + '%'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ============================================================================
+// SUMMARY CARDS
+// ============================================================================
+
+function renderSummary(events, sales) {
+  const visitors = countUniqueSessions(events, 'q1');
+  const completions = countUniqueSessions(events, 'q34');
+  const leads = completions; // everyone who finishes HIPAA is a lead
+  const saleCount = sales.length + countUniqueSessions(events, 'offer_sale');
+  const revenue = sales.reduce((sum, s) => sum + (s.amount || 0), 0);
+
+  document.getElementById('sumVisitors').textContent = visitors.toLocaleString();
+  document.getElementById('sumCompletions').textContent = completions.toLocaleString();
+  document.getElementById('sumCompletionRate').textContent = visitors > 0 ? ((completions / visitors * 100).toFixed(1) + '% completion rate') : '0% completion rate';
+  document.getElementById('sumLeads').textContent = leads.toLocaleString();
+  document.getElementById('sumLeadRate').textContent = visitors > 0 ? ((leads / visitors * 100).toFixed(1) + '% of visitors') : '0% of visitors';
+  document.getElementById('sumSales').textContent = saleCount.toLocaleString();
+  document.getElementById('sumConvRate').textContent = visitors > 0 ? ((saleCount / visitors * 100).toFixed(1) + '% conversion') : '0% conversion';
+  document.getElementById('sumRevenue').textContent = '$' + revenue.toLocaleString();
+  document.getElementById('sumEPC').textContent = visitors > 0 ? ('$' + (revenue / visitors).toFixed(2) + ' EPC') : '$0.00 EPC';
+}
+
+// ============================================================================
+// TAB SWITCHING
+// ============================================================================
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.tab-btn[onclick*="${tab}"]`).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+// ============================================================================
+// REFRESH
+// ============================================================================
+
+function refreshDashboard() {
+  const events = getFilteredEvents();
+  const sales = getFilteredSales();
+  renderFunnelTable(QUIZ_STEPS, events, sales, 'quizTableBody');
+  renderFunnelTable(ADV_STEPS, events, sales, 'advTableBody');
+  renderSummary(events, sales);
+}
+
+// ============================================================================
+// POSTBACK HANDLER
+// ============================================================================
+
+function handlePostbackParams() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('postback') === 'sale') {
+    const sale = {
+      amount: parseFloat(params.get('amount') || '99'),
+      source: params.get('source') || 'webhook',
+      session: params.get('session_id') || 'postback_' + Date.now(),
+      ts: Date.now()
+    };
+    const sales = getSales();
+    sales.push(sale);
+    localStorage.setItem('funnel_sales', JSON.stringify(sales));
+
+    // Also record as funnel event
+    const events = getEvents();
+    if (!events.some(e => e.session === sale.session && e.step === 'offer_sale')) {
+      events.push({ session: sale.session, step: 'offer_sale', ts: sale.ts });
+      localStorage.setItem('funnel_events', JSON.stringify(events));
+    }
+
+    // Clean URL
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+}
+
+function recordManualSale() {
+  const amount = parseFloat(document.getElementById('saleAmount').value) || 99;
+  const source = document.getElementById('saleSource').value;
+  const session = document.getElementById('saleSession').value || 'manual_' + Date.now();
+
+  const sale = { amount, source, session, ts: Date.now() };
+  const sales = getSales();
+  sales.push(sale);
+  localStorage.setItem('funnel_sales', JSON.stringify(sales));
+
+  const events = getEvents();
+  events.push({ session, step: 'offer_sale', ts: Date.now() });
+  localStorage.setItem('funnel_events', JSON.stringify(events));
+
+  document.getElementById('saleSession').value = '';
+  refreshDashboard();
+}
+
+// ============================================================================
+// DEMO DATA GENERATOR
+// ============================================================================
+
+function generateDemoData() {
+  if (!confirm('Generate sample funnel data for testing? This will add to existing data.')) return;
+
+  const events = getEvents();
+  const sales = getSales();
+  const now = Date.now();
+
+  const allQuizSteps = QUIZ_STEPS.map(s => s.id);
+  const advStepIds = ['adv_view', 'adv_scroll_50', 'adv_cta'];
+  const totalSessions = 150 + Math.floor(Math.random() * 100);
+
+  for (let i = 0; i < totalSessions; i++) {
+    const session = 'demo_' + now + '_' + i;
+    const ts = now - Math.floor(Math.random() * 30 * 86400000); // random time in last 30 days
+    let dropChance = 0;
+
+    // ~60% come from advertorial
+    const fromAdv = Math.random() < 0.6;
+    if (fromAdv) {
+      events.push({ session, step: 'adv_view', ts });
+      if (Math.random() > 0.15) events.push({ session, step: 'adv_scroll_50', ts: ts + 10000 });
+      if (Math.random() > 0.35) {
+        events.push({ session, step: 'adv_cta', ts: ts + 20000 });
+      } else continue;
+    }
+
+    // Quiz steps
+    for (let j = 0; j < allQuizSteps.length; j++) {
+      const stepId = allQuizSteps[j];
+
+      // Dynamic drop rates
+      if (stepId === 'q1') dropChance = 0.08;
+      else if (stepId === 'q2') dropChance = 0.02;
+      else if (stepId.startsWith('q') && parseInt(stepId.slice(1)) <= 10) dropChance = 0.015;
+      else if (stepId === 'q27' || stepId === 'q28') dropChance = 0.04;
+      else if (stepId === 'q29') dropChance = 0.05;
+      else if (stepId === 'q32') dropChance = 0.03;
+      else if (stepId === 'q33') dropChance = 0.02;
+      else if (stepId === 'offer_view') dropChance = 0.0;
+      else if (stepId === 'offer_checkout') dropChance = 0.4;
+      else if (stepId === 'offer_sale') dropChance = 0.6;
+      else dropChance = 0.01;
+
+      if (Math.random() < dropChance && j > 0) break;
+
+      events.push({ session, step: stepId, ts: ts + (j + 1) * 5000 });
+
+      // Record sale
+      if (stepId === 'offer_sale') {
+        sales.push({ amount: 99, source: ['checkoutchamp', 'stripe', 'crm'][Math.floor(Math.random() * 3)], session, ts: ts + (j + 1) * 5000 });
+      }
+    }
+  }
+
+  localStorage.setItem('funnel_events', JSON.stringify(events));
+  localStorage.setItem('funnel_sales', JSON.stringify(sales));
+  refreshDashboard();
+}
+
+// ============================================================================
+// INIT
+// ============================================================================
+
+// Set postback URL display
+document.getElementById('postbackUrl').textContent = window.location.origin + window.location.pathname + '?postback=sale&amount={amount}&source={source}&session_id={session_id}';
+
+handlePostbackParams();
+refreshDashboard();
+</script>
+</body>
+</html>
