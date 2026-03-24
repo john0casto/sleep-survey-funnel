@@ -701,7 +701,7 @@
           <li><span class="check">&#10003;</span> 1:1 medical support</li>
           <li><span class="check">&#10003;</span> Personalized sleep plan</li>
         </ul>
-        <button class="plan-select-btn" style="width:100%;max-width:320px;padding:16px 32px;font-size:18px;" onclick="document.getElementById('checkoutSection').scrollIntoView({behavior:'smooth',block:'start'})">GET STARTED</button>
+        <button class="plan-select-btn" style="width:100%;max-width:320px;padding:16px 32px;font-size:18px;" onclick="selectPlan('plan1')">GET STARTED</button>
       </div>
     </div>
   </div>
@@ -904,6 +904,7 @@ const state = params.get('state') || '';
 const severity = params.get('severity') || 'Moderate';
 const avgSleep = params.get('sleep') || '3–5 hrs';
 const duration = params.get('duration') || '3+ months';
+const checkoutUrl = params.get('checkout_url') || '';
 
 // Personalize
 if (firstName) {
@@ -937,15 +938,22 @@ setInterval(updateTimer, 1000);
 let selectedPlan = 'plan1';
 function selectPlan(planId) {
   selectedPlan = planId;
-  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-  document.getElementById(planId).classList.add('selected');
-  document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
   trackFunnelStep('offer_checkout');
   // Fire InitiateCheckout pixel
   const eid = generateEventId();
   fbq('track', 'InitiateCheckout', { content_name: planId }, { eventID: eid });
   fireCapiEvent('InitiateCheckout', eid, {}, { content_name: planId });
+
+  // If Dosable returned a checkout URL, redirect there (CheckoutChamp)
+  if (checkoutUrl) {
+    window.location.href = checkoutUrl;
+    return;
+  }
+
+  // Fallback: scroll to local checkout form
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById(planId).classList.add('selected');
+  document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ── FAQ Toggle ──

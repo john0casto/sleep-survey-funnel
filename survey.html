@@ -783,7 +783,9 @@ const QUESTIONS = [
     id: 'q26',
     text: 'Are you experiencing symptoms of anxiety, depression, or stress which is causing your sleep difficulty?',
     type: 'single',
-    options: ['Yes', 'No']
+    options: ['No', 'Yes'],
+    dqOn: 'Yes',
+    dqMessage: "Based on your response, we cannot proceed with the medication at this time. Please consult with your doctor for alternative options."
   },
   {
     id: 'q25',
@@ -1265,6 +1267,206 @@ function showDQ(message) {
   </div>`;
 }
 
+// ============================================================================
+// DOSABLE INTEGRATION
+// ============================================================================
+const DOSABLE_API = 'https://staging.intake.dosable.com';
+const DOSABLE_KEY = '87ec5703cae0c6bc2d6795c73a5f4b61f95a96c93a241c86c2169b98872e310b';
+// Monthly subscription: Trazodone/Pyridoxine/Melatonin/L-Theanine $99.99/mo
+const DOSABLE_MED = 'C-3pLxA7tWjMbEZKc64oYvRqdXnFuHgTNs';
+
+function norm(v) { return typeof v === 'string' ? v.replace(/\u2013/g, '-') : v; }
+
+function noneOrTextValue(a, fallback) {
+  if (!a) return fallback;
+  if (a.none) return 'None';
+  return a.text || fallback;
+}
+
+function mapMultiValues(arr, mapping) {
+  if (!Array.isArray(arr)) return [];
+  return arr.map(v => mapping[norm(v)] || norm(v)).filter(Boolean);
+}
+
+function mapAnswersToDosable(a) {
+  const d = {};
+  const q = (id, value, question) => { if (value !== undefined && value !== null && value !== '') d[id] = { value, question }; };
+
+  // 3000: Sex at birth
+  q('3000', a.q9, 'What was your sex assigned at birth?');
+
+  // 3001: Pregnancy (females only)
+  if (a.q9a) q('3001', a.q9a, 'Are you currently pregnant, breastfeeding or planning to become pregnant?');
+
+  // 3002: Pregnancy consent (auto-consent if female + not pregnant)
+  if (a.q9 === 'Female' && a.q9a === 'No') {
+    q('3002', 'I have read and understand the above information, I understand the risks and wish to proceed', 'Consent (Pregnancy)');
+  }
+
+  // 3003: Height
+  if (a.q7) q('3003', a.q7.feet + "'" + (a.q7.inches || '0') + '"', 'What is your height in feet and inches?');
+
+  // 3004: Weight
+  if (a.q8) q('3004', a.q8, 'What is your weight in pounds?');
+
+  // 3005: Medical conditions
+  q('3005', noneOrTextValue(a.q11, 'None'), 'Please identify all your current medical conditions');
+
+  // 3006: Medications
+  q('3006', noneOrTextValue(a.q12, 'None'), 'Please list all your current medications including dosages');
+
+  // 3007: Allergies
+  q('3007', noneOrTextValue(a.q13, 'None'), 'Please list all of your known allergies');
+
+  // 3008: Duration of insomnia
+  const durationMap = { 'Less than 1 month': 'Less than 1 month', '1-3 months': '1-3 months', 'Over 3 months': 'Over 3 months' };
+  if (a.q3) q('3008', durationMap[norm(a.q3)] || norm(a.q3), 'How long have you been experiencing insomnia?');
+
+  // 3009: Sleep hours
+  const sleepMap = { 'Less than 3 hours': 'Less than 3 hours', '3-5 hours': '3-5 hours', '5-7 hours': '5-7 hours', 'More than 7 hours': 'More than 7 hours' };
+  if (a.q14) q('3009', sleepMap[norm(a.q14)] || norm(a.q14), 'How many hours do you sleep on average per night?');
+
+  // 3010: Sleep issues (checkbox)
+  const issueMap = { 'Falling asleep': 'Difficulty falling asleep', 'Staying asleep': 'Difficulty staying asleep', 'Early morning awakening': 'Early morning awakening' };
+  if (a.q2) q('3010', mapMultiValues(a.q2, issueMap), 'What type of sleep issues are you experiencing?');
+
+  // 3011: Severity
+  if (a.q15) q('3011', a.q15, 'How would you classify the severity of your insomnia?');
+
+  // 3012: Treatments tried (checkbox)
+  const treatMap = {
+    "I haven't tried anything to fix my sleep": 'I have never treated my insomnia',
+    "I've tried changing my routine/habits": 'Sleep hygiene',
+    'Cognitive behavioral therapy': 'Cognitive behavioral therapy',
+    'Medications or supplements': 'Medications or supplements',
+    'Other': 'Other'
+  };
+  if (a.q5) {
+    const mapped = mapMultiValues(a.q5, treatMap);
+    q('3012', mapped, 'What treatments have you tried for insomnia?');
+    // 3013/3014: Follow-up if medications selected
+    if (mapped.includes('Medications or supplements')) {
+      q('3013', 'Previously tried OTC sleep aids and/or supplements', 'Which supplement or medication have you tried?');
+      q('3014', 'Did not find them effective for managing insomnia', 'Please provide further information about your previous treatment');
+    }
+  }
+
+  // 3015: Sleep apnea
+  if (a.q16) q('3015', a.q16, 'Do you have sleep apnea?');
+
+  // 3016: CPAP (only if sleep apnea = Yes)
+  if (a.q16a) q('3016', a.q16a, 'Is this well controlled with a sleep device such as an oral appliance or CPAP/BIPAP?');
+
+  // 3017: Age 65+
+  if (a.q10) q('3017', a.q10, 'Are you 65 years of age or older?');
+
+  // 3018: Heavy machinery
+  if (a.q17) q('3018', a.q17, 'Do you operate heavy machinery, drive for extended periods, or perform tasks that require high levels of focus and coordination as part of your job?');
+
+  // 3019: Conditions (checkbox)
+  const condMap = { 'None apply': 'None of these apply' };
+  if (a.q18) q('3019', mapMultiValues(a.q18, condMap), 'Do any of these apply to you? (select all that apply)');
+
+  // 3020: Caffeine
+  if (a.q19) q('3020', norm(a.q19), 'How often do you consume caffeine in the afternoon? (coffee, tea, soda)');
+
+  // 3021: Alcohol
+  if (a.q20) q('3021', norm(a.q20), 'How frequently do you consume alcohol?');
+
+  // 3022: Exercise
+  if (a.q21) q('3022', a.q21, 'Do you engage in regular physical activity?');
+
+  // 3023: Sleep environment
+  if (a.q22) q('3023', a.q22, 'Is your sleep environment conducive to rest? (e.g., comfortable bedding, dark room, minimal noise)');
+
+  // 3024: Environment details (only if q22 = No)
+  if (a.q22a) q('3024', a.q22a, 'Please provide further information about your difficulties');
+
+  // 3025: Electronics
+  if (a.q23) q('3025', a.q23, 'Do you use electronic devices (phone, computer, TV) shortly before bedtime?');
+
+  // 3026: Consistent schedule
+  if (a.q24) q('3026', a.q24, 'Do you have a consistent sleep schedule?');
+
+  // 3027: Mental health (hard stop on Yes handled by DQ in quiz)
+  if (a.q26) q('3027', a.q26, 'Are you experiencing symptoms of anxiety, depression, or stress which is causing your sleep difficulty?');
+
+  // 3028: Additional info
+  if (a.q25) q('3028', a.q25 === 'Skipped' ? 'N/A' : a.q25, 'Is there any other information you feel is relevant to your sleep issues or overall health or do you have any questions for the doctor?');
+
+  // 3029: General Insomnia Consent
+  if (a.q27 === 'agreed') q('3029', 'I have read the above information and I do consent and wish to move forward', 'General Insomnia Consent');
+
+  // 3030: Truthfulness Consent (category_final_question)
+  if (a.q28 === 'agreed') q('3030', 'I have read the above information and I do consent and wish to move forward', 'Consent (Truthfulness)');
+
+  return d;
+}
+
+async function dosableFetch(path, method, body) {
+  const res = await fetch(DOSABLE_API + path, {
+    method,
+    headers: { 'X-API-KEY': DOSABLE_KEY, 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const data = await res.json();
+  // Lead endpoint returns 200 with message for duplicates — treat as success
+  if (!res.ok && res.status !== 409) {
+    console.error('Dosable error:', path, res.status, data);
+    throw new Error(data.message || data.detail?.message || `Dosable ${path} failed (${res.status})`);
+  }
+  return data;
+}
+
+async function submitToDosable(a) {
+  // 1. Create Lead (also creates session + order automatically)
+  const lead = await dosableFetch('/leads/', 'POST', {
+    first_name: a.q29?.first,
+    last_name: a.q29?.last,
+    email: a.q32,
+    phone: (a.q33 || '').replace(/\D/g, ''),
+    birthday: a.q30 ? `${a.q30.month}/${a.q30.day}/${a.q30.year}` : undefined,
+    lead_state: a.q31,
+    gender: a.q9,
+    tenant_id: 30
+  });
+  console.log('Dosable lead created:', lead);
+
+  // Handle redirect (existing patient)
+  if (lead.redirect_required) {
+    return { checkout_url: lead.redirect_url };
+  }
+
+  const sessionId = lead.session_id || lead.order?.session_id;
+  if (!sessionId) throw new Error('No session_id returned from lead creation');
+
+  // 2. Map and bulk submit all answers
+  const dosableAnswers = mapAnswersToDosable(a);
+  console.log('Mapped Dosable answers:', dosableAnswers);
+  await dosableFetch('/sessions/' + sessionId, 'PUT', dosableAnswers);
+
+  // 3. Complete session with final answer + med → returns checkout_url
+  const finalAnswers = {};
+  if (dosableAnswers['3030']) finalAnswers['3030'] = dosableAnswers['3030'];
+
+  const completeRes = await fetch(DOSABLE_API + '/sessions/' + sessionId + '/complete', {
+    method: 'POST',
+    headers: { 'X-API-KEY': DOSABLE_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ final_answers: finalAnswers, med: DOSABLE_MED })
+  });
+  const result = await completeRes.json();
+  if (!completeRes.ok) {
+    console.error('Dosable complete error:', result);
+    throw new Error(result.message || result.detail || 'Session complete failed');
+  }
+  console.log('Dosable session completed:', result);
+  return result; // { completed: true, checkout_url: "https://staging-buy.healthrenewalrx.com/..." }
+}
+
+// ============================================================================
+// SUBMIT
+// ============================================================================
+
 async function handleSubmit() {
   document.getElementById('questionCard').innerHTML = `<div class="review-screen">
     <div class="loading-spinner"></div>
@@ -1294,23 +1496,30 @@ async function handleSubmit() {
   };
   fireCapiEvent('Lead', leadEventId, hashedUserData, { content_name: 'Sleep Survey Complete' });
 
-  // TODO: POST answers to your backend
-  // fetch('/api/survey/submit', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(answers) })
+  // Submit to Dosable
+  let checkoutUrl = '';
+  try {
+    const result = await submitToDosable(answers);
+    checkoutUrl = result.checkout_url || result.thanks_url || '';
+    console.log('Dosable checkout URL:', checkoutUrl);
+  } catch (err) {
+    console.error('Dosable submission failed:', err);
+    // Continue to offer page even if Dosable fails
+  }
 
-  // Redirect to offer page with patient data
-  setTimeout(() => {
-    const offerParams = new URLSearchParams({
-      first: answers.q29?.first || '',
-      last: answers.q29?.last || '',
-      email: answers.q32 || '',
-      phone: answers.q33 || '',
-      state: answers.q31 || '',
-      severity: answers.q15 || 'Moderate',
-      sleep: answers.q14 || '3–5 hrs',
-      duration: answers.q3 || '3+ months',
-    });
-    window.location.href = 'offer.html?' + offerParams.toString();
-  }, 2000);
+  // Redirect to offer page with patient data + checkout URL
+  const offerParams = new URLSearchParams({
+    first: firstName,
+    last: lastName,
+    email: email,
+    phone: answers.q33 || '',
+    state: state,
+    severity: answers.q15 || 'Moderate',
+    sleep: answers.q14 || '3–5 hrs',
+    duration: answers.q3 || '3+ months',
+  });
+  if (checkoutUrl) offerParams.set('checkout_url', checkoutUrl);
+  window.location.href = 'offer.html?' + offerParams.toString();
 }
 
 renderQuestion();
