@@ -1281,13 +1281,20 @@ async function handleSubmit() {
   // TODO: POST answers to your backend
   // fetch('/api/survey/submit', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(answers) })
 
+  // Redirect to offer page with patient data
   setTimeout(() => {
-    document.getElementById('questionCard').innerHTML = `<div class="review-screen">
-      <div style="font-size:48px;margin-bottom:16px;color:#c4a882;">&#10003;</div>
-      <p><strong>Assessment Complete!</strong></p>
-      <p>Thank you, ${answers.q29?.first || ''}. Your responses have been submitted successfully. A licensed provider will reach out to you shortly.</p>
-    </div>`;
-  }, 3000);
+    const offerParams = new URLSearchParams({
+      first: answers.q29?.first || '',
+      last: answers.q29?.last || '',
+      email: answers.q32 || '',
+      phone: answers.q33 || '',
+      state: answers.q31 || '',
+      severity: answers.q15 || 'Moderate',
+      sleep: answers.q14 || '3–5 hrs',
+      duration: answers.q3 || '3+ months',
+    });
+    window.location.href = 'offer.html?' + offerParams.toString();
+  }, 2000);
 }
 
 renderQuestion();

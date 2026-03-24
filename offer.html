@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Your Sleep Treatment Plan - Health Renewal Rx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Facebook Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1630969037933313');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1630969037933313&ev=PageView&noscript=1"/></noscript>
+
+  <script>
+    const FB_PIXEL_ID = '1630969037933313';
+    const FB_CAPI_TOKEN = 'EAAOrQQDYtRsBRFODGWcVBXE88blRBHmZAvfl5LfNmnc07mjnx1htvaEHCq9RIFfJDPKNfCmOvozx4cU73OVynC56HDQwkpsWc1CePQTJT0HfoxL82y3xR1ifPjp7jZCcjai1PT4vbzzKEd00InrWWYZA0j2A8Iowsv8oux7HrsXjMhZB7vcLduYT4IUdNWlMUAZDZD';
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    function getUrlParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+    function generateEventId() {
+      return 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+    }
+    async function hashSHA256(value) {
+      if (!value) return null;
+      const data = new TextEncoder().encode(value.trim().toLowerCase());
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    async function fireCapiEvent(eventName, eventId, userData, customData) {
+      const fbp = getCookie('_fbp');
+      const fbc = getCookie('_fbc') || (getUrlParam('fbclid') ? 'fb.1.' + Date.now() + '.' + getUrlParam('fbclid') : null);
+      const serverEvent = {
+        event_name: eventName, event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId, event_source_url: window.location.href, action_source: 'website',
+        user_data: { client_user_agent: navigator.userAgent, fbp, fbc, ...userData },
+        custom_data: customData || {}
+      };
+      try {
+        await fetch(`https://graph.facebook.com/v21.0/${FB_PIXEL_ID}/events?access_token=${FB_CAPI_TOKEN}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: [serverEvent] })
+        });
+      } catch (e) { console.warn('CAPI event failed:', e); }
+    }
+    // PageView CAPI
+    fireCapiEvent('PageView', generateEventId(), {});
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f0f2f8;
+      color: #1a1a2e;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ── Header ── */
+    .top-header {
+      background: #fff;
+      border-bottom: 1px solid #e0e3ea;
+      padding: 16px 0;
+      text-align: center;
+    }
+    .top-header img { height: 44px; }
+
+    .timer-bar {
+      background: #c4a882;
+      color: #fff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .timer-bar .timer { font-size: 18px; font-weight: 800; }
+
+    /* ── Sections ── */
+    .section { padding: 24px 0; }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    h1 .highlight {
+      background: linear-gradient(to top, #f5e6cc 40%, transparent 40%);
+      font-style: italic;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    h2 .highlight {
+      background: linear-gradient(to top, #f5e6cc 40%, transparent 40%);
+      font-style: italic;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #555;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    /* Rating */
+    .rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 14px;
+      color: #555;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+    .stars { color: #f5a623; letter-spacing: 2px; }
+
+    /* ── Patient Info Grid ── */
+    .info-grid {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin: 20px 0;
+      border: 1px solid #e0e3ea;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .info-cell {
+      flex: 1;
+      text-align: center;
+      padding: 16px 12px;
+      border-right: 1px solid #e0e3ea;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-cell-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #999;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .info-cell-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    /* ── Success Banner ── */
+    .success-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(135deg, #2d4a3e, #3d6b56);
+      border-radius: 12px;
+      padding: 20px;
+      color: #fff;
+      margin: 20px 0;
+    }
+    .success-banner .icon { font-size: 32px; flex-shrink: 0; }
+    .success-banner p { font-size: 14px; margin: 0; flex: 1; }
+    .success-banner .big-number {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .success-banner .big-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    /* ── Sleep Journey Graph ── */
+    .journey-graph {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 40px 20px 0;
+      position: relative;
+      min-height: 160px;
+    }
+    .journey-line {
+      position: absolute;
+      bottom: 40px;
+      left: 60px;
+      right: 60px;
+      height: 60px;
+      border-bottom: 3px dashed #c4a882;
+      border-radius: 0 0 50% 0;
+    }
+    .journey-point {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .journey-bubble {
+      background: #c4a882;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .journey-bubble.goal {
+      background: #2d6a4f;
+    }
+    .journey-label {
+      font-size: 13px;
+      color: #888;
+    }
+    .journey-label strong { color: #1a1a2e; }
+
+    /* ── Goals ── */
+    .goals-block {
+      display: flex;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .goals-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .goals-list {
+      list-style: none;
+    }
+    .goals-list li {
+      padding: 6px 0;
+      font-size: 15px;
+      border-bottom: 1px solid #f0f2f8;
+    }
+    .goals-list li:last-child { border-bottom: none; }
+
+    /* ── What's Included ── */
+    .included-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid #f0f2f8;
+    }
+    .included-item:last-child { border-bottom: none; }
+    .included-icon {
+      width: 44px;
+      height: 44px;
+      background: #f0f2f8;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .included-text h4 { font-size: 15px; font-weight: 600; }
+    .included-text p { font-size: 13px; color: #888; margin-top: 2px; }
+
+    /* ── Steps ── */
+    .steps-timeline {
+      border-left: 3px solid #c4a882;
+      padding-left: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .step-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #c4a882;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .step-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .step-desc { font-size: 14px; color: #555; }
+
+    /* ── Medication Plans ── */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    @media (min-width: 600px) {
+      .plans-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .plan-card {
+      background: #fff;
+      border: 2px solid #e0e3ea;
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: border-color 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .plan-card:hover { border-color: #c4a882; }
+    .plan-card.selected { border-color: #c4a882; box-shadow: 0 0 0 2px #c4a882; }
+    .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #c4a882;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    .plan-name { font-size: 18px; font-weight: 700; margin: 12px 0 4px; }
+    .plan-price {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1a1a2e;
+    }
+    .plan-price-old {
+      font-size: 16px;
+      color: #999;
+      text-decoration: line-through;
+      margin-left: 6px;
+      font-weight: 400;
+    }
+    .plan-per { font-size: 13px; color: #888; margin-bottom: 12px; }
+    .plan-features {
+      list-style: none;
+      text-align: left;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .plan-features li {
+      padding: 4px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .plan-features .check { color: #2d6a4f; font-weight: 700; flex-shrink: 0; }
+    .plan-select-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #c4a882;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+      margin-top: 12px;
+    }
+    .plan-select-btn:hover { background: #b69872; }
+
+    /* ── Checkout Form ── */
+    .checkout-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .form-row > * { flex: 1; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid #e0e3ea;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: #c4a882; }
+    .form-group select {
+      -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+
+    .checkout-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: #2d6a4f;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+      margin-top: 16px;
+      letter-spacing: 0.5px;
+    }
+    .checkout-btn:hover { background: #245a42; }
+
+    .security-badges {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #999;
+    }
+    .security-badges span { display: flex; align-items: center; gap: 4px; }
+
+    /* ── Testimonials ── */
+    .testimonial {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .testimonial-avatar {
+      width: 36px; height: 36px;
+      background: #c4a882;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 14px;
+    }
+    .testimonial-name { font-weight: 600; font-size: 14px; }
+    .testimonial-badge { font-size: 11px; color: #2d6a4f; font-weight: 500; }
+    .testimonial-text { font-size: 14px; color: #555; line-height: 1.6; }
+
+    /* ── Stats Grid ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: #c4a882;
+    }
+    .stat-label { font-size: 13px; color: #555; margin-top: 4px; }
+
+    /* ── FAQ ── */
+    .faq-item {
+      border-bottom: 1px solid #e0e3ea;
+      padding: 16px 0;
+      cursor: pointer;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-q .arrow { transition: transform 0.2s; font-size: 18px; color: #999; }
+    .faq-q .arrow.open { transform: rotate(180deg); }
+    .faq-a {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding-top: 0;
+    }
+    .faq-a.open { max-height: 300px; padding-top: 12px; }
+
+    /* ── Footer ── */
+    .page-footer {
+      text-align: center;
+      padding: 24px 16px;
+      font-size: 12px;
+      color: #999;
+      line-height: 1.6;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      h1 { font-size: 20px; }
+      h2 { font-size: 18px; }
+      .card { padding: 24px 18px; }
+      .checkout-card { padding: 24px 18px; }
+      .form-row { flex-direction: column; gap: 0; }
+      .info-cell-value { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="top-header">
+  <img src="logo.png" alt="Health Renewal Rx">
+</div>
+<div class="timer-bar">
+  <span id="patientNameTimer">Your</span> approval valid for <span class="timer" id="timerDisplay">11:00</span>
+</div>
+
+<div class="container section">
+
+  <!-- ── APPROVAL CARD ── -->
+  <div class="card">
+    <h1><span id="patientNameHead">Your</span> sleep treatment plan <span class="highlight">approved</span>!</h1>
+    <div class="rating">
+      <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      Excellent 4.7 &middot; 2.1k Reviews
+    </div>
+
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-cell-label">Severity</div>
+        <div class="info-cell-value" id="infoSeverity">Moderate</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Avg Sleep</div>
+        <div class="info-cell-value" id="infoSleep">3–5 hrs</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Duration</div>
+        <div class="info-cell-value" id="infoDuration">3+ months</div>
+      </div>
+    </div>
+
+    <p class="subtitle">You'll receive personalized care with <strong>prescribed medication</strong>, 1:1 physician guidance, and 24/7 support.</p>
+
+    <!-- Success Banner -->
+    <div class="success-banner">
+      <div class="icon">&#128164;</div>
+      <p>You have a <strong>very high</strong> chance of improving your sleep with prescription medication</p>
+      <div>
+        <div class="big-number">92.4%</div>
+        <div class="big-label">VERY HIGH</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GOALS ── -->
+  <div class="card">
+    <h2>The goals <span class="highlight">you will accomplish</span></h2>
+    <div class="goals-block">
+      <div class="goals-icon">&#127942;</div>
+      <ul class="goals-list">
+        <li>Fall asleep faster and stay asleep through the night</li>
+        <li>Reset your sleep cycle so your body naturally maintains healthy rest</li>
+        <li>Wake up feeling refreshed with more energy throughout the day</li>
+        <li>Improve your focus, mood, and overall quality of life</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── WHAT'S INCLUDED ── -->
+  <div class="card">
+    <h2>What's <span class="highlight">included</span> in your plan</h2>
+    <div class="included-item">
+      <div class="included-icon">&#128138;</div>
+      <div class="included-text">
+        <h4>Prescription Sleep Medication</h4>
+        <p>Cost of medication is included</p>
+      </div>
+    </div>
+    <div class="included-item">
+      <div class="included-icon">&#129657;</div>
+      <div class="included-text">
+        <h4>Board-Certified Physician Review</h4>
+        <p>No insurance required</p>
+      </div>
+    </div>
+    <div class="included-item">
+      <div class="included-icon">&#128172;</div>
+      <div class="included-text">
+        <h4>1:1 Physician Guidance</h4>
+        <p>Unlimited messaging with your care team</p>
+      </div>
+    </div>
+    <div class="included-item">
+      <div class="included-icon">&#128666;</div>
+      <div class="included-text">
+        <h4>Free Shipping</h4>
+        <p>Delivered to your door within days</p>
+      </div>
+    </div>
+    <div class="included-item">
+      <div class="included-icon">&#128203;</div>
+      <div class="included-text">
+        <h4>Personalized Sleep Plan</h4>
+        <p>Tailored guidance based on your assessment</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WHAT HAPPENS NEXT ── -->
+  <div class="card">
+    <h2>What happens <span class="highlight">next</span>?</h2>
+    <div class="steps-timeline">
+      <div>
+        <div class="step-label">STEP 1</div>
+        <div class="step-title">Physician Review</div>
+        <div class="step-desc">You're already pre-qualified. After checkout, a board-certified physician will review your assessment and begin the approval process.</div>
+      </div>
+      <div>
+        <div class="step-label">STEP 2</div>
+        <div class="step-title">Fast Prescription Approval</div>
+        <div class="step-desc">Most prescriptions are approved in less than 24 hours. If needed, a same-day consultation with a licensed clinician is available at no extra charge.</div>
+      </div>
+      <div>
+        <div class="step-label">STEP 3</div>
+        <div class="step-title">Medication Shipping</div>
+        <div class="step-desc">Once approved, your medication is prepared and shipped. You'll receive tracking info within 2 business days.</div>
+      </div>
+      <div>
+        <div class="step-label">STEP 4</div>
+        <div class="step-title">Monthly Refills</div>
+        <div class="step-desc">Each month, complete a quick refill form. We'll send email and text updates with tracking as your next shipment is on its way.</div>
+      </div>
+      <div>
+        <div class="step-label">STEP 5</div>
+        <div class="step-title">Unlimited Support</div>
+        <div class="step-desc">Questions about your progress, side effects, or dosage? You have unlimited, 24/7 access to our care team and licensed clinicians.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MEDICATION SELECTION ── -->
+  <div class="card" id="medicationSection">
+    <div class="timer-bar" style="border-radius:12px;margin-bottom:20px;">
+      Your approval is reserved for <span class="timer" id="timerDisplay2">11:00</span>
+    </div>
+    <h2>Choose your <span class="highlight">medication</span></h2>
+    <p class="subtitle">Pay one month at a time. No contracts, cancel anytime.</p>
+
+    <div class="plans-grid">
+      <!-- Plan 1 -->
+      <div class="plan-card selected" id="plan1" onclick="selectPlan('plan1')">
+        <div class="plan-badge">MOST POPULAR</div>
+        <div class="plan-name">Sleep Essentials</div>
+        <div class="plan-price">$99 <span class="plan-price-old">$149</span></div>
+        <div class="plan-per">per month</div>
+        <ul class="plan-features">
+          <li><span class="check">&#10003;</span> Prescription sleep medication</li>
+          <li><span class="check">&#10003;</span> Board-certified physician consult</li>
+          <li><span class="check">&#10003;</span> 1:1 medical support</li>
+          <li><span class="check">&#10003;</span> Free shipping included</li>
+        </ul>
+        <button class="plan-select-btn" onclick="selectPlan('plan1')">SELECT</button>
+      </div>
+
+      <!-- Plan 2 -->
+      <div class="plan-card" id="plan2" onclick="selectPlan('plan2')">
+        <div class="plan-name">Sleep Complete</div>
+        <div class="plan-price">$149 <span class="plan-price-old">$199</span></div>
+        <div class="plan-per">per month</div>
+        <ul class="plan-features">
+          <li><span class="check">&#10003;</span> Premium prescription medication</li>
+          <li><span class="check">&#10003;</span> Board-certified physician consult</li>
+          <li><span class="check">&#10003;</span> Unlimited 1:1 doctor access</li>
+          <li><span class="check">&#10003;</span> Personalized sleep coaching</li>
+          <li><span class="check">&#10003;</span> Free expedited shipping</li>
+        </ul>
+        <button class="plan-select-btn" onclick="selectPlan('plan2')">SELECT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CHECKOUT FORM ── -->
+  <div class="checkout-card" id="checkoutSection">
+    <h2>Enter your <span class="highlight">shipping details</span></h2>
+
+    <form id="checkoutForm" onsubmit="handleCheckout(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="coFirstName" placeholder="First Name" required>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="coLastName" placeholder="Last Name" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="coEmail" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="coPhone" placeholder="(555) 123-4567" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Shipping Address</label>
+        <input type="text" id="coAddress" placeholder="Street Address" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="coCity" placeholder="City" required>
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" id="coState" placeholder="State" required>
+        </div>
+        <div class="form-group">
+          <label>Zip</label>
+          <input type="text" id="coZip" placeholder="Zip" required>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #e0e3ea;margin:20px 0;padding-top:20px;">
+        <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">Payment Information</h3>
+        <div class="form-group">
+          <label>Card Number</label>
+          <input type="text" id="coCard" placeholder="1234 5678 9012 3456" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Expiration</label>
+            <input type="text" id="coExp" placeholder="MM/YY" required>
+          </div>
+          <div class="form-group">
+            <label>CVV</label>
+            <input type="text" id="coCvv" placeholder="123" required>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="checkout-btn" id="checkoutBtn">CHECKOUT &#10132;</button>
+    </form>
+
+    <div class="security-badges">
+      <span>&#128274; HIPAA Compliant</span>
+      <span>&#128274; 256-bit SSL</span>
+      <span>&#128274; Secure Checkout</span>
+    </div>
+  </div>
+
+  <!-- ── TESTIMONIALS ── -->
+  <div class="card">
+    <h2>Real results from <span class="highlight">real patients</span></h2>
+
+    <div class="testimonial">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">S</div>
+        <div>
+          <div class="testimonial-name">Sarah M.</div>
+          <div class="testimonial-badge">&#10003; Verified patient</div>
+        </div>
+        <div style="margin-left:auto;" class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+      <div class="testimonial-text">"I had struggled with insomnia for over 3 years. Within the first week of starting my prescription, I was falling asleep in under 20 minutes. I finally feel like a normal person again."</div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">M</div>
+        <div>
+          <div class="testimonial-name">Michael T.</div>
+          <div class="testimonial-badge">&#10003; Verified patient</div>
+        </div>
+        <div style="margin-left:auto;" class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+      <div class="testimonial-text">"The entire process was seamless. I answered the questions, got approved the same day, and had my medication within 3 days. I'm sleeping 7+ hours now for the first time in years."</div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">J</div>
+        <div>
+          <div class="testimonial-name">Jennifer R.</div>
+          <div class="testimonial-badge">&#10003; Verified patient</div>
+        </div>
+        <div style="margin-left:auto;" class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+      <div class="testimonial-text">"I was skeptical at first, but the doctor was thorough and the medication has been life-changing. My anxiety around bedtime is gone. I wake up refreshed and energized."</div>
+    </div>
+  </div>
+
+  <!-- ── STATS ── -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">87%</div>
+      <div class="stat-label">Fall asleep faster within 1 week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">9/10</div>
+      <div class="stat-label">Patient satisfaction rating</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">+2.4 hrs</div>
+      <div class="stat-label">Average increase in nightly sleep</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">93%</div>
+      <div class="stat-label">Maintain improved sleep long-term</div>
+    </div>
+  </div>
+
+  <!-- ── FAQ ── -->
+  <div class="card">
+    <h2>Frequently asked <span class="highlight">questions</span></h2>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How does the program work? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">After completing your assessment and selecting a plan, a board-certified physician reviews your information. Once approved, your personalized sleep medication is prescribed and shipped directly to your door. You'll have ongoing access to your care team for support.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What medications are prescribed? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">Our physicians prescribe FDA-approved sleep medications tailored to your specific needs. The exact medication is determined after your physician review based on your medical history, sleep patterns, and other health factors discussed in your assessment.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Do I need insurance? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">No insurance is required. The cost of your consultation, prescription, medication, and shipping are all included in your monthly plan. There are no hidden fees.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can I cancel anytime? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">Yes. There are no contracts or long-term commitments. You can cancel at any time without needing to speak with anyone — simply log in to your account or contact our support team.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How quickly will I see results? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">Most patients report improved sleep within the first week of starting their medication. Full benefits are typically experienced within 2-4 weeks as your body adjusts to a healthier sleep pattern.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is my information secure? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">Absolutely. All personal and medical information is protected under HIPAA regulations and encrypted with 256-bit SSL. Your data is never shared with third parties.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="page-footer">
+  <p>&copy; 2026 Health Renewal Rx. All rights reserved.</p>
+  <p style="margin-top:8px;">This site is not a part of Facebook or Meta Platforms, Inc. This site is not endorsed by Facebook in any way. FACEBOOK is a trademark of META PLATFORMS, Inc.</p>
+  <p style="margin-top:8px;">Results may vary. Consult your physician before starting any treatment program.</p>
+</div>
+
+<script>
+// ── URL Params ──
+const params = new URLSearchParams(window.location.search);
+const firstName = params.get('first') || '';
+const lastName = params.get('last') || '';
+const email = params.get('email') || '';
+const phone = params.get('phone') || '';
+const state = params.get('state') || '';
+const severity = params.get('severity') || 'Moderate';
+const avgSleep = params.get('sleep') || '3–5 hrs';
+const duration = params.get('duration') || '3+ months';
+
+// Personalize
+if (firstName) {
+  document.getElementById('patientNameTimer').textContent = firstName + "'s";
+  document.getElementById('patientNameHead').textContent = firstName + "'s";
+}
+document.getElementById('infoSeverity').textContent = severity;
+document.getElementById('infoSleep').textContent = avgSleep;
+document.getElementById('infoDuration').textContent = duration;
+
+// Pre-fill checkout
+if (firstName) document.getElementById('coFirstName').value = firstName;
+if (lastName) document.getElementById('coLastName').value = lastName;
+if (email) document.getElementById('coEmail').value = email;
+if (phone) document.getElementById('coPhone').value = phone;
+if (state) document.getElementById('coState').value = state;
+
+// ── Timer ──
+let timerSeconds = 11 * 60;
+function updateTimer() {
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  const display = (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+  document.getElementById('timerDisplay').textContent = display;
+  document.getElementById('timerDisplay2').textContent = display;
+  if (timerSeconds > 0) timerSeconds--;
+}
+setInterval(updateTimer, 1000);
+
+// ── Plan Selection ──
+let selectedPlan = 'plan1';
+function selectPlan(planId) {
+  selectedPlan = planId;
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById(planId).classList.add('selected');
+  document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Fire InitiateCheckout pixel
+  const eid = generateEventId();
+  fbq('track', 'InitiateCheckout', { content_name: planId }, { eventID: eid });
+  fireCapiEvent('InitiateCheckout', eid, {}, { content_name: planId });
+}
+
+// ── FAQ Toggle ──
+function toggleFaq(el) {
+  const a = el.querySelector('.faq-a');
+  const arrow = el.querySelector('.arrow');
+  a.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ── Phone formatting ──
+document.getElementById('coPhone')?.addEventListener('input', function(e) {
+  let digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+  let formatted = '';
+  if (digits.length > 0) formatted = '(' + digits.slice(0, 3);
+  if (digits.length >= 3) formatted += ') ';
+  if (digits.length > 3) formatted += digits.slice(3, 6);
+  if (digits.length >= 6) formatted += '-';
+  if (digits.length > 6) formatted += digits.slice(6, 10);
+  e.target.value = formatted;
+});
+
+// ── Card formatting ──
+document.getElementById('coCard')?.addEventListener('input', function(e) {
+  let digits = e.target.value.replace(/\D/g, '').slice(0, 16);
+  e.target.value = digits.replace(/(.{4})/g, '$1 ').trim();
+});
+document.getElementById('coExp')?.addEventListener('input', function(e) {
+  let digits = e.target.value.replace(/\D/g, '').slice(0, 4);
+  if (digits.length > 2) digits = digits.slice(0, 2) + '/' + digits.slice(2);
+  e.target.value = digits;
+});
+document.getElementById('coCvv')?.addEventListener('input', function(e) {
+  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+});
+
+// ── Checkout ──
+async function handleCheckout(e) {
+  e.preventDefault();
+  const btn = document.getElementById('checkoutBtn');
+  btn.textContent = 'Processing...';
+  btn.disabled = true;
+
+  // Fire Purchase pixel
+  const planPrices = { plan1: 99, plan2: 149 };
+  const price = planPrices[selectedPlan] || 99;
+  const eid = generateEventId();
+  const em = document.getElementById('coEmail').value;
+  const ph = document.getElementById('coPhone').value.replace(/\D/g, '');
+  const fn = document.getElementById('coFirstName').value;
+  const ln = document.getElementById('coLastName').value;
+
+  fbq('track', 'Purchase', { value: price, currency: 'USD', content_name: selectedPlan }, { eventID: eid });
+  const hashedData = {
+    em: await hashSHA256(em), ph: await hashSHA256(ph),
+    fn: await hashSHA256(fn), ln: await hashSHA256(ln),
+    country: await hashSHA256('us')
+  };
+  fireCapiEvent('Purchase', eid, hashedData, { value: price, currency: 'USD', content_name: selectedPlan });
+
+  // TODO: Submit to your payment processor
+  console.log('Checkout submitted:', {
+    plan: selectedPlan,
+    price: price,
+    firstName: fn, lastName: ln,
+    email: em, phone: ph,
+    address: document.getElementById('coAddress').value,
+    city: document.getElementById('coCity').value,
+    state: document.getElementById('coState').value,
+    zip: document.getElementById('coZip').value,
+  });
+
+  setTimeout(() => {
+    document.getElementById('checkoutSection').innerHTML = `
+      <div style="text-align:center;padding:40px 0;">
+        <div style="font-size:48px;margin-bottom:16px;">&#10003;</div>
+        <h2>Order Confirmed!</h2>
+        <p style="color:#555;margin-top:12px;">Thank you, ${fn}. Your sleep treatment plan is being processed. A board-certified physician will review your information and you'll receive a confirmation email at <strong>${em}</strong> shortly.</p>
+      </div>`;
+  }, 2000);
+}
+</script>
+</body>
+</html>
