@@ -6,6 +6,81 @@
   <title>SleepWell - Personalized Sleep Solutions</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Facebook Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1630969037933313');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1630969037933313&ev=PageView&noscript=1"/></noscript>
+
+  <script>
+    // --- Facebook CAPI Helper ---
+    const FB_PIXEL_ID = '1630969037933313';
+    const FB_CAPI_TOKEN = 'EAAOrQQDYtRsBRFODGWcVBXE88blRBHmZAvfl5LfNmnc07mjnx1htvaEHCq9RIFfJDPKNfCmOvozx4cU73OVynC56HDQwkpsWc1CePQTJT0HfoxL82y3xR1ifPjp7jZCcjai1PT4vbzzKEd00InrWWYZA0j2A8Iowsv8oux7HrsXjMhZB7vcLduYT4IUdNWlMUAZDZD';
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+
+    function getUrlParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    function generateEventId() {
+      return 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+    }
+
+    async function hashSHA256(value) {
+      if (!value) return null;
+      const data = new TextEncoder().encode(value.trim().toLowerCase());
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function fireCapiEvent(eventName, eventId, userData, customData) {
+      const fbp = getCookie('_fbp');
+      const fbc = getCookie('_fbc') || (getUrlParam('fbclid') ? 'fb.1.' + Date.now() + '.' + getUrlParam('fbclid') : null);
+
+      const serverEvent = {
+        event_name: eventName,
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId,
+        event_source_url: window.location.href,
+        action_source: 'website',
+        user_data: {
+          client_ip_address: null,
+          client_user_agent: navigator.userAgent,
+          fbp: fbp,
+          fbc: fbc,
+          ...userData
+        },
+        custom_data: customData || {}
+      };
+
+      try {
+        await fetch(`https://graph.facebook.com/v21.0/${FB_PIXEL_ID}/events?access_token=${FB_CAPI_TOKEN}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: [serverEvent] })
+        });
+      } catch (e) {
+        console.warn('CAPI event failed:', e);
+      }
+    }
+
+    // Fire PageView via CAPI on load
+    (async () => {
+      const pvEventId = generateEventId();
+      fireCapiEvent('PageView', pvEventId, {});
+    })();
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1088,10 +1163,20 @@ function bindEvents(q) {
   }
 }
 
+let quizStartFired = false;
 function handleSingleSelect(q, value, e) {
   answers[q.id] = value;
   document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
   e.currentTarget.classList.add('selected');
+
+  // Fire ViewContent on first question answered (quiz started)
+  if (q.id === 'q1' && !quizStartFired) {
+    quizStartFired = true;
+    const eid = generateEventId();
+    fbq('trackCustom', 'QuizStart', {}, { eventID: eid });
+    fireCapiEvent('ViewContent', eid, {}, { content_name: 'Sleep Survey Started' });
+  }
+
   if (q.dqOn && value === q.dqOn) { setTimeout(() => showDQ(q.dqMessage), 400); return; }
   setTimeout(() => goNext(q), 400);
 }
@@ -1164,7 +1249,7 @@ function showDQ(message) {
   </div>`;
 }
 
-function handleSubmit() {
+async function handleSubmit() {
   document.getElementById('questionCard').innerHTML = `<div class="review-screen">
     <div class="loading-spinner"></div>
     <p><strong>Submitting your assessment...</strong></p>
@@ -1172,6 +1257,26 @@ function handleSubmit() {
   </div>`;
 
   console.log('Survey answers:', answers);
+
+  // Fire Lead event — Pixel + CAPI
+  const leadEventId = generateEventId();
+  const email = answers.q32 || '';
+  const phone = (answers.q33 || '').replace(/\D/g, '');
+  const firstName = answers.q29?.first || '';
+  const lastName = answers.q29?.last || '';
+  const state = answers.q31 || '';
+
+  fbq('track', 'Lead', { content_name: 'Sleep Survey Complete' }, { eventID: leadEventId });
+
+  const hashedUserData = {
+    em: await hashSHA256(email),
+    ph: await hashSHA256(phone),
+    fn: await hashSHA256(firstName),
+    ln: await hashSHA256(lastName),
+    st: await hashSHA256(state),
+    country: await hashSHA256('us')
+  };
+  fireCapiEvent('Lead', leadEventId, hashedUserData, { content_name: 'Sleep Survey Complete' });
 
   // TODO: POST answers to your backend
   // fetch('/api/survey/submit', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(answers) })
