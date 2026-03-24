@@ -8,6 +8,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- ClickFlare Conversion Tracking -->
+  <script>
+    function fireClickFlareConversion(payout, txid) {
+      var baseUrl = "https://priorityjusticeassist.com/cf/cv";
+      var cookieMatch = document.cookie.match(/(^| )cf_click_id=([^;]+)/);
+      var clickId = cookieMatch ? cookieMatch.pop() : '';
+      if (!clickId) return;
+      var url = baseUrl + "?click_id=" + encodeURIComponent(clickId);
+      if (payout) url += "&payout=" + encodeURIComponent(payout);
+      if (txid) url += "&txid=" + encodeURIComponent(txid);
+      var s = document.createElement("script");
+      s.src = url;
+      document.head.appendChild(s);
+    }
+  </script>
+
   <!-- Facebook Pixel -->
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -791,6 +807,9 @@ function selectPlan(planId) {
   const eid = generateEventId();
   fbq('track', 'InitiateCheckout', { content_name: planId }, { eventID: eid });
   fireCapiEvent('InitiateCheckout', eid, {}, { content_name: planId });
+
+  // ClickFlare checkout conversion with payout
+  fireClickFlareConversion(99, eid);
 
   // Redirect to CheckoutChamp checkout
   if (checkoutUrl) {
