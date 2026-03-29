@@ -866,14 +866,21 @@ let questionHistory = [];
 // FUNNEL TRACKING (localStorage)
 // ============================================================================
 (function() {
-  const SK = 'funnel_session_id', EK = 'funnel_events';
+  const SK = 'funnel_session_id';
+  const tracked = new Set();
   function getSid() { let s = sessionStorage.getItem(SK); if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem(SK,s); } return s; }
+  window.getFunnelSessionId = getSid;
   window.trackFunnelStep = function(step) {
+    const sid = getSid();
+    const key = sid + ':' + step;
+    if (tracked.has(key)) return;
+    tracked.add(key);
     try {
-      const evts = JSON.parse(localStorage.getItem(EK)||'[]'), sid = getSid();
-      if (evts.some(e => e.session===sid && e.step===step)) return;
-      evts.push({session:sid, step:step, ts:Date.now()});
-      localStorage.setItem(EK, JSON.stringify(evts));
+      fetch('/api/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session: sid, step: step, ts: Date.now() })
+      }).catch(() => {});
     } catch(e) {}
   };
 })();
@@ -1519,6 +1526,21 @@ async function handleSubmit() {
   const lastName = answers.q29?.last || '';
   const state = answers.q31 || '';
 
+  // Save lead to server for dashboard
+  try {
+    const sid = typeof getFunnelSessionId === 'function' ? getFunnelSessionId() : 'unknown';
+    fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session: sid, ts: Date.now(),
+        first: firstName, last: lastName,
+        email: email, phone: answers.q33 || '', state: state,
+        answers: JSON.parse(JSON.stringify(answers))
+      })
+    }).catch(() => {});
+  } catch(e) { console.warn('Failed to save lead:', e); }
+
   // Submit to Dosable
   let checkoutUrl = '';
   try {
@@ -1542,7 +1564,27 @@ async function handleSubmit() {
     duration: answers.q3 || '3+ months',
   });
   if (checkoutUrl) offerParams.set('checkout_url', checkoutUrl);
-  window.location.href = 'offer.html?' + offerParams.toString();
+
+  // ── Offer Page Variant Rotation ──
+  // To enable self-hosted split testing, add variant filenames below.
+  // Each visitor is randomly assigned one variant (sticky per session).
+  // Set to empty array [] to disable rotation and use offer.html only.
+  // Example: ['offer.html', 'offer-v2.html', 'offer-v3.html']
+  const OFFER_VARIANTS = ['offer.html', 'offer-v2.html'];
+
+  let offerPage = 'offer.html';
+  if (OFFER_VARIANTS.length > 1) {
+    // Sticky assignment: same session always gets same variant
+    const variantKey = 'offer_variant_assigned';
+    let assigned = sessionStorage.getItem(variantKey);
+    if (!assigned || !OFFER_VARIANTS.includes(assigned)) {
+      assigned = OFFER_VARIANTS[Math.floor(Math.random() * OFFER_VARIANTS.length)];
+      sessionStorage.setItem(variantKey, assigned);
+    }
+    offerPage = assigned;
+  }
+
+  window.location.href = offerPage + '?' + offerParams.toString();
 }
 
 renderQuestion();
