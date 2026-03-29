@@ -1056,7 +1056,7 @@
       </div>
     </div>
 
-    <div class="price-hero">
+    <div class="price-hero" id="pricing">
       <div class="price-label">Your Complete Sleep Deep Rx&trade; Plan</div>
       <div class="price-amount">$99<span class="price-old">$199</span></div>
       <div class="price-per">per month &mdash; everything included</div>
@@ -1290,7 +1290,7 @@
 
 <!-- ── STICKY MOBILE CTA ── -->
 <div class="sticky-cta" id="stickyCta">
-  <button onclick="selectPlan('plan1')">Start My Treatment &mdash; $99/mo &#8594;</button>
+  <button onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Start My Treatment &mdash; $99/mo &#8594;</button>
   <div class="sticky-sub">&#128737; 30-day guarantee &middot; Cancel anytime &middot; Free shipping</div>
 </div>
 
