@@ -504,7 +504,8 @@ function renderFunnelTable(steps, events, sales, tbodyId) {
   const counts = {};
   const maxCount = Math.max(...steps.map(s => {
     if (s.id === 'offer_sale') {
-      counts[s.id] = saleSessions.size + countUniqueSessions(events, 'offer_sale');
+      const allSaleSessions = new Set([...saleSessions, ...events.filter(e => e.step === 'offer_sale').map(e => e.session)]);
+      counts[s.id] = allSaleSessions.size;
     } else {
       counts[s.id] = countUniqueSessions(events, s.id);
     }
@@ -558,7 +559,9 @@ function renderSummary(events, sales) {
   const visitors = countUniqueSessions(events, 'q1');
   const completions = countUniqueSessions(events, 'q34');
   const leads = completions; // everyone who finishes HIPAA is a lead
-  const saleCount = sales.length + countUniqueSessions(events, 'offer_sale');
+  // Deduplicate: count unique sessions across both sales records and offer_sale events
+  const saleSessions = new Set([...sales.map(s => s.session), ...events.filter(e => e.step === 'offer_sale').map(e => e.session)]);
+  const saleCount = saleSessions.size;
   const revenue = sales.reduce((sum, s) => sum + (s.amount || 0), 0);
 
   document.getElementById('sumVisitors').textContent = visitors.toLocaleString();

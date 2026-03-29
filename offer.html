@@ -836,9 +836,15 @@ async function selectPlan(planId) {
   // ClickFlare checkout conversion with payout
   fireClickFlareConversion(99, eid);
 
-  // Redirect to CheckoutChamp checkout
+  // Redirect to CheckoutChamp checkout — append ClickFlare click ID for affiliate postback
   if (checkoutUrl) {
-    window.location.href = checkoutUrl;
+    let url = checkoutUrl;
+    const cfCookie = document.cookie.match(/(^| )cf_click_id=([^;]+)/);
+    if (cfCookie) {
+      const sep = url.includes('?') ? '&' : '?';
+      url += sep + 'clickid=' + encodeURIComponent(cfCookie[2]);
+    }
+    window.location.href = url;
   } else {
     alert('Checkout is not available. Please try again.');
   }

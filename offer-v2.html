@@ -1385,8 +1385,15 @@ async function selectPlan(planId) {
   fireCapiEvent('InitiateCheckout', eid, hashedUserData, { content_name: planId });
   fireClickFlareConversion(99, eid);
 
+  // Append ClickFlare click ID for CheckoutChamp affiliate postback
   if (checkoutUrl) {
-    window.location.href = checkoutUrl;
+    let url = checkoutUrl;
+    const cfCookie = document.cookie.match(/(^| )cf_click_id=([^;]+)/);
+    if (cfCookie) {
+      const sep = url.includes('?') ? '&' : '?';
+      url += sep + 'clickid=' + encodeURIComponent(cfCookie[2]);
+    }
+    window.location.href = url;
   } else {
     alert('Checkout is not available. Please try again.');
   }
