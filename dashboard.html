@@ -100,6 +100,109 @@
 
   .tab-content { display: none; }
   .tab-content.active { display: block; }
+
+  /* ── LEADS TAB ── */
+  .leads-list { display: flex; flex-direction: column; gap: 8px; }
+  .lead-row {
+    background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .lead-row:hover { background: #f3f4f6; }
+  .lead-header {
+    display: grid; grid-template-columns: 2fr 2fr 1fr 1fr 40px;
+    align-items: center; padding: 14px 20px; gap: 12px; font-size: 14px;
+  }
+  .lead-header .lead-name { font-weight: 600; color: #1a1a2e; }
+  .lead-header .lead-email { color: #555; }
+  .lead-header .lead-state { color: #888; text-align: center; }
+  .lead-header .lead-date { color: #888; font-size: 12px; }
+  .lead-header .lead-arrow { text-align: center; color: #ccc; transition: transform 0.2s; font-size: 16px; }
+  .lead-row.open .lead-arrow { transform: rotate(180deg); }
+  .lead-detail {
+    display: none; padding: 0 20px 20px; border-top: 1px solid #e5e7eb;
+  }
+  .lead-row.open .lead-detail { display: block; }
+  .lead-answers-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px;
+    margin-top: 12px;
+  }
+  .lead-answer-item { font-size: 13px; padding: 6px 0; border-bottom: 1px solid #f3f4f6; }
+  .lead-answer-item .laq { color: #888; font-weight: 500; }
+  .lead-answer-item .lav { color: #1a1a2e; font-weight: 600; margin-top: 2px; }
+  .leads-table-header {
+    display: grid; grid-template-columns: 2fr 2fr 1fr 1fr 40px;
+    padding: 0 20px 10px; gap: 12px; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #999; font-weight: 600;
+  }
+  .leads-search {
+    padding: 8px 14px; border: 1px solid #e5e7eb; border-radius: 8px;
+    font-size: 13px; font-family: inherit; width: 260px; margin-bottom: 16px;
+  }
+  .leads-search:focus { outline: none; border-color: #c4a882; }
+
+  /* ── ANSWER BREAKDOWN TAB ── */
+  .breakdown-section { margin-bottom: 28px; }
+  .breakdown-section h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #1a1a2e; }
+  .breakdown-bar-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 6px; font-size: 13px;
+  }
+  .breakdown-label { width: 240px; flex-shrink: 0; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .breakdown-bar-wrap { flex: 1; height: 22px; background: #f3f4f6; border-radius: 4px; overflow: hidden; position: relative; }
+  .breakdown-bar-fill { height: 100%; background: linear-gradient(90deg, #c4a882, #d4b896); border-radius: 4px; min-width: 2px; transition: width 0.4s; }
+  .breakdown-pct { width: 50px; text-align: right; font-weight: 600; color: #1a1a2e; flex-shrink: 0; }
+  .breakdown-count { width: 40px; text-align: right; color: #999; flex-shrink: 0; font-size: 12px; }
+  .breakdown-section-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    color: #c4a882; font-weight: 700; padding: 16px 0 8px; border-bottom: 1px solid #f3f4f6; margin-bottom: 16px;
+  }
+
+  /* ── SPLIT TEST TAB ── */
+  .split-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 24px; }
+  .variant-card { background: #fff; border: 2px solid #e5e7eb; border-radius: 14px; padding: 24px; position: relative; transition: border-color 0.2s; }
+  .variant-card.winner { border-color: #16a34a; }
+  .variant-card .variant-badge { position: absolute; top: -10px; left: 20px; padding: 3px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .variant-card.winner .variant-badge { background: #16a34a; color: #fff; }
+  .variant-card:not(.winner) .variant-badge { background: #e5e7eb; color: #888; }
+  .variant-name { font-size: 20px; font-weight: 700; margin-bottom: 16px; margin-top: 4px; }
+  .variant-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .variant-metric { background: #f9fafb; border-radius: 10px; padding: 14px; }
+  .variant-metric .vm-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; font-weight: 600; margin-bottom: 4px; }
+  .variant-metric .vm-value { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+  .variant-metric .vm-sub { font-size: 12px; color: #888; margin-top: 2px; }
+  .variant-metric.highlight .vm-value { color: #16a34a; }
+  .split-comparison { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .split-comparison h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+  .comp-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .comp-label { width: 120px; font-size: 13px; font-weight: 600; color: #555; flex-shrink: 0; }
+  .comp-bars { flex: 1; display: flex; gap: 4px; flex-direction: column; }
+  .comp-bar-row { display: flex; align-items: center; gap: 8px; }
+  .comp-bar-name { width: 70px; font-size: 11px; color: #888; flex-shrink: 0; text-align: right; }
+  .comp-bar-wrap { flex: 1; height: 20px; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
+  .comp-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s; }
+  .comp-bar-val { width: 60px; font-size: 13px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; }
+  .split-colors-0 { background: #5b6fe6; }
+  .split-colors-1 { background: #c4a882; }
+  .split-colors-2 { background: #16a34a; }
+  .split-colors-3 { background: #ea580c; }
+  .split-colors-4 { background: #8b5cf6; }
+  .split-empty { text-align: center; padding: 60px 20px; color: #888; }
+  .split-empty h3 { font-size: 16px; color: #555; margin-bottom: 8px; }
+  .split-empty p { font-size: 13px; }
+  .confidence-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-top: 8px; }
+  .confidence-high { background: #dcfce7; color: #16a34a; }
+  .confidence-low { background: #fef3c7; color: #d97706; }
+  .confidence-none { background: #f3f4f6; color: #888; }
+
+  @media (max-width: 768px) {
+    .lead-header { grid-template-columns: 1fr 1fr 40px; }
+    .lead-header .lead-email, .lead-header .lead-state { display: none; }
+    .leads-table-header { grid-template-columns: 1fr 1fr 40px; }
+    .leads-table-header span:nth-child(2), .leads-table-header span:nth-child(3) { display: none; }
+    .lead-answers-grid { grid-template-columns: 1fr; }
+    .breakdown-label { width: 140px; }
+    .variant-metrics { grid-template-columns: 1fr; }
+    .split-overview { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -114,7 +217,7 @@
       <option value="all">All Time</option>
     </select>
     <button class="btn-primary" onclick="generateDemoData()">Generate Demo Data</button>
-    <button class="btn-danger" onclick="if(confirm('Clear all tracking data?')){localStorage.removeItem('funnel_events');localStorage.removeItem('funnel_sales');refreshDashboard();}">Reset Data</button>
+    <button class="btn-danger" onclick="if(confirm('Clear all tracking data?')){fetch('/api/dashboard',{method:'DELETE'}).then(()=>refreshDashboard());}">Reset Data</button>
   </div>
 </div>
 
@@ -153,6 +256,10 @@
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('quiz')">Quiz Funnel</button>
     <button class="tab-btn" onclick="switchTab('advertorial')">Advertorial</button>
+    <button class="tab-btn" onclick="switchTab('leads')">Leads</button>
+    <button class="tab-btn" onclick="switchTab('sales')">Sales</button>
+    <button class="tab-btn" onclick="switchTab('answers')">Answer Breakdown</button>
+    <button class="tab-btn" onclick="switchTab('splittests')">Split Tests</button>
   </div>
 
   <!-- QUIZ FUNNEL TAB -->
@@ -194,6 +301,56 @@
         </thead>
         <tbody id="advTableBody"></tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- LEADS TAB -->
+  <div class="tab-content" id="tab-leads">
+    <div class="table-panel">
+      <h2>Leads</h2>
+      <input type="text" class="leads-search" id="leadsSearch" placeholder="Search by name, email, or phone..." oninput="renderLeads()">
+      <div class="leads-table-header">
+        <span>Name</span>
+        <span>Email</span>
+        <span>State</span>
+        <span>Date</span>
+        <span></span>
+      </div>
+      <div class="leads-list" id="leadsList"></div>
+    </div>
+  </div>
+
+  <!-- SALES TAB -->
+  <div class="tab-content" id="tab-sales">
+    <div class="table-panel">
+      <h2>Sales</h2>
+      <div class="leads-table-header" style="grid-template-columns: 2fr 2fr 1fr 1fr 1fr 40px;">
+        <span>Name</span>
+        <span>Email</span>
+        <span>Amount</span>
+        <span>Source</span>
+        <span>Date</span>
+        <span></span>
+      </div>
+      <div class="leads-list" id="salesList"></div>
+    </div>
+  </div>
+
+  <!-- ANSWER BREAKDOWN TAB -->
+  <div class="tab-content" id="tab-answers">
+    <div class="table-panel">
+      <h2>Answer Breakdown</h2>
+      <p style="font-size:13px;color:#888;margin-bottom:24px;">Distribution of answers across all leads</p>
+      <div id="answerBreakdown"></div>
+    </div>
+  </div>
+
+  <!-- SPLIT TESTS TAB -->
+  <div class="tab-content" id="tab-splittests">
+    <div class="table-panel">
+      <h2>Offer Page Split Tests</h2>
+      <p style="font-size:13px;color:#888;margin-bottom:24px;">Compare conversion performance across offer page variants. Variants are detected automatically from event data.</p>
+      <div id="splitTestContent"></div>
     </div>
   </div>
 
@@ -289,46 +446,40 @@ const ADV_STEPS = [
 ];
 
 // ============================================================================
-// DATA LAYER
+// DATA LAYER (server-backed via Vercel KV)
 // ============================================================================
 
-function getEvents() {
-  return JSON.parse(localStorage.getItem('funnel_events') || '[]');
+let _allEvents = [], _allSales = [], _allLeads = [];
+
+async function fetchDashboardData() {
+  try {
+    const res = await fetch('/api/dashboard');
+    const data = await res.json();
+    _allEvents = data.events || [];
+    _allSales = data.sales || [];
+    _allLeads = data.leads || [];
+  } catch (e) {
+    console.warn('Failed to fetch dashboard data:', e);
+  }
 }
 
-function getSales() {
-  return JSON.parse(localStorage.getItem('funnel_sales') || '[]');
-}
-
-function getFilteredEvents() {
+function filterByRange(arr) {
   const range = document.getElementById('dateRange').value;
-  let events = getEvents();
   const now = Date.now();
   if (range === 'today') {
     const start = new Date(); start.setHours(0,0,0,0);
-    events = events.filter(e => e.ts >= start.getTime());
+    return arr.filter(item => item.ts >= start.getTime());
   } else if (range === '7d') {
-    events = events.filter(e => e.ts >= now - 7*86400000);
+    return arr.filter(item => item.ts >= now - 7*86400000);
   } else if (range === '30d') {
-    events = events.filter(e => e.ts >= now - 30*86400000);
+    return arr.filter(item => item.ts >= now - 30*86400000);
   }
-  return events;
+  return arr;
 }
 
-function getFilteredSales() {
-  const range = document.getElementById('dateRange').value;
-  let sales = getSales();
-  const now = Date.now();
-  if (range === 'today') {
-    const start = new Date(); start.setHours(0,0,0,0);
-    sales = sales.filter(s => s.ts >= start.getTime());
-  } else if (range === '7d') {
-    sales = sales.filter(s => s.ts >= now - 7*86400000);
-  } else if (range === '30d') {
-    sales = sales.filter(s => s.ts >= now - 30*86400000);
-  }
-  return sales;
-}
+function getFilteredEvents() { return filterByRange(_allEvents); }
+function getFilteredSales() { return filterByRange(_allSales); }
+function getFilteredLeads() { return filterByRange(_allLeads); }
 
 function countUniqueSessions(events, stepId) {
   const sessions = new Set();
@@ -433,61 +584,471 @@ function switchTab(tab) {
 }
 
 // ============================================================================
+// QUESTION LABELS (for leads + breakdown)
+// ============================================================================
+
+const Q_LABELS = {
+  q1: 'Sleep Struggles', q2: 'Sleep Problems', q3: 'Duration', q4: 'Daily Impact',
+  q5: 'Remedies Tried', q6: 'Primary Goal', q7: 'Height', q8: 'Weight',
+  q9: 'Sex at Birth', q9a: 'Pregnant/Breastfeeding', q10: 'Age 65+',
+  q11: 'Medical Conditions', q12: 'Medications', q13: 'Allergies',
+  q14: 'Sleep Hours', q15: 'Severity', q16: 'Sleep Apnea', q16a: 'Apnea Controlled',
+  q17: 'Heavy Machinery', q18: 'Conditions Check',
+  q19: 'Caffeine Intake', q20: 'Alcohol Use', q21: 'Exercise',
+  q22: 'Bedroom Setup', q22a: 'Environment Issues', q23: 'Electronics Use',
+  q24: 'Sleep Schedule', q25: 'Additional Info', q26: 'Mental Health',
+  q27: 'Consent (Insomnia)', q28: 'Consent (Truthfulness)',
+  q29: 'Name', q30: 'Date of Birth', q31: 'State', q32: 'Email', q33: 'Phone', q34: 'HIPAA Consent'
+};
+
+// Questions with fixed options (for breakdown chart)
+const Q_OPTIONS = {
+  q1: ['Yes', 'No'],
+  q3: ['Less than 1 month', '1\u20133 months', 'Over 3 months'],
+  q4: ['Yes', 'No'],
+  q6: ['I want to live longer', 'I want to feel better', 'I want to have more energy'],
+  q9: ['Male', 'Female'],
+  q14: ['Less than 3 hours', '3\u20135 hours', '5\u20137 hours', 'More than 7 hours'],
+  q15: ['Mild', 'Moderate', 'Severe'],
+  q16: ['No', 'Yes'],
+  q17: ['No', 'Yes'],
+  q19: ['Rarely or never', '1\u20132 times a day', '3\u20134 times a day', 'More than 4 times a day'],
+  q20: ['Never', 'Occasionally (1\u20132 times a week)', 'Regularly (3 or more times a week)'],
+  q21: ['Yes', 'No'],
+  q22: ['Yes', 'No'],
+  q23: ['Yes', 'No'],
+  q24: ['Yes', 'No'],
+  q26: ['Yes', 'No'],
+  q10: ['No', 'Yes']
+};
+
+const Q_SECTIONS = {
+  q1: 'Screening', q7: 'Health Profile', q14: 'Sleep Assessment', q19: 'Lifestyle'
+};
+
+// ============================================================================
+// RENDER LEADS
+// ============================================================================
+
+function formatAnswer(val) {
+  if (val === null || val === undefined) return '—';
+  if (typeof val === 'string') return val;
+  if (Array.isArray(val)) return val.join(', ');
+  if (val.first && val.last) return val.first + ' ' + val.last;
+  if (val.feet) return val.feet + "'" + (val.inches || '0') + '"';
+  if (val.month) return val.month + '/' + val.day + '/' + val.year;
+  if (val.none === true) return 'None';
+  if (val.none === false && val.text) return val.text;
+  return JSON.stringify(val);
+}
+
+function renderLeads() {
+  const leads = getFilteredLeads();
+  const search = (document.getElementById('leadsSearch')?.value || '').toLowerCase();
+  const container = document.getElementById('leadsList');
+
+  const filtered = leads.filter(l => {
+    if (!search) return true;
+    return (l.first + ' ' + l.last).toLowerCase().includes(search) ||
+           (l.email || '').toLowerCase().includes(search) ||
+           (l.phone || '').includes(search);
+  });
+
+  // Sort newest first
+  filtered.sort((a, b) => b.ts - a.ts);
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">&#128100;</div><h3>No leads yet</h3><p>Leads will appear here after users complete the quiz.</p></div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map((lead, i) => {
+    const date = new Date(lead.ts);
+    const dateStr = (date.getMonth()+1) + '/' + date.getDate() + '/' + date.getFullYear();
+    const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const answers = lead.answers || {};
+
+    // Build answer detail rows — skip consent, contact, and empty
+    const skipKeys = ['q27','q28','q29','q30','q31','q32','q33','q34'];
+    const answerRows = Object.keys(answers)
+      .filter(k => !skipKeys.includes(k) && answers[k] !== undefined)
+      .map(k => `<div class="lead-answer-item"><div class="laq">${Q_LABELS[k] || k}</div><div class="lav">${formatAnswer(answers[k])}</div></div>`)
+      .join('');
+
+    return `<div class="lead-row" onclick="this.classList.toggle('open')">
+      <div class="lead-header">
+        <div class="lead-name">${lead.first || '—'} ${lead.last || ''}</div>
+        <div class="lead-email">${lead.email || '—'}</div>
+        <div class="lead-state">${lead.state || '—'}</div>
+        <div class="lead-date">${dateStr}<br>${timeStr}</div>
+        <div class="lead-arrow">&#9660;</div>
+      </div>
+      <div class="lead-detail">
+        <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:12px;margin-bottom:12px;">
+          <div style="font-size:13px;"><span style="color:#888;">Phone:</span> <strong>${lead.phone || '—'}</strong></div>
+          <div style="font-size:13px;"><span style="color:#888;">DOB:</span> <strong>${answers.q30 ? formatAnswer(answers.q30) : '—'}</strong></div>
+          <div style="font-size:13px;"><span style="color:#888;">Session:</span> <span style="color:#888;font-family:monospace;font-size:11px;">${lead.session || '—'}</span></div>
+        </div>
+        <div class="lead-answers-grid">${answerRows || '<div style="color:#888;font-size:13px;">No answer data available</div>'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================================
+// RENDER SALES
+// ============================================================================
+
+function renderSales() {
+  const sales = getFilteredSales();
+  const container = document.getElementById('salesList');
+
+  // Sort newest first
+  const sorted = [...sales].sort((a, b) => b.ts - a.ts);
+
+  if (sorted.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">&#128176;</div><h3>No sales yet</h3><p>Sales will appear here when postbacks fire from CheckoutChamp or are recorded manually.</p></div>';
+    return;
+  }
+
+  let totalRevenue = 0;
+  const rows = sorted.map((sale, i) => {
+    const date = new Date(sale.ts);
+    const dateStr = (date.getMonth()+1) + '/' + date.getDate() + '/' + date.getFullYear();
+    const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    totalRevenue += sale.amount || 0;
+
+    return `<div class="lead-row" onclick="this.classList.toggle('open')">
+      <div class="lead-header" style="grid-template-columns: 2fr 2fr 1fr 1fr 1fr 40px;">
+        <div class="lead-name">${sale.firstName || '—'} ${sale.lastName || ''}</div>
+        <div class="lead-email">${sale.email || '—'}</div>
+        <div style="font-weight:700;color:#16a34a;">$${(sale.amount || 0).toFixed(2)}</div>
+        <div style="color:#888;font-size:12px;">${sale.source || '—'}</div>
+        <div class="lead-date">${dateStr}<br>${timeStr}</div>
+        <div class="lead-arrow">&#9660;</div>
+      </div>
+      <div class="lead-detail">
+        <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:12px;">
+          <div style="font-size:13px;"><span style="color:#888;">Order ID:</span> <strong>${sale.orderId || '—'}</strong></div>
+          <div style="font-size:13px;"><span style="color:#888;">Session:</span> <span style="color:#888;font-family:monospace;font-size:11px;">${sale.session || '—'}</span></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  container.innerHTML = `<div style="padding:12px 20px;margin-bottom:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:14px;font-weight:600;color:#15803d;">${sorted.length} sale${sorted.length !== 1 ? 's' : ''}</span>
+    <span style="font-size:18px;font-weight:800;color:#16a34a;">$${totalRevenue.toFixed(2)}</span>
+  </div>` + rows;
+}
+
+// ============================================================================
+// RENDER ANSWER BREAKDOWN
+// ============================================================================
+
+function renderAnswerBreakdown() {
+  const leads = getFilteredLeads();
+  const container = document.getElementById('answerBreakdown');
+
+  if (leads.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">&#128202;</div><h3>No data yet</h3><p>Answer breakdown will appear once leads come in.</p></div>';
+    return;
+  }
+
+  const totalLeads = leads.length;
+  let html = '';
+  let lastSection = '';
+
+  // Process each question that has fixed options
+  const orderedKeys = ['q1','q3','q4','q6','q9','q10','q14','q15','q16','q17','q19','q20','q21','q22','q23','q24','q26'];
+
+  orderedKeys.forEach(qId => {
+    const options = Q_OPTIONS[qId];
+    if (!options) return;
+
+    // Section headers
+    if (Q_SECTIONS[qId] && Q_SECTIONS[qId] !== lastSection) {
+      lastSection = Q_SECTIONS[qId];
+      html += `<div class="breakdown-section-label">${lastSection}</div>`;
+    }
+
+    // Count each option
+    const counts = {};
+    options.forEach(o => counts[o] = 0);
+    let answered = 0;
+
+    leads.forEach(l => {
+      const a = l.answers?.[qId];
+      if (a !== undefined && a !== null) {
+        answered++;
+        const val = typeof a === 'string' ? a : JSON.stringify(a);
+        if (counts[val] !== undefined) counts[val]++;
+        else {
+          // Try to match
+          options.forEach(o => { if (val.includes(o)) counts[o]++; });
+        }
+      }
+    });
+
+    if (answered === 0) return;
+
+    const maxCount = Math.max(...Object.values(counts), 1);
+
+    html += `<div class="breakdown-section"><h3>${Q_LABELS[qId] || qId}</h3>`;
+    options.forEach(opt => {
+      const count = counts[opt] || 0;
+      const pct = answered > 0 ? (count / answered * 100) : 0;
+      const barWidth = maxCount > 0 ? (count / maxCount * 100) : 0;
+      html += `<div class="breakdown-bar-row">
+        <div class="breakdown-label" title="${opt}">${opt}</div>
+        <div class="breakdown-bar-wrap"><div class="breakdown-bar-fill" style="width:${barWidth}%"></div></div>
+        <div class="breakdown-pct">${pct.toFixed(0)}%</div>
+        <div class="breakdown-count">${count}</div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  // Multi-select questions (q2, q5)
+  const multiQs = [
+    { id: 'q2', label: 'Sleep Problems', section: 'Screening', options: ['Falling asleep', 'Staying asleep', 'Early morning awakening'] },
+    { id: 'q5', label: 'Remedies Tried', section: 'Screening', options: ["I haven't tried anything to fix my sleep", "I've tried changing my routine/habits", 'Cognitive behavioral therapy', 'Medications or supplements', 'Other'] }
+  ];
+  multiQs.forEach(mq => {
+    const counts = {};
+    mq.options.forEach(o => counts[o] = 0);
+    let answered = 0;
+    leads.forEach(l => {
+      const a = l.answers?.[mq.id];
+      if (a && Array.isArray(a)) {
+        answered++;
+        a.forEach(v => { if (counts[v] !== undefined) counts[v]++; });
+      }
+    });
+    if (answered === 0) return;
+    const maxCount = Math.max(...Object.values(counts), 1);
+    html += `<div class="breakdown-section"><h3>${mq.label} <span style="font-size:12px;color:#888;font-weight:400;">(multi-select)</span></h3>`;
+    mq.options.forEach(opt => {
+      const count = counts[opt] || 0;
+      const pct = answered > 0 ? (count / answered * 100) : 0;
+      const barWidth = maxCount > 0 ? (count / maxCount * 100) : 0;
+      html += `<div class="breakdown-bar-row">
+        <div class="breakdown-label" title="${opt}">${opt}</div>
+        <div class="breakdown-bar-wrap"><div class="breakdown-bar-fill" style="width:${barWidth}%"></div></div>
+        <div class="breakdown-pct">${pct.toFixed(0)}%</div>
+        <div class="breakdown-count">${count}</div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+// ============================================================================
+// RENDER SPLIT TESTS
+// ============================================================================
+
+function renderSplitTests() {
+  const events = getFilteredEvents();
+  const sales = getFilteredSales();
+  const container = document.getElementById('splitTestContent');
+
+  // Group events by variant
+  const variantData = {};
+  const sessionVariant = {};
+
+  // First pass: map sessions to variants from offer events
+  events.forEach(e => {
+    if (e.variant && (e.step === 'offer_view' || e.step === 'offer_checkout')) {
+      sessionVariant[e.session] = e.variant;
+    }
+  });
+
+  // Build per-variant metrics
+  events.forEach(e => {
+    if (e.step !== 'offer_view' && e.step !== 'offer_checkout') return;
+    const v = e.variant || 'control';
+    if (!variantData[v]) variantData[v] = { views: new Set(), checkouts: new Set(), sales: new Set(), revenue: 0 };
+    if (e.step === 'offer_view') variantData[v].views.add(e.session);
+    if (e.step === 'offer_checkout') variantData[v].checkouts.add(e.session);
+  });
+
+  // Map sales to variants
+  sales.forEach(s => {
+    const v = sessionVariant[s.session] || 'control';
+    if (!variantData[v]) variantData[v] = { views: new Set(), checkouts: new Set(), sales: new Set(), revenue: 0 };
+    variantData[v].sales.add(s.session || s.orderId || ('sale_' + s.ts));
+    variantData[v].revenue += (s.amount || 0);
+  });
+  // Also check offer_sale events
+  events.forEach(e => {
+    if (e.step === 'offer_sale') {
+      const v = sessionVariant[e.session] || e.variant || 'control';
+      if (!variantData[v]) variantData[v] = { views: new Set(), checkouts: new Set(), sales: new Set(), revenue: 0 };
+      variantData[v].sales.add(e.session);
+    }
+  });
+
+  const variants = Object.keys(variantData);
+
+  if (variants.length === 0) {
+    container.innerHTML = '<div class="split-empty"><div style="font-size:48px;opacity:0.3;margin-bottom:16px;">&#9878;</div><h3>No split test data yet</h3><p>Create offer page variants and deploy them. Data will appear here as visitors see different versions.</p><p style="margin-top:12px;font-size:12px;color:#aaa;">Variants are detected from the <code>variant</code> param in events (e.g., offer-v2.html &rarr; "v2")</p></div>';
+    return;
+  }
+
+  // If only one variant (control), show a message but still render stats
+  const colors = ['split-colors-0','split-colors-1','split-colors-2','split-colors-3','split-colors-4'];
+
+  // Calculate metrics for each variant
+  const metrics = variants.map((v, i) => {
+    const d = variantData[v];
+    const views = d.views.size;
+    const checkouts = d.checkouts.size;
+    const saleCount = d.sales.size;
+    const revenue = d.revenue;
+    const ctr = views > 0 ? (checkouts / views * 100) : 0;
+    const convRate = views > 0 ? (saleCount / views * 100) : 0;
+    const epc = views > 0 ? (revenue / views) : 0;
+    return { name: v, views, checkouts, sales: saleCount, revenue, ctr, convRate, epc, color: colors[i % colors.length] };
+  });
+
+  // Find winner by conversion rate (needs minimum 20 views)
+  const qualified = metrics.filter(m => m.views >= 20);
+  let winnerName = null;
+  if (qualified.length >= 2) {
+    qualified.sort((a, b) => b.convRate - a.convRate);
+    winnerName = qualified[0].name;
+  }
+
+  // Render variant cards
+  let html = '<div class="split-overview">';
+  metrics.forEach(m => {
+    const isWinner = m.name === winnerName;
+    const confidence = getConfidence(m, metrics.find(x => x.name !== m.name && x.views >= 20));
+    html += `
+      <div class="variant-card ${isWinner ? 'winner' : ''}">
+        <div class="variant-badge">${isWinner ? 'WINNER' : m.name.toUpperCase()}</div>
+        <div class="variant-name">${formatVariantName(m.name)}</div>
+        <div class="variant-metrics">
+          <div class="variant-metric">
+            <div class="vm-label">Views</div>
+            <div class="vm-value">${m.views.toLocaleString()}</div>
+          </div>
+          <div class="variant-metric">
+            <div class="vm-label">Checkouts</div>
+            <div class="vm-value">${m.checkouts.toLocaleString()}</div>
+            <div class="vm-sub">${m.ctr.toFixed(1)}% CTR</div>
+          </div>
+          <div class="variant-metric ${isWinner ? 'highlight' : ''}">
+            <div class="vm-label">Sales</div>
+            <div class="vm-value">${m.sales.toLocaleString()}</div>
+            <div class="vm-sub">${m.convRate.toFixed(1)}% conv rate</div>
+          </div>
+          <div class="variant-metric ${isWinner ? 'highlight' : ''}">
+            <div class="vm-label">Revenue</div>
+            <div class="vm-value">$${m.revenue.toLocaleString()}</div>
+            <div class="vm-sub">$${m.epc.toFixed(2)} EPC</div>
+          </div>
+        </div>
+        ${confidence ? `<div class="confidence-badge ${confidence.cls}">${confidence.label}</div>` : ''}
+      </div>`;
+  });
+  html += '</div>';
+
+  // Render comparison bars
+  if (metrics.length >= 2) {
+    const compMetrics = [
+      { label: 'Click-Through', key: 'ctr', fmt: v => v.toFixed(1) + '%' },
+      { label: 'Conv. Rate', key: 'convRate', fmt: v => v.toFixed(1) + '%' },
+      { label: 'EPC', key: 'epc', fmt: v => '$' + v.toFixed(2) },
+      { label: 'Revenue', key: 'revenue', fmt: v => '$' + v.toLocaleString() },
+    ];
+
+    html += '<div class="split-comparison"><h3>Head-to-Head Comparison</h3>';
+    compMetrics.forEach(cm => {
+      const maxVal = Math.max(...metrics.map(m => m[cm.key]), 0.01);
+      html += `<div class="comp-row"><div class="comp-label">${cm.label}</div><div class="comp-bars">`;
+      metrics.forEach(m => {
+        const pct = maxVal > 0 ? (m[cm.key] / maxVal * 100) : 0;
+        html += `<div class="comp-bar-row">
+          <div class="comp-bar-name">${m.name}</div>
+          <div class="comp-bar-wrap"><div class="comp-bar-fill ${m.color}" style="width:${pct}%"></div></div>
+          <div class="comp-bar-val">${cm.fmt(m[cm.key])}</div>
+        </div>`;
+      });
+      html += '</div></div>';
+    });
+    html += '</div>';
+  }
+
+  container.innerHTML = html;
+}
+
+function formatVariantName(name) {
+  if (name === 'control') return 'Control (Original)';
+  return name.replace(/^v/, 'Variant ').replace(/^V/, 'Variant ');
+}
+
+function getConfidence(a, b) {
+  if (!b || a.views < 20 || b.views < 20) return { label: 'Not enough data', cls: 'confidence-none' };
+  const totalViews = a.views + b.views;
+  if (totalViews < 100) return { label: 'Gathering data...', cls: 'confidence-none' };
+  // Simple z-test approximation for proportions
+  const p1 = a.convRate / 100, p2 = b.convRate / 100;
+  const n1 = a.views, n2 = b.views;
+  const pPool = (p1 * n1 + p2 * n2) / (n1 + n2);
+  if (pPool === 0 || pPool === 1) return { label: 'Insufficient variance', cls: 'confidence-none' };
+  const se = Math.sqrt(pPool * (1 - pPool) * (1/n1 + 1/n2));
+  const z = se > 0 ? Math.abs(p1 - p2) / se : 0;
+  if (z >= 2.58) return { label: '99% confidence', cls: 'confidence-high' };
+  if (z >= 1.96) return { label: '95% confidence', cls: 'confidence-high' };
+  if (z >= 1.65) return { label: '90% confidence', cls: 'confidence-low' };
+  return { label: 'Not yet significant', cls: 'confidence-low' };
+}
+
+// ============================================================================
 // REFRESH
 // ============================================================================
 
-function refreshDashboard() {
+async function refreshDashboard() {
+  await fetchDashboardData();
   const events = getFilteredEvents();
   const sales = getFilteredSales();
   renderFunnelTable(QUIZ_STEPS, events, sales, 'quizTableBody');
   renderFunnelTable(ADV_STEPS, events, sales, 'advTableBody');
   renderSummary(events, sales);
+  renderLeads();
+  renderSales();
+  renderAnswerBreakdown();
+  renderSplitTests();
 }
 
 // ============================================================================
-// POSTBACK HANDLER
+// (Postbacks now handled by /api/sale serverless function)
 // ============================================================================
 
-function handlePostbackParams() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('postback') === 'sale') {
-    const sale = {
-      amount: parseFloat(params.get('amount') || '99'),
-      source: params.get('source') || 'webhook',
-      session: params.get('session_id') || 'postback_' + Date.now(),
-      ts: Date.now()
-    };
-    const sales = getSales();
-    sales.push(sale);
-    localStorage.setItem('funnel_sales', JSON.stringify(sales));
+let _saleSubmitting = false;
+async function recordManualSale() {
+  if (_saleSubmitting) return;
+  _saleSubmitting = true;
+  const btn = document.querySelector('.postback-form .btn-primary');
+  if (btn) btn.disabled = true;
 
-    // Also record as funnel event
-    const events = getEvents();
-    if (!events.some(e => e.session === sale.session && e.step === 'offer_sale')) {
-      events.push({ session: sale.session, step: 'offer_sale', ts: sale.ts });
-      localStorage.setItem('funnel_events', JSON.stringify(events));
-    }
-
-    // Clean URL
-    window.history.replaceState({}, '', window.location.pathname);
-  }
-}
-
-function recordManualSale() {
   const amount = parseFloat(document.getElementById('saleAmount').value) || 99;
   const source = document.getElementById('saleSource').value;
   const session = document.getElementById('saleSession').value || 'manual_' + Date.now();
+  const orderId = 'manual_' + Date.now();
 
-  const sale = { amount, source, session, ts: Date.now() };
-  const sales = getSales();
-  sales.push(sale);
-  localStorage.setItem('funnel_sales', JSON.stringify(sales));
-
-  const events = getEvents();
-  events.push({ session, step: 'offer_sale', ts: Date.now() });
-  localStorage.setItem('funnel_events', JSON.stringify(events));
+  await fetch('/api/sale', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount, source, session, order_id: orderId })
+  });
 
   document.getElementById('saleSession').value = '';
+  _saleSubmitting = false;
+  if (btn) btn.disabled = false;
   refreshDashboard();
 }
 
@@ -495,11 +1056,11 @@ function recordManualSale() {
 // DEMO DATA GENERATOR
 // ============================================================================
 
-function generateDemoData() {
+async function generateDemoData() {
   if (!confirm('Generate sample funnel data for testing? This will add to existing data.')) return;
 
-  const events = getEvents();
-  const sales = getSales();
+  const events = [];
+  const sales = [];
   const now = Date.now();
 
   const allQuizSteps = QUIZ_STEPS.map(s => s.id);
@@ -540,7 +1101,17 @@ function generateDemoData() {
 
       if (Math.random() < dropChance && j > 0) break;
 
-      events.push({ session, step: stepId, ts: ts + (j + 1) * 5000 });
+      const evt = { session, step: stepId, ts: ts + (j + 1) * 5000 };
+      // Assign variant to offer steps
+      if (stepId === 'offer_view' || stepId === 'offer_checkout' || stepId === 'offer_sale') {
+        // 50/50 split between control and v2, with v2 having slightly better conversion
+        if (!window._demoVariantMap) window._demoVariantMap = {};
+        if (!window._demoVariantMap[session]) window._demoVariantMap[session] = Math.random() < 0.5 ? 'control' : 'v2';
+        evt.variant = window._demoVariantMap[session];
+        // v2 has 15% better checkout rate
+        if (stepId === 'offer_checkout' && evt.variant === 'v2') dropChance = Math.max(0, dropChance - 0.06);
+      }
+      events.push(evt);
 
       // Record sale
       if (stepId === 'offer_sale') {
@@ -549,8 +1120,69 @@ function generateDemoData() {
     }
   }
 
-  localStorage.setItem('funnel_events', JSON.stringify(events));
-  localStorage.setItem('funnel_sales', JSON.stringify(sales));
+  // Generate lead data for sessions that completed the quiz
+  const demoLeads = [];
+  const completedSessions = new Set();
+  events.forEach(e => { if (e.step === 'q34') completedSessions.add(e.session); });
+
+  const firstNames = ['Sarah','Michael','Jennifer','David','Emily','James','Jessica','Robert','Ashley','Daniel','Amanda','Chris','Lisa','Matt','Lauren','Brian','Rachel','Kevin','Nicole','Mark'];
+  const lastNames = ['Smith','Johnson','Williams','Brown','Jones','Garcia','Miller','Davis','Rodriguez','Martinez','Anderson','Taylor','Thomas','Jackson','White','Harris','Martin','Thompson','Moore','Clark'];
+  const states = ['AL','AZ','CA','CO','FL','GA','IL','IN','MA','MD','MI','MN','MO','NC','NJ','NY','OH','PA','TN','TX','VA','WA'];
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+  completedSessions.forEach(sid => {
+    const first = pick(firstNames);
+    const last = pick(lastNames);
+    const state = pick(states);
+    const evtTs = events.find(e => e.session === sid && e.step === 'q34')?.ts || Date.now();
+
+    demoLeads.push({
+      session: sid, ts: evtTs,
+      first, last,
+      email: first.toLowerCase() + '.' + last.toLowerCase() + '@example.com',
+      phone: '(' + (200 + Math.floor(Math.random()*800)) + ') ' + (200 + Math.floor(Math.random()*800)) + '-' + (1000 + Math.floor(Math.random()*9000)),
+      state,
+      answers: {
+        q1: 'Yes',
+        q2: pick([['Falling asleep'],['Staying asleep'],['Falling asleep','Staying asleep'],['Falling asleep','Early morning awakening'],['Staying asleep','Early morning awakening']]),
+        q3: pick(['Less than 1 month','1\u20133 months','Over 3 months']),
+        q4: pick(['Yes','No']),
+        q5: pick([["I haven't tried anything to fix my sleep"],["I've tried changing my routine/habits"],['Medications or supplements'],["I've tried changing my routine/habits",'Medications or supplements']]),
+        q6: pick(['I want to live longer','I want to feel better','I want to have more energy']),
+        q7: { feet: String(5 + Math.floor(Math.random()*2)), inches: String(Math.floor(Math.random()*12)) },
+        q8: String(120 + Math.floor(Math.random()*120)),
+        q9: pick(['Male','Female']),
+        q10: 'No',
+        q11: pick([{none:true,text:''},{none:false,text:'High blood pressure'},{none:false,text:'Anxiety'},{none:true,text:''}]),
+        q12: pick([{none:true,text:''},{none:false,text:'Lisinopril 10mg'},{none:true,text:''}]),
+        q13: pick([{none:true,text:''},{none:false,text:'Penicillin'},{none:true,text:''}]),
+        q14: pick(['Less than 3 hours','3\u20135 hours','5\u20137 hours']),
+        q15: pick(['Mild','Moderate','Severe']),
+        q16: 'No',
+        q17: 'No',
+        q19: pick(['Rarely or never','1\u20132 times a day','3\u20134 times a day']),
+        q20: pick(['Never','Occasionally (1\u20132 times a week)','Regularly (3 or more times a week)']),
+        q21: pick(['Yes','No']),
+        q22: pick(['Yes','No']),
+        q23: pick(['Yes','No']),
+        q24: pick(['Yes','No']),
+        q26: pick(['Yes','No']),
+        q29: { first, last },
+        q30: { month: String(1+Math.floor(Math.random()*12)), day: String(1+Math.floor(Math.random()*28)), year: String(1960+Math.floor(Math.random()*40)) },
+        q31: state,
+        q32: first.toLowerCase() + '.' + last.toLowerCase() + '@example.com',
+        q33: '(' + (200 + Math.floor(Math.random()*800)) + ') ' + (200 + Math.floor(Math.random()*800)) + '-' + (1000 + Math.floor(Math.random()*9000))
+      }
+    });
+  });
+
+  // Batch send to API
+  const postJson = (url, body) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => {});
+  const batch = [];
+  events.forEach(e => batch.push(postJson('/api/event', e)));
+  sales.forEach(s => batch.push(postJson('/api/sale', s)));
+  demoLeads.forEach(l => batch.push(postJson('/api/lead', l)));
+  await Promise.all(batch);
   refreshDashboard();
 }
 
@@ -559,9 +1191,8 @@ function generateDemoData() {
 // ============================================================================
 
 // Set postback URL display
-document.getElementById('postbackUrl').textContent = window.location.origin + window.location.pathname + '?postback=sale&amount={amount}&source={source}&session_id={session_id}';
+document.getElementById('postbackUrl').textContent = window.location.origin + '/api/sale?amount=[orderTotal]&order_id=[orderId]&email=[emailAddress]&first=[firstName]&last=[lastName]&source=checkoutchamp';
 
-handlePostbackParams();
 refreshDashboard();
 </script>
 </body>
