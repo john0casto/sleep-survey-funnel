@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Your Sleep Treatment Plan - Health Renewal Rx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+
+  <!-- ClickFlare Conversion Tracking -->
+  <script>
+    function fireClickFlareConversion(payout, txid) {
+      var baseUrl = "https://priorityjusticeassist.com/cf/cv";
+      var cookieMatch = document.cookie.match(/(^| )cf_click_id=([^;]+)/);
+      var clickId = cookieMatch ? cookieMatch.pop() : '';
+      if (!clickId) return;
+      var url = baseUrl + "?click_id=" + encodeURIComponent(clickId);
+      if (payout) url += "&payout=" + encodeURIComponent(payout);
+      if (txid) url += "&txid=" + encodeURIComponent(txid);
+      var s = document.createElement("script");
+      s.src = url;
+      document.head.appendChild(s);
+    }
+  </script>
+
+  <!-- Facebook Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1630969037933313');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1630969037933313&ev=PageView&noscript=1"/></noscript>
+
+  <script>
+    const FB_PIXEL_ID = '1630969037933313';
+    const FB_CAPI_TOKEN = 'EAAOrQQDYtRsBRFODGWcVBXE88blRBHmZAvfl5LfNmnc07mjnx1htvaEHCq9RIFfJDPKNfCmOvozx4cU73OVynC56HDQwkpsWc1CePQTJT0HfoxL82y3xR1ifPjp7jZCcjai1PT4vbzzKEd00InrWWYZA0j2A8Iowsv8oux7HrsXjMhZB7vcLduYT4IUdNWlMUAZDZD';
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    function getUrlParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+    function generateEventId() {
+      return 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+    }
+    async function hashSHA256(value) {
+      if (!value) return null;
+      const data = new TextEncoder().encode(value.trim().toLowerCase());
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    async function fireCapiEvent(eventName, eventId, userData, customData) {
+      const fbp = getCookie('_fbp');
+      const fbc = getCookie('_fbc') || (getUrlParam('fbclid') ? 'fb.1.' + Date.now() + '.' + getUrlParam('fbclid') : null);
+      const serverEvent = {
+        event_name: eventName, event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId, event_source_url: window.location.href, action_source: 'website',
+        user_data: { client_user_agent: navigator.userAgent, fbp, fbc, ...userData },
+        custom_data: customData || {}
+      };
+      try {
+        await fetch(`https://graph.facebook.com/v21.0/${FB_PIXEL_ID}/events?access_token=${FB_CAPI_TOKEN}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: [serverEvent] })
+        });
+      } catch (e) { console.warn('CAPI event failed:', e); }
+    }
+    fireCapiEvent('PageView', generateEventId(), {});
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0d1117;
+      color: #e6e8ed;
+      line-height: 1.6;
+      padding-bottom: 80px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+
+    /* ── Typography ── */
+    .serif { font-family: 'Playfair Display', Georgia, serif; }
+
+    h1 { font-size: 28px; font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
+    h2 { font-size: 24px; font-weight: 700; line-height: 1.25; margin-bottom: 16px; }
+    h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+
+    .hl {
+      background: linear-gradient(to top, rgba(196,168,130,0.35) 40%, transparent 40%);
+      font-style: italic;
+    }
+
+    /* ── Header ── */
+    .top-header {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 16px 0;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .top-header img {
+      height: 36px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 6px 14px;
+    }
+
+    .timer-strip {
+      background: linear-gradient(135deg, #c4a882, #a8895e);
+      color: #fff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .timer-strip .timer { font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+      padding: 48px 24px 56px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(196,168,130,0.12) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(91,111,230,0.06) 0%, transparent 50%),
+                  radial-gradient(ellipse at 80% 60%, rgba(45,106,79,0.08) 0%, transparent 50%),
+                  #0d1117;
+      text-align: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,168,130,0.15) 0%, transparent 70%);
+      box-shadow: 0 0 80px 40px rgba(196,168,130,0.08);
+    }
+    .hero-moon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .hero-moon-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c4a882, #e8d5b8);
+      box-shadow: 0 0 40px rgba(196,168,130,0.3), 0 0 80px rgba(196,168,130,0.15);
+    }
+    .hero-moon-shadow {
+      position: absolute;
+      top: 4px;
+      left: 14px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #0d1117;
+    }
+    .hero-stars {
+      position: absolute;
+      inset: 0;
+    }
+    .hero-stars span {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+    }
+    .hero h1 { color: #fff; font-size: 26px; position: relative; }
+    .hero-sub {
+      color: rgba(255,255,255,0.6);
+      font-size: 15px;
+      margin-top: 10px;
+      position: relative;
+    }
+    .hero-sub strong { color: #c4a882; }
+
+    /* ── Cards ── */
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 32px 24px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+    .card-glass {
+      background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── Rating ── */
+    .rating-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+    .stars { color: #f5a623; letter-spacing: 2px; font-size: 15px; }
+
+    /* ── Info Grid ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .info-cell {
+      background: rgba(196,168,130,0.08);
+      border: 1px solid rgba(196,168,130,0.15);
+      border-radius: 14px;
+      text-align: center;
+      padding: 16px 12px;
+    }
+    .info-cell-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #c4a882;
+      letter-spacing: 1.2px;
+      margin-bottom: 4px;
+    }
+    .info-cell-value { font-size: 16px; font-weight: 700; color: #fff; }
+
+    /* ── Success Banner ── */
+    .success-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(135deg, rgba(45,106,79,0.2), rgba(45,106,79,0.08));
+      border: 1px solid rgba(45,106,79,0.3);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .success-ring {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: conic-gradient(#2d6a4f 0deg, #2d6a4f 332deg, rgba(255,255,255,0.1) 332deg);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .success-ring-inner {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #0d1117;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+    }
+    .success-ring-inner .pct { font-size: 16px; font-weight: 800; color: #4ade80; line-height: 1; }
+    .success-ring-inner .lbl { font-size: 8px; font-weight: 700; color: #4ade80; letter-spacing: 0.5px; text-transform: uppercase; }
+    .success-banner p { font-size: 14px; color: rgba(255,255,255,0.8); }
+    .success-banner p strong { color: #4ade80; }
+
+    /* ── Visual Accent Bars ── */
+    .visual-accent {
+      height: 4px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    .accent-danger { background: linear-gradient(90deg, #dc2626, rgba(220,38,38,0.1)); }
+    .accent-brand { background: linear-gradient(90deg, #c4a882, rgba(196,168,130,0.1)); }
+    .accent-success { background: linear-gradient(90deg, #16a34a, rgba(22,163,74,0.1)); }
+
+    /* ── Agitation ── */
+    .agitation-item {
+      display: flex;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .agitation-item:last-child { border-bottom: none; }
+    .agitation-icon {
+      width: 40px; height: 40px;
+      background: rgba(220,38,38,0.1);
+      border: 1px solid rgba(220,38,38,0.2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .agitation-icon svg { width: 20px; height: 20px; }
+    .agitation-item strong { color: #fca5a5; }
+    .agitation-item .cite { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+    /* ── Fail/Works Cards ── */
+    .fail-card {
+      background: rgba(220,38,38,0.06);
+      border: 1px solid rgba(220,38,38,0.15);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 12px;
+    }
+    .fail-card h3 { color: #fca5a5; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+    .fail-card h3 .x-icon { width: 20px; height: 20px; background: rgba(220,38,38,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #f87171; flex-shrink: 0; }
+    .fail-card p { font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+
+    .works-card {
+      background: linear-gradient(135deg, rgba(45,106,79,0.15), rgba(45,106,79,0.05));
+      border: 2px solid rgba(74,222,128,0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 16px;
+    }
+    .works-card h3 { color: #4ade80; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+    .works-card h3 .check-icon { width: 22px; height: 22px; background: rgba(74,222,128,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #4ade80; flex-shrink: 0; }
+    .works-card p { font-size: 14px; color: rgba(255,255,255,0.75); margin-top: 8px; line-height: 1.7; }
+
+    /* ── 3-Step Mechanism ── */
+    .mech-steps { display: flex; flex-direction: column; gap: 0; }
+    .mech-step {
+      display: flex;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .mech-step:last-child { border-bottom: none; }
+    .mech-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 18px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+    }
+    .mech-step:nth-child(1) .mech-num { background: linear-gradient(135deg, #c4a882, #a8895e); color: #fff; }
+    .mech-step:nth-child(2) .mech-num { background: linear-gradient(135deg, #5b6fe6, #4355c4); color: #fff; }
+    .mech-step:nth-child(3) .mech-num { background: linear-gradient(135deg, #2d6a4f, #16a34a); color: #fff; }
+    .mech-step h3 { color: #fff; font-size: 16px; }
+    .mech-step .mech-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .mech-step:nth-child(1) .mech-label { color: #c4a882; }
+    .mech-step:nth-child(2) .mech-label { color: #818cf8; }
+    .mech-step:nth-child(3) .mech-label { color: #4ade80; }
+    .mech-step p { font-size: 14px; color: rgba(255,255,255,0.6); }
+
+    /* ── Testimonials ── */
+    .testimonial {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 14px;
+    }
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .testimonial-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .testimonial-avatar-placeholder {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px; color: #fff;
+      flex-shrink: 0;
+    }
+    .testimonial-name { font-weight: 600; font-size: 14px; color: #fff; }
+    .testimonial-loc { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .testimonial-badge {
+      font-size: 11px;
+      color: #4ade80;
+      font-weight: 600;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .testimonial-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.75;
+      font-style: italic;
+    }
+    .testimonial-text strong { color: #fff; font-style: normal; }
+
+    /* ── CTA ── */
+    .cta-block { text-align: center; margin: 28px 0; }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 440px;
+      padding: 18px 32px;
+      background: linear-gradient(135deg, #2d6a4f, #16a34a);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s;
+    }
+    .cta-btn:hover::before { left: 100%; }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(45,106,79,0.4); }
+    .cta-btn:active { transform: translateY(0); }
+
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.4); } 70% { box-shadow: 0 0 0 16px rgba(74,222,128,0); } 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); } }
+    .cta-pulse { animation: pulse 2s infinite; }
+
+    @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
+    .hero-stars span { animation: twinkle 3s ease-in-out infinite; }
+
+    .cta-btn svg { width: 20px; height: 20px; }
+
+    .cta-micro {
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 10px;
+    }
+    .cta-micro strong { color: rgba(255,255,255,0.7); }
+
+    .guarantee-inline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 500;
+    }
+    .guarantee-inline svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* ── Included ── */
+    .included-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .included-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+    .included-card .ic-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+      font-size: 24px;
+    }
+    .included-card:nth-child(1) .ic-icon { background: rgba(196,168,130,0.12); }
+    .included-card:nth-child(2) .ic-icon { background: rgba(91,111,230,0.12); }
+    .included-card:nth-child(3) .ic-icon { background: rgba(74,222,128,0.12); }
+    .included-card:nth-child(4) .ic-icon { background: rgba(245,166,35,0.12); }
+    .included-card h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .included-card p { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+    /* ── Price Anchor ── */
+    .anchor-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .anchor-item {
+      background: rgba(220,38,38,0.06);
+      border: 1px solid rgba(220,38,38,0.12);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+    .anchor-item .alt-label { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 500; margin-bottom: 4px; }
+    .anchor-item .alt-price { font-size: 20px; font-weight: 800; color: #f87171; text-decoration: line-through; }
+
+    .price-hero {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 16px 0;
+      text-align: center;
+      padding: 36px 24px;
+      background: linear-gradient(135deg, #1a3a2a, #0d2618);
+      border: 2px solid rgba(74,222,128,0.2);
+    }
+    .price-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(74,222,128,0.06) 0%, transparent 50%);
+    }
+    .price-hero .price-label { font-size: 13px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #4ade80; margin-bottom: 8px; position: relative; }
+    .price-hero .price-amount { font-size: 56px; font-weight: 800; color: #fff; position: relative; line-height: 1; }
+    .price-hero .price-old { font-size: 24px; text-decoration: line-through; color: rgba(255,255,255,0.3); margin-left: 8px; font-weight: 400; }
+    .price-hero .price-per { font-size: 15px; color: rgba(255,255,255,0.6); margin-top: 4px; position: relative; }
+    .price-hero .price-daily { font-size: 14px; color: rgba(255,255,255,0.45); margin-top: 6px; position: relative; }
+    .price-hero .price-daily strong { color: #c4a882; }
+    .price-hero .save-pill {
+      display: inline-block;
+      background: linear-gradient(135deg, #c4a882, #a8895e);
+      color: #1a1a2e;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 18px;
+      border-radius: 24px;
+      margin-top: 14px;
+      position: relative;
+    }
+    .price-no-risk {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      position: relative;
+    }
+    .price-no-risk span { display: flex; align-items: center; gap: 4px; }
+    .price-no-risk svg { width: 14px; height: 14px; color: #4ade80; }
+
+    /* ── Guarantee ── */
+    .guarantee-card {
+      background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(74,222,128,0.02));
+      border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      margin: 20px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .guarantee-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: rgba(74,222,128,0.05);
+    }
+    .guarantee-card .g-shield { font-size: 40px; margin-bottom: 8px; position: relative; }
+    .guarantee-card h3 { color: #4ade80; font-size: 17px; margin-bottom: 8px; position: relative; }
+    .guarantee-card p { font-size: 14px; color: rgba(255,255,255,0.6); position: relative; line-height: 1.7; }
+    .guarantee-card p strong { color: rgba(255,255,255,0.85); }
+
+    /* ── Doctor ── */
+    .doctor-section {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .doctor-photo {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(196,168,130,0.3);
+      flex-shrink: 0;
+    }
+    .doctor-badge {
+      width: 80px; height: 80px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(196,168,130,0.15), rgba(196,168,130,0.05));
+      border: 1px solid rgba(196,168,130,0.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .doctor-badge svg { width: 28px; height: 28px; color: #c4a882; }
+    .doctor-badge .db-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #c4a882; }
+    .doctor-name { font-size: 17px; font-weight: 700; color: #fff; }
+    .doctor-creds { font-size: 12px; color: #c4a882; font-weight: 600; letter-spacing: 0.3px; margin-bottom: 10px; line-height: 1.5; }
+    .doctor-quote { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.75; font-style: italic; }
+    .doctor-quote strong { color: rgba(255,255,255,0.85); font-style: normal; }
+
+    /* ── Stats ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .stat-number { font-size: 30px; font-weight: 800; }
+    .stat-card:nth-child(1) .stat-number { color: #4ade80; }
+    .stat-card:nth-child(2) .stat-number { color: #c4a882; }
+    .stat-card:nth-child(3) .stat-number { color: #818cf8; }
+    .stat-card:nth-child(4) .stat-number { color: #4ade80; }
+    .stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+    /* ── Timeline ── */
+    .timeline { position: relative; padding-left: 28px; margin-top: 16px; }
+    .timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, #c4a882, #2d6a4f); border-radius: 2px; }
+    .timeline-step { position: relative; padding: 0 0 28px 20px; }
+    .timeline-step:last-child { padding-bottom: 0; }
+    .timeline-step::before {
+      content: '';
+      position: absolute;
+      left: -22px; top: 4px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #c4a882;
+      border: 3px solid #0d1117;
+    }
+    .timeline-step .ts-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #c4a882; margin-bottom: 2px; }
+    .timeline-step h4 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .timeline-step p { font-size: 13px; color: rgba(255,255,255,0.55); }
+
+    /* ── FAQ ── */
+    .faq-item {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 18px 0;
+      cursor: pointer;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .faq-q .arrow { transition: transform 0.2s; font-size: 16px; color: rgba(255,255,255,0.3); flex-shrink: 0; }
+    .faq-q .arrow.open { transform: rotate(180deg); }
+    .faq-a {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding-top: 0;
+    }
+    .faq-a.open { max-height: 500px; padding-top: 12px; }
+    .faq-a strong { color: rgba(255,255,255,0.85); }
+
+    /* ── Trust Row ── */
+    .trust-row {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding: 28px 0;
+    }
+    .trust-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .trust-badge .tb-icon {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    /* ── Divider ── */
+    .section-divider {
+      text-align: center;
+      padding: 8px 0;
+      position: relative;
+    }
+    .section-divider::before {
+      content: '';
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      top: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(196,168,130,0.2), transparent);
+    }
+
+    /* ── Sticky Mobile CTA ── */
+    .sticky-cta {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(13,17,23,0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 10px 16px;
+      z-index: 999;
+    }
+    .sticky-cta button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #2d6a4f, #16a34a);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sticky-cta .sticky-sub {
+      text-align: center;
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 4px;
+    }
+
+    /* ── Footer ── */
+    .page-footer {
+      text-align: center;
+      padding: 24px 16px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      line-height: 1.6;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      h2 { font-size: 20px; }
+      .card { padding: 24px 18px; }
+      .info-cell-value { font-size: 14px; }
+      .included-grid { grid-template-columns: 1fr; }
+      .anchor-row { grid-template-columns: 1fr; }
+      .doctor-section { flex-direction: column; align-items: center; text-align: center; }
+      .price-hero .price-amount { font-size: 44px; }
+      .sticky-cta { display: block; }
+      .hero { padding: 36px 20px 44px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="top-header">
+  <img src="logo.png" alt="Health Renewal Rx">
+</div>
+<div class="timer-strip">
+  <span id="patientNameTimer">Your</span> treatment plan reserved for <span class="timer" id="timerDisplay">14:59</span>
+</div>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-stars" id="heroStars"></div>
+  <div class="hero-moon">
+    <div class="hero-moon-circle"></div>
+    <div class="hero-moon-shadow"></div>
+  </div>
+  <h1><span id="patientNameHead">Your</span> personalized sleep treatment plan is <span class="hl">approved</span></h1>
+  <div class="hero-sub">Backed by <strong>board-certified physicians</strong> &middot; FDA-approved medication included</div>
+</div>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PERSONALIZED RESULTS                   -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card card-glass">
+    <div class="rating-bar">
+      <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <span>4.8 Excellent &middot; 2,100+ patients treated</span>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-cell-label">Severity</div>
+        <div class="info-cell-value" id="infoSeverity">Moderate</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Avg Sleep</div>
+        <div class="info-cell-value" id="infoSleep">3-5 hrs</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Duration</div>
+        <div class="info-cell-value" id="infoDuration">3+ months</div>
+      </div>
+    </div>
+
+    <div class="success-banner">
+      <div class="success-ring">
+        <div class="success-ring-inner">
+          <div class="pct">92%</div>
+          <div class="lbl">match</div>
+        </div>
+      </div>
+      <p>Based on your assessment, you have a <strong>very high probability</strong> of significant sleep improvement with prescription treatment. Patients with your profile typically see results within the first week.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- AGITATION — COST OF INACTION           -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card">
+    <h2>What happens if you <span class="hl">don't fix this</span></h2>
+    <div class="visual-accent accent-danger"></div>
+
+    <div class="agitation-item">
+      <div class="agitation-icon"><svg fill="none" stroke="#f87171" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div>
+        <strong>3x higher risk of heart disease and stroke</strong>
+        <div class="cite">European Heart Journal — chronic insomnia triples cardiovascular risk</div>
+      </div>
+    </div>
+    <div class="agitation-item">
+      <div class="agitation-icon"><svg fill="none" stroke="#f87171" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div>
+        <strong>40% decline in cognitive performance</strong>
+        <div class="cite">Impairs memory, focus, and decision-making comparable to alcohol intoxication</div>
+      </div>
+    </div>
+    <div class="agitation-item">
+      <div class="agitation-icon"><svg fill="none" stroke="#f87171" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div>
+        <strong>$2,280/year in lost productivity</strong>
+        <div class="cite">RAND Corporation — poor sleep costs the U.S. economy $411 billion annually</div>
+      </div>
+    </div>
+    <div class="agitation-item">
+      <div class="agitation-icon"><svg fill="none" stroke="#f87171" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div>
+        <strong>Weakened immunity, weight gain, anxiety, and depression</strong>
+        <div class="cite">Chronic sleep loss creates a compounding cycle that worsens every month</div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:14px;color:rgba(255,255,255,0.5);margin-top:16px;">The longer you wait, the harder it becomes to reset your sleep architecture.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- WHY MOST TREATMENTS FAIL               -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card">
+    <h2>Why nothing you've tried has <span class="hl">actually worked</span></h2>
+
+    <div class="fail-card">
+      <h3><span class="x-icon">&#10005;</span> Over-the-Counter Sleep Aids &mdash; The Band-Aid</h3>
+      <p>Benadryl, ZzzQuil, and doxylamine were never designed for chronic insomnia. Your body builds tolerance within 2-3 weeks. They leave you groggy, impair next-day performance, and never address <em>why</em> you can't sleep.</p>
+    </div>
+
+    <div class="fail-card">
+      <h3><span class="x-icon">&#10005;</span> Melatonin &amp; Supplements &mdash; Surface-Level</h3>
+      <p>Melatonin treats jet lag, not chronic insomnia. A 2023 JAMA study found 71% of melatonin products were mislabeled. Magnesium, valerian, and CBD may promote relaxation but can't override disrupted sleep architecture.</p>
+    </div>
+
+    <div class="fail-card">
+      <h3><span class="x-icon">&#10005;</span> "Sleep Hygiene" Alone &mdash; Not Enough</h3>
+      <p>Dark room, cool temp, no screens &mdash; necessary but not sufficient. Telling someone with chronic insomnia to "practice sleep hygiene" is like telling someone with a broken leg to walk it off.</p>
+    </div>
+
+    <div class="works-card">
+      <h3><span class="check-icon">&#10003;</span> Prescription Treatment &mdash; Targets the Root Cause</h3>
+      <p>FDA-approved medications work directly on your brain's GABA receptors and sleep-wake neurotransmitter systems. They don't just sedate you &mdash; they <strong>restore your natural sleep architecture</strong> so your body re-learns how to cycle through restorative deep sleep. This is the approach backed by the American Academy of Sleep Medicine.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 3-STEP MECHANISM                       -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card">
+    <h2>How Sleep Deep Rx&trade; <span class="hl">restores</span> your sleep</h2>
+    <div class="visual-accent accent-brand"></div>
+
+    <div class="mech-steps">
+      <div class="mech-step">
+        <div class="mech-num">1</div>
+        <div>
+          <div class="mech-label">Reset</div>
+          <h3>Recalibrate Your Sleep-Wake Cycle</h3>
+          <p>Your physician prescribes an FDA-approved medication that acts on GABA receptors to quiet the overactive neural circuits keeping you awake. Unlike OTC sedatives, this restores your natural circadian signaling.</p>
+        </div>
+      </div>
+      <div class="mech-step">
+        <div class="mech-num">2</div>
+        <div>
+          <div class="mech-label">Restore</div>
+          <h3>Rebuild Deep Sleep Architecture</h3>
+          <p>As your sleep-wake cycle stabilizes, your body begins cycling through all restorative sleep stages again &mdash; including the deep N3 sleep your brain needs for memory consolidation, immune function, and cellular repair.</p>
+        </div>
+      </div>
+      <div class="mech-step">
+        <div class="mech-num">3</div>
+        <div>
+          <div class="mech-label">Sustain</div>
+          <h3>Lock In Long-Term Results</h3>
+          <p>With ongoing physician support, your care team adjusts your plan as your sleep improves. 93% of patients maintain their results long-term. Your body re-learns how to sleep &mdash; naturally and consistently.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SOCIAL PROOF #1 — BEFORE PRICING       -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card">
+    <h2>Real results from <span class="hl">real patients</span></h2>
+    <div class="rating-bar"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span>4.8 &middot; 2,100+ verified patients</span></div>
+
+    <div class="testimonial">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar-placeholder" style="background:linear-gradient(135deg,#c4a882,#8a6d4b);">S</div>
+        <div>
+          <div class="testimonial-name">Sarah M. <span class="testimonial-loc">&middot; Austin, TX</span></div>
+          <div class="testimonial-badge">&#10003; Verified patient</div>
+        </div>
+        <div style="margin-left:auto;" class="stars" style="font-size:13px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+      <div class="testimonial-text">"Before this program, I averaged <strong>3 hours of broken sleep for over 3 years</strong>. I'd tried melatonin, CBD, magnesium &mdash; nothing worked. Within the first week of starting my prescription, I was falling asleep in under 20 minutes and sleeping 6-7 hours straight. By week 3, I was waking up before my alarm. <strong>I finally feel like a normal person again.</strong>"</div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar-placeholder" style="background:linear-gradient(135deg,#5b6fe6,#4355c4);">M</div>
+        <div>
+          <div class="testimonial-name">Michael T. <span class="testimonial-loc">&middot; Denver, CO</span></div>
+          <div class="testimonial-badge">&#10003; Verified patient</div>
+        </div>
+        <div style="margin-left:auto;" class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+      <div class="testimonial-text">"The physician was more thorough than any in-person doctor. Had my medication in 3 days. <strong>I'm sleeping 7+ hours now for the first time in years.</strong> My wife says I'm a different person."</div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar-placeholder" style="background:linear-gradient(135deg,#2d6a4f,#16a34a);">J</div>
+        <div>
+          <div class="testimonial-name">Jennifer R. <span class="testimonial-loc">&middot; Charlotte, NC</span></div>
+          <div class="testimonial-badge">&#10003; Verified patient</div>
+        </div>
+        <div style="margin-left:auto;" class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+      <div class="testimonial-text">"My anxiety around bedtime was crippling. The doctor understood exactly what I was dealing with. <strong>Within two weeks, I stopped dreading bedtime.</strong> This program gave me my life back."</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- CTA #1                                 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="cta-block">
+    <button class="cta-btn cta-pulse" onclick="selectPlan('plan1')">
+      Start My Treatment Plan
+      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+    </button>
+    <div class="cta-micro"><strong>2,100+</strong> patients sleeping better &middot; Takes 2 minutes</div>
+    <div class="guarantee-inline">
+      <svg fill="none" stroke="#4ade80" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      30-Day Money-Back Guarantee &middot; Cancel anytime
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- WHAT'S INCLUDED                        -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card">
+    <h2>Everything <span class="hl">included</span></h2>
+    <div class="included-grid">
+      <div class="included-card">
+        <div class="ic-icon">&#128138;</div>
+        <h4>Prescription Medication</h4>
+        <p>FDA-approved, tailored to your profile. No separate pharmacy bill.</p>
+      </div>
+      <div class="included-card">
+        <div class="ic-icon">&#129657;</div>
+        <h4>Physician Consult</h4>
+        <p>Board-certified physician reviews your full assessment. No insurance needed.</p>
+      </div>
+      <div class="included-card">
+        <div class="ic-icon">&#128172;</div>
+        <h4>1:1 Medical Support</h4>
+        <p>Unlimited messaging with your care team. Dosage adjustments included.</p>
+      </div>
+      <div class="included-card">
+        <div class="ic-icon">&#128230;</div>
+        <h4>Free Home Delivery</h4>
+        <p>Discreet packaging shipped to your door. Free on every order.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PRICING                                -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card" id="medicationSection">
+    <div class="timer-strip" style="border-radius:12px;margin-bottom:20px;">
+      Approval reserved for <span class="timer" id="timerDisplay2">14:59</span>
+    </div>
+
+    <h2>See how your plan <span class="hl">compares</span></h2>
+
+    <div class="anchor-row">
+      <div class="anchor-item">
+        <div class="alt-label">Sleep Specialist</div>
+        <div class="alt-price">$300-500</div>
+      </div>
+      <div class="anchor-item">
+        <div class="alt-label">Monthly Rx</div>
+        <div class="alt-price">$150+</div>
+      </div>
+      <div class="anchor-item">
+        <div class="alt-label">Sleep Study</div>
+        <div class="alt-price">$1,000-3,000</div>
+      </div>
+      <div class="anchor-item">
+        <div class="alt-label">CBT-I Therapy</div>
+        <div class="alt-price">$600-1,200</div>
+      </div>
+    </div>
+
+    <div class="price-hero">
+      <div class="price-label">Your Complete Sleep Deep Rx&trade; Plan</div>
+      <div class="price-amount">$99<span class="price-old">$199</span></div>
+      <div class="price-per">per month &mdash; everything included</div>
+      <div class="price-daily">That's just <strong>$3.30/day</strong> &mdash; less than your morning coffee</div>
+      <div class="save-pill">YOU SAVE $100/MONTH (50% OFF)</div>
+      <div class="price-no-risk">
+        <span><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> No insurance</span>
+        <span><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> No contracts</span>
+        <span><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Cancel anytime</span>
+      </div>
+    </div>
+
+    <div class="guarantee-card">
+      <div class="g-shield">&#128737;</div>
+      <h3>30-Day Money-Back Guarantee</h3>
+      <p>There's absolutely zero risk. If you don't see meaningful improvement in your sleep within 30 days, we'll <strong>refund your money in full</strong> &mdash; no questions asked. You have nothing to lose.</p>
+    </div>
+
+    <div class="cta-block" style="margin-top:8px; text-align:center;">
+      <img src="product-bottle.png" alt="Sleep Deep Rx bottle" style="height:220px; margin-bottom:20px; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.5));">
+      <button class="cta-btn cta-pulse" onclick="selectPlan('plan1')">
+        Claim My Treatment Plan
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+      </button>
+      <div class="cta-micro">$99/month &middot; Medication included &middot; Free shipping</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- HOW IT WORKS                           -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card">
+    <h2>What happens <span class="hl">next</span></h2>
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="ts-label">Step 1</div>
+        <h4>Physician Reviews Your Assessment</h4>
+        <p>You're already pre-qualified. A board-certified physician reviews your full profile. Most reviews same-day.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="ts-label">Step 2</div>
+        <h4>Prescription Approved in Under 24 Hours</h4>
+        <p>The right FDA-approved medication selected for your sleep profile. Same-day consultation available if needed.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="ts-label">Step 3</div>
+        <h4>Medication Ships to Your Door</h4>
+        <p>Discreet packaging, free shipping. Tracking info within 2 business days.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="ts-label">Step 4</div>
+        <h4>Sleep Through the Night Again</h4>
+        <p>Most patients report improvement within the first week. Unlimited care team access for ongoing support.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- DOCTOR ENDORSEMENT                     -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card">
+    <h2>Physician <span class="hl">backed</span></h2>
+    <div class="doctor-section">
+      <div class="doctor-badge">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
+        <div class="db-label">Board<br>Certified</div>
+      </div>
+      <div>
+        <div class="doctor-name">Dr. Rebecca Chen, MD</div>
+        <div class="doctor-creds">Board-Certified Sleep Medicine &middot; 15+ Years Experience<br>3,000+ Patients Treated &middot; Stanford Medical, Residency</div>
+        <div class="doctor-quote">"Chronic insomnia is a medical condition, not a lifestyle problem. After treating over 3,000 patients, I've seen how <strong>personalized prescription treatment transforms lives within weeks</strong>. The patients in this program have already tried everything else &mdash; this gives them the clinical support they should have had from the beginning."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- STATS + MORE TESTIMONIALS              -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">87%</div>
+      <div class="stat-label">Sleep better within 1 week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">9/10</div>
+      <div class="stat-label">Patient satisfaction</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">+2.4 hrs</div>
+      <div class="stat-label">More sleep per night</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">93%</div>
+      <div class="stat-label">Maintain results long-term</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="testimonial" style="border:none;margin:0;padding:0 0 16px;background:transparent;">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar-placeholder" style="background:linear-gradient(135deg,#f59e0b,#d97706);">D</div>
+        <div>
+          <div class="testimonial-name">David K. <span class="testimonial-loc">&middot; Phoenix, AZ</span></div>
+          <div class="testimonial-badge">&#10003; Verified patient</div>
+        </div>
+        <div style="margin-left:auto;" class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+      <div class="testimonial-text">"I was waking up 4-5 times every night for over a year. My doctor just said 'reduce stress.' This program actually listened. <strong>The medication worked on night one.</strong> By week two, 7 hours straight. Energy, mood, focus &mdash; everything changed. I wish I'd done this a year ago."</div>
+    </div>
+
+    <div class="testimonial" style="border:none;margin:0;padding:16px 0 0;background:transparent;border-top:1px solid rgba(255,255,255,0.06);">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar-placeholder" style="background:linear-gradient(135deg,#ec4899,#be185d);">L</div>
+        <div>
+          <div class="testimonial-name">Lisa P. <span class="testimonial-loc">&middot; Chicago, IL</span></div>
+          <div class="testimonial-badge">&#10003; Verified patient</div>
+        </div>
+        <div style="margin-left:auto;" class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      </div>
+      <div class="testimonial-text">"I spent <strong>over $2,000 on a sleep study, two specialist visits, and supplements that did nothing</strong>. This costs a fraction and actually works. Prescription arrived in 3 days. Sleeping through the night for the first time in 4 years."</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- CTA #3                                 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="cta-block">
+    <button class="cta-btn cta-pulse" onclick="selectPlan('plan1')">
+      Start My Treatment &mdash; $99/month
+      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+    </button>
+    <div class="cta-micro">Medication + physician + ongoing support included</div>
+    <div class="guarantee-inline">
+      <svg fill="none" stroke="#4ade80" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      30-day money-back guarantee &middot; Cancel anytime &middot; No contracts
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- FAQ                                    -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card">
+    <h2>Common <span class="hl">questions</span></h2>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How is this different from melatonin or OTC sleep aids? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">OTC sleep aids like Benadryl and ZzzQuil only mask symptoms &mdash; your body builds tolerance within weeks. Melatonin treats jet lag, not chronic insomnia. Our physicians prescribe <strong>FDA-approved medications that work on your brain's sleep-wake system</strong> to restore natural sleep architecture &mdash; not just sedate you.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is this legitimate? How do I know it's safe? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">Every prescription is written by a <strong>board-certified, U.S.-licensed physician</strong>. We only prescribe FDA-approved medications. All data is HIPAA-protected and encrypted with 256-bit SSL. We've treated 2,100+ patients with a 9/10 satisfaction rating.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What if it doesn't work for me? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a"><strong>30-day money-back guarantee.</strong> If you don't see meaningful improvement, we'll refund you in full &mdash; no questions asked. That said, 87% of patients report sleeping better within the first week.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Isn't $99/month expensive? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">A single sleep specialist visit costs $300-500. Monthly Rx at a pharmacy runs $150+. A sleep study costs $1,000-3,000. At <strong>$3.30/day</strong>, you get the medication, physician consult, unlimited support, and a personalized plan &mdash; all included. No insurance, no copays, no hidden fees.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Do I need insurance? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">No. Your consultation, prescription, medication, and ongoing support are all included. No copays, no surprise charges. Often cheaper than going through insurance.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How fast will I see results? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">Most patients notice improvement <strong>within the first week</strong>. Many see results on the very first night. Full benefits &mdash; restored energy, better mood, consistent sleep &mdash; typically within 2-4 weeks.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can I cancel anytime? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">Yes. No contracts, no commitments, no fees. Cancel anytime through your account or support team.</div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What medications are prescribed? <span class="arrow">&#9662;</span></div>
+      <div class="faq-a">FDA-approved sleep medications tailored to your needs. The exact medication is determined by your physician based on your medical history, sleep patterns, and health profile. Common prescriptions include non-benzodiazepine sleep aids that are well-tolerated and effective.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- FINAL CTA                              -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="card" style="text-align:center;background:linear-gradient(135deg, rgba(45,106,79,0.1), rgba(196,168,130,0.05));border-color:rgba(74,222,128,0.15);">
+    <h2>Your plan is reserved for <span class="hl"><span id="timerDisplay3">14:59</span></span></h2>
+    <p style="color:rgba(255,255,255,0.55);font-size:14px;margin-bottom:20px;">Don't let another sleepless night pass. Your personalized treatment is ready.</p>
+
+    <button class="cta-btn cta-pulse" onclick="selectPlan('plan1')" style="margin-bottom:12px;">
+      Claim My Sleep Rx &mdash; $3.30/day
+      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+    </button>
+    <div class="cta-micro"><strong>87%</strong> of patients sleep better within the first week</div>
+    <div class="guarantee-inline">
+      <svg fill="none" stroke="#4ade80" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      30-Day Money-Back Guarantee &middot; Risk-Free
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TRUST ROW                              -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="trust-row">
+    <div class="trust-badge">
+      <div class="tb-icon">&#128737;</div>
+      HIPAA<br>Compliant
+    </div>
+    <div class="trust-badge">
+      <div class="tb-icon">&#9877;</div>
+      Board-Certified<br>Physicians
+    </div>
+    <div class="trust-badge">
+      <div class="tb-icon">&#128138;</div>
+      FDA-Approved<br>Meds
+    </div>
+    <div class="trust-badge">
+      <div class="tb-icon">&#128274;</div>
+      256-bit<br>Encrypted
+    </div>
+    <div class="trust-badge">
+      <div class="tb-icon">&#128737;</div>
+      Money-Back<br>Guarantee
+    </div>
+  </div>
+
+</div>
+
+<!-- ── STICKY MOBILE CTA ── -->
+<div class="sticky-cta" id="stickyCta">
+  <button onclick="selectPlan('plan1')">Start My Treatment &mdash; $99/mo &#8594;</button>
+  <div class="sticky-sub">&#128737; 30-day guarantee &middot; Cancel anytime &middot; Free shipping</div>
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="page-footer">
+  <p>&copy; 2026 Health Renewal Rx. All rights reserved.</p>
+  <p style="margin-top:8px;">This site is not a part of Facebook or Meta Platforms, Inc. FACEBOOK is a trademark of META PLATFORMS, Inc.</p>
+  <p style="margin-top:8px;">Results may vary. Consult your physician before starting any treatment program.</p>
+</div>
+
+<script>
+// ── Funnel Tracking ──
+(function() {
+  const SK = 'funnel_session_id';
+  const tracked = new Set();
+  function getSid() { let s = sessionStorage.getItem(SK); if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem(SK,s); } return s; }
+
+  const _vParam = new URLSearchParams(window.location.search).get('variant');
+  const _fMatch = window.location.pathname.match(/offer-?(v\w+)\.html/);
+  window.offerVariant = _vParam || (_fMatch ? _fMatch[1] : 'control');
+
+  window.trackFunnelStep = function(step) {
+    const sid = getSid();
+    const key = sid + ':' + step;
+    if (tracked.has(key)) return;
+    tracked.add(key);
+    try {
+      fetch('/api/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session: sid, step: step, ts: Date.now(), variant: window.offerVariant })
+      }).catch(() => {});
+    } catch(e) {}
+  };
+})();
+trackFunnelStep('offer_view');
+
+// ── URL Params ──
+const params = new URLSearchParams(window.location.search);
+const firstName = params.get('first') || '';
+const lastName = params.get('last') || '';
+const email = params.get('email') || '';
+const phone = params.get('phone') || '';
+const state = params.get('state') || '';
+const severity = params.get('severity') || 'Moderate';
+const avgSleep = params.get('sleep') || '3-5 hrs';
+const duration = params.get('duration') || '3+ months';
+const checkoutUrl = params.get('checkout_url') || '';
+
+if (firstName) {
+  document.getElementById('patientNameTimer').textContent = firstName + "'s";
+  document.getElementById('patientNameHead').textContent = firstName + "'s";
+}
+document.getElementById('infoSeverity').textContent = severity;
+document.getElementById('infoSleep').textContent = avgSleep;
+document.getElementById('infoDuration').textContent = duration;
+
+// ── Timer (15 min) ──
+let timerSeconds = 15 * 60;
+function updateTimer() {
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  const display = (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+  document.getElementById('timerDisplay').textContent = display;
+  document.getElementById('timerDisplay2').textContent = display;
+  document.getElementById('timerDisplay3').textContent = display;
+  if (timerSeconds > 0) timerSeconds--;
+}
+setInterval(updateTimer, 1000);
+
+// ── Sticky CTA ──
+(function() {
+  const sticky = document.getElementById('stickyCta');
+  window.addEventListener('scroll', function() {
+    sticky.style.display = window.scrollY > 600 ? 'block' : 'none';
+  });
+})();
+
+// ── Plan Selection ──
+async function selectPlan(planId) {
+  trackFunnelStep('offer_checkout');
+  const eid = generateEventId();
+  const hashedUserData = {
+    em: await hashSHA256(getUrlParam('email') || ''),
+    ph: await hashSHA256((getUrlParam('phone') || '').replace(/\D/g, '')),
+    fn: await hashSHA256(getUrlParam('first') || ''),
+    ln: await hashSHA256(getUrlParam('last') || ''),
+    st: await hashSHA256(getUrlParam('state') || ''),
+    country: await hashSHA256('us')
+  };
+  fbq('track', 'InitiateCheckout', { content_name: planId }, { eventID: eid });
+  fireCapiEvent('InitiateCheckout', eid, hashedUserData, { content_name: planId });
+  fireClickFlareConversion(99, eid);
+
+  if (checkoutUrl) {
+    window.location.href = checkoutUrl;
+  } else {
+    alert('Checkout is not available. Please try again.');
+  }
+}
+
+// ── FAQ Toggle ──
+function toggleFaq(el) {
+  const a = el.querySelector('.faq-a');
+  const arrow = el.querySelector('.arrow');
+  a.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ── Generate Stars ──
+(function() {
+  const container = document.getElementById('heroStars');
+  if (!container) return;
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.width = (1 + Math.random() * 2) + 'px';
+    s.style.height = s.style.width;
+    s.style.opacity = 0.2 + Math.random() * 0.5;
+    s.style.animationDelay = Math.random() * 3 + 's';
+    container.appendChild(s);
+  }
+})();
+</script>
+</body>
+</html>
