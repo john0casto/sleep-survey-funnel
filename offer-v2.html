@@ -24,15 +24,19 @@
     }
   </script>
 
-  <!-- Facebook Pixel -->
+  <!-- Facebook Pixel (disabled in preview mode) -->
   <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1630969037933313');
-    fbq('track', 'PageView');
+    if (new URLSearchParams(window.location.search).get('preview') !== 'true') {
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1630969037933313');
+      fbq('track', 'PageView');
+    } else {
+      window.fbq = function() {};
+    }
   </script>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1630969037933313&ev=PageView&noscript=1"/></noscript>
 
@@ -1312,7 +1316,10 @@
   const _fMatch = window.location.pathname.match(/offer-?(v\w+)\.html/);
   window.offerVariant = _vParam || (_fMatch ? _fMatch[1] : 'control');
 
+  const _isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+
   window.trackFunnelStep = function(step) {
+    if (_isPreview) return;
     const sid = getSid();
     const key = sid + ':' + step;
     if (tracked.has(key)) return;
