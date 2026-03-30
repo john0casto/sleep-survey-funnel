@@ -22,15 +22,20 @@
     }
   </script>
 
-  <!-- Facebook Pixel -->
+  <!-- Facebook Pixel (disabled in preview mode) -->
   <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1630969037933313');
-    fbq('track', 'PageView');
+    window._isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+    if (!window._isPreview) {
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1630969037933313');
+      fbq('track', 'PageView');
+    } else {
+      window.fbq = function() {};
+    }
   </script>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1630969037933313&ev=PageView&noscript=1"/></noscript>
 
@@ -60,6 +65,7 @@
     }
 
     async function fireCapiEvent(eventName, eventId, userData, customData) {
+      if (window._isPreview) return;
       const fbp = getCookie('_fbp');
       const fbc = getCookie('_fbc') || (getUrlParam('fbclid') ? 'fb.1.' + Date.now() + '.' + getUrlParam('fbclid') : null);
 
@@ -871,6 +877,7 @@ let questionHistory = [];
   function getSid() { let s = sessionStorage.getItem(SK); if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem(SK,s); } return s; }
   window.getFunnelSessionId = getSid;
   window.trackFunnelStep = function(step) {
+    if (window._isPreview) return;
     const sid = getSid();
     const key = sid + ':' + step;
     if (tracked.has(key)) return;
@@ -1526,30 +1533,34 @@ async function handleSubmit() {
   const lastName = answers.q29?.last || '';
   const state = answers.q31 || '';
 
-  // Save lead to server for dashboard
-  try {
-    const sid = typeof getFunnelSessionId === 'function' ? getFunnelSessionId() : 'unknown';
-    fetch('/api/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        session: sid, ts: Date.now(),
-        first: firstName, last: lastName,
-        email: email, phone: answers.q33 || '', state: state,
-        answers: JSON.parse(JSON.stringify(answers))
-      })
-    }).catch(() => {});
-  } catch(e) { console.warn('Failed to save lead:', e); }
+  // Save lead to server for dashboard (skip in preview)
+  if (!window._isPreview) {
+    try {
+      const sid = typeof getFunnelSessionId === 'function' ? getFunnelSessionId() : 'unknown';
+      fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session: sid, ts: Date.now(),
+          first: firstName, last: lastName,
+          email: email, phone: answers.q33 || '', state: state,
+          answers: JSON.parse(JSON.stringify(answers))
+        })
+      }).catch(() => {});
+    } catch(e) { console.warn('Failed to save lead:', e); }
+  }
 
-  // Submit to Dosable
+  // Submit to Dosable (skip in preview mode)
   let checkoutUrl = '';
-  try {
-    const result = await submitToDosable(answers);
-    checkoutUrl = result.checkout_url || result.thanks_url || '';
-    console.log('Dosable checkout URL:', checkoutUrl);
-  } catch (err) {
-    console.error('Dosable submission failed:', err);
-    // Continue to offer page even if Dosable fails
+  if (!window._isPreview) {
+    try {
+      const result = await submitToDosable(answers);
+      checkoutUrl = result.checkout_url || result.thanks_url || '';
+      console.log('Dosable checkout URL:', checkoutUrl);
+    } catch (err) {
+      console.error('Dosable submission failed:', err);
+      // Continue to offer page even if Dosable fails
+    }
   }
 
   // Redirect to offer page with patient data + checkout URL
@@ -1564,6 +1575,7 @@ async function handleSubmit() {
     duration: answers.q3 || '3+ months',
   });
   if (checkoutUrl) offerParams.set('checkout_url', checkoutUrl);
+  if (window._isPreview) offerParams.set('preview', 'true');
 
   // ── Offer Page Variant Rotation ──
   // To enable self-hosted split testing, add variant filenames below.

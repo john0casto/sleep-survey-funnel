@@ -12,15 +12,20 @@
   <!-- ClickFlare Lander Tracking -->
   <script>!function(){"use strict";var n="lp_ref",t="cpid",e="lpurl",c="https://priorityjusticeassist.com",r="(?<domain>http(?:s?)://[^/]*)".concat("/cf/click"),a="(?:(?:/(?<cta>[1-9][0-9]*)/?)|(?:/))?",i="^".concat(r).concat(a).concat("(?:$|(\\?.*))"),o='javascript:window.clickflare.l="(?<original_link>'.concat(r).concat(a,'("|(\\?[^"]*"))).*'),s=function(){return new RegExp(i,"")},u=function(){return new RegExp(o,"")};function l(n){var t=function(n){return n.replace(s(),(function(n){for(var t=[],e=1;e<arguments.length;e++)t[e-1]=arguments[e];var r=t[t.length-1].domain;return n.replace(r,c)}))}(n);return'javascript:window.clickflare.l="'.concat(t,'"; void 0;')}function d(n,t){if(t&&n&&t.apply(document,[n]),/loaded|interactive|complete/.test(document.readyState))for(var e=0,c=document.links.length;e<c;e++)if(s().test(document.links[e].href)){var r=document.links[e];window.clickflare.links_replaced.has(r)||(r.href=l(r.href),window.clickflare.links_replaced.add(r))}}var f,h,m,p;!function(r,a){var i=document.onreadystatechange;window.clickflare||(window.clickflare={listeners:{},customParams:{},links_replaced:new Set,addEventListener:function(n,t){var e=this.listeners[n]||[];e.includes(t)||e.push(t),this.listeners[n]=e},dispatchEvent:function(n,t){t&&(this.customParams[n]=t),(this.listeners[n]||[]).forEach((function(n){return n(t)}))},push:function(n,t){t&&(this.customParams[n]=t),(this.listeners[n]||[]).forEach((function(n){return n(t)}))}},document.onreadystatechange=function(n){return d(n,i)},d(null,i),setTimeout((function(){!function(r,a){var i,o=function(r,a){var i=new URL("".concat(c).concat(r)),o="{",s=o+o;a.startsWith(s)||i.searchParams.set(t,a);return i.searchParams.append(n,document.referrer),i.searchParams.append(e,location.href),i.searchParams.append("lpt",document.title),i.searchParams.append("t",(new Date).getTime().toString()),i.toString()}(r,a),s=document.createElement("script"),l=document.scripts[0];s.async=1,s.src=o,s.onerror=function(){!function(){for(var n=function(n,t){var e=document.links[n];u().test(decodeURI(e.href))&&setTimeout((function(){e&&e.setAttribute("href",function(n){var t=n.match(u());if(t){var e=(t.groups||{}).original_link;return e?e.slice(0,-1):n}return n}(decodeURI(e.href)))}))},t=0,e=document.links.length;t<e;t++)n(t)}()},null===(i=l.parentNode)||void 0===i||i.insertBefore(s,l)}(r,a)})))}("".concat("/cf/tags","/").concat(new URL(window.location.href).searchParams.get("cftmid")||"{{__CONTAINER_ID__}}"),"698d2ff6f03370001216abeb")}();</script>
 
-  <!-- Facebook Pixel -->
+  <!-- Facebook Pixel (disabled in preview mode) -->
   <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1630969037933313');
-    fbq('track', 'PageView');
+    window._isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+    if (!window._isPreview) {
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1630969037933313');
+      fbq('track', 'PageView');
+    } else {
+      window.fbq = function() {};
+    }
   </script>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1630969037933313&ev=PageView&noscript=1"/></noscript>
 
@@ -31,6 +36,7 @@
     function getUrlParam(name) { return new URLSearchParams(window.location.search).get(name); }
     function generateEventId() { return 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10); }
     async function fireCapiEvent(eventName, eventId, userData, customData) {
+      if (window._isPreview) return;
       const fbp = getCookie('_fbp');
       const fbc = getCookie('_fbc') || (getUrlParam('fbclid') ? 'fb.1.' + Date.now() + '.' + getUrlParam('fbclid') : null);
       try {
@@ -671,14 +677,21 @@
 <script>
 // ── Funnel Tracking ──
 (function() {
-  const SK = 'funnel_session_id', EK = 'funnel_events';
+  const SK = 'funnel_session_id';
+  const tracked = new Set();
   function getSid() { let s = sessionStorage.getItem(SK); if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem(SK,s); } return s; }
   window.trackFunnelStep = function(step) {
+    if (window._isPreview) return;
+    const sid = getSid();
+    const key = sid + ':' + step;
+    if (tracked.has(key)) return;
+    tracked.add(key);
     try {
-      const evts = JSON.parse(localStorage.getItem(EK)||'[]'), sid = getSid();
-      if (evts.some(e => e.session===sid && e.step===step)) return;
-      evts.push({session:sid, step:step, ts:Date.now()});
-      localStorage.setItem(EK, JSON.stringify(evts));
+      fetch('/api/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session: sid, step: step, ts: Date.now() })
+      }).catch(() => {});
     } catch(e) {}
   };
 })();
@@ -692,9 +705,17 @@ window.addEventListener('scroll', function() {
   if (scrollPct >= 50) { scrollTracked50 = true; trackFunnelStep('adv_scroll_50'); }
 });
 
+// In preview mode, redirect CTAs to survey with preview=true (skip ClickFlare)
+if (window._isPreview) {
+  document.querySelectorAll('.cta-button').forEach(btn => {
+    btn.href = '/survey.html?preview=true';
+  });
+}
+
 // Track CTA clicks
 document.querySelectorAll('.cta-button').forEach(btn => {
   btn.addEventListener('click', function() {
+    if (window._isPreview) return;
     trackFunnelStep('adv_cta');
     const eid = generateEventId();
     fbq('trackCustom', 'CTAClick', { content_name: 'Advertorial CTA' }, { eventID: eid });
