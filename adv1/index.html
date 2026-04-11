@@ -689,6 +689,7 @@
     try {
       fetch('/api/event', {
         method: 'POST',
+        keepalive: true,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session: sid, step: step, ts: Date.now() })
       }).catch(() => {});

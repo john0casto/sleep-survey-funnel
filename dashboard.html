@@ -514,10 +514,10 @@ function getFilteredEvents() { return filterByRange(_allEvents); }
 function getFilteredSales() { return filterByRange(_allSales); }
 function getFilteredLeads() { return filterByRange(_allLeads); }
 
-function countUniqueSessions(events, stepId) {
+function countUniqueSessions(events, stepId, sessionGate) {
   const sessions = new Set();
   events.forEach(e => {
-    if (e.step === stepId) sessions.add(e.session);
+    if (e.step === stepId && (!sessionGate || sessionGate.has(e.session))) sessions.add(e.session);
   });
   return sessions.size;
 }
@@ -526,21 +526,35 @@ function countUniqueSessions(events, stepId) {
 // RENDER FUNNEL TABLE
 // ============================================================================
 
-function renderFunnelTable(steps, events, sales, tbodyId) {
+function renderFunnelTable(steps, events, sales, tbodyId, gateStepId) {
   const tbody = document.getElementById(tbodyId);
   tbody.innerHTML = '';
 
-  // Merge sale events into counts
-  const saleSessions = new Set(sales.map(s => s.session));
+  // If a gating step is specified, only include sessions that fired that step
+  // (so e.g. the Brand funnel only counts quiz/offer events from sessions
+  // that originally viewed /brand1)
+  let gate = null;
+  if (gateStepId) {
+    gate = new Set();
+    events.forEach(e => {
+      if (e.step === gateStepId && e.session) gate.add(e.session);
+    });
+  }
+
+  const filterSessions = (arr) => gate ? arr.filter(x => x.session && gate.has(x.session)) : arr;
+
+  // Merge sale events into counts, gated if needed
+  const saleSessions = new Set(filterSessions(sales).map(s => s.session));
 
   // Build visitor counts per step
   const counts = {};
   const maxCount = Math.max(...steps.map(s => {
     if (s.id === 'offer_sale') {
-      const allSaleSessions = new Set([...saleSessions, ...events.filter(e => e.step === 'offer_sale').map(e => e.session)]);
+      const saleEventSessions = events.filter(e => e.step === 'offer_sale' && (!gate || gate.has(e.session))).map(e => e.session);
+      const allSaleSessions = new Set([...saleSessions, ...saleEventSessions]);
       counts[s.id] = allSaleSessions.size;
     } else {
-      counts[s.id] = countUniqueSessions(events, s.id);
+      counts[s.id] = countUniqueSessions(events, s.id, gate);
     }
     return counts[s.id];
   }), 1);
@@ -1052,8 +1066,8 @@ async function refreshDashboard() {
   const events = getFilteredEvents();
   const sales = getFilteredSales();
   renderFunnelTable(QUIZ_STEPS, events, sales, 'quizTableBody');
-  renderFunnelTable(ADV_STEPS, events, sales, 'advTableBody');
-  renderFunnelTable(BRAND_STEPS, events, sales, 'brandTableBody');
+  renderFunnelTable(ADV_STEPS, events, sales, 'advTableBody', 'adv_view');
+  renderFunnelTable(BRAND_STEPS, events, sales, 'brandTableBody', 'brand_view');
   renderSummary(events, sales);
   renderLeads();
   renderSales();
