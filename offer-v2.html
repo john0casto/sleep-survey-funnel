@@ -1062,7 +1062,7 @@
 
     <div class="price-hero" id="pricing">
       <div class="price-label">Your Complete Sleep Deep Rx&trade; Plan</div>
-      <div class="price-amount">$99<span class="price-old">$199</span></div>
+      <div class="price-amount">$49.99<span class="price-old">$99.99</span></div>
       <div class="price-per">per month &mdash; everything included</div>
       <div class="price-daily">That's just <strong>$3.30/day</strong> &mdash; less than your morning coffee</div>
       <div class="save-pill">YOU SAVE $100/MONTH (50% OFF)</div>
@@ -1085,7 +1085,7 @@
         Claim My Treatment Plan
         <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
       </button>
-      <div class="cta-micro">$99/month &middot; Medication included &middot; Free shipping</div>
+      <div class="cta-micro">$49.99/month &middot; Medication included &middot; Free shipping</div>
     </div>
   </div>
 
@@ -1189,7 +1189,7 @@
   <!-- ══════════════════════════════════════ -->
   <div class="cta-block">
     <button class="cta-btn cta-pulse" onclick="selectPlan('plan1')">
-      Start My Treatment &mdash; $99/month
+      Start My Treatment &mdash; $49.99/month
       <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
     </button>
     <div class="cta-micro">Medication + physician + ongoing support included</div>
@@ -1221,7 +1221,7 @@
     </div>
 
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">Isn't $99/month expensive? <span class="arrow">&#9662;</span></div>
+      <div class="faq-q">Isn't $49.99/month expensive? <span class="arrow">&#9662;</span></div>
       <div class="faq-a">A single sleep specialist visit costs $300-500. Monthly Rx at a pharmacy runs $150+. A sleep study costs $1,000-3,000. At <strong>$3.30/day</strong>, you get the medication, physician consult, unlimited support, and a personalized plan &mdash; all included. No insurance, no copays, no hidden fees.</div>
     </div>
 
@@ -1294,7 +1294,7 @@
 
 <!-- ── STICKY MOBILE CTA ── -->
 <div class="sticky-cta" id="stickyCta">
-  <button onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Start My Treatment &mdash; $99/mo &#8594;</button>
+  <button onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Start My Treatment &mdash; $49.99/mo &#8594;</button>
   <div class="sticky-sub">&#128737; 30-day guarantee &middot; Cancel anytime &middot; Free shipping</div>
 </div>
 
@@ -1390,7 +1390,7 @@ async function selectPlan(planId) {
   };
   fbq('track', 'InitiateCheckout', { content_name: planId }, { eventID: eid });
   fireCapiEvent('InitiateCheckout', eid, hashedUserData, { content_name: planId });
-  fireClickFlareConversion(99, eid);
+  fireClickFlareConversion(49.99, eid);
 
   // Append ClickFlare click ID for CheckoutChamp affiliate postback
   if (checkoutUrl) {
