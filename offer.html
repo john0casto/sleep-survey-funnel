@@ -830,8 +830,8 @@ async function selectPlan(planId) {
     st: await hashSHA256(state),
     country: await hashSHA256('us')
   };
-  fbq('track', 'InitiateCheckout', { content_name: planId }, { eventID: eid });
-  fireCapiEvent('InitiateCheckout', eid, hashedUserData, { content_name: planId });
+  fbq('track', 'AddToCart', { content_name: planId }, { eventID: eid });
+  fireCapiEvent('AddToCart', eid, hashedUserData, { content_name: planId });
 
   // ClickFlare checkout conversion with payout
   fireClickFlareConversion(49.99, eid);
