@@ -1392,14 +1392,18 @@ async function selectPlan(planId) {
   fireCapiEvent('AddToCart', eid, hashedUserData, { content_name: planId });
   fireClickFlareConversion(49.99, eid);
 
-  // Append ClickFlare click ID for CheckoutChamp affiliate postback
+  // Append tracking params for CheckoutChamp postback attribution
   if (checkoutUrl) {
     let url = checkoutUrl;
-    const cfCookie = document.cookie.match(/(^| )cf_click_id=([^;]+)/);
-    if (cfCookie) {
+    const append = (key, val) => {
+      if (!val) return;
       const sep = url.includes('?') ? '&' : '?';
-      url += sep + 'clickid=' + encodeURIComponent(cfCookie[2]);
-    }
+      url += sep + key + '=' + encodeURIComponent(val);
+    };
+    const cfCookie = document.cookie.match(/(^| )cf_click_id=([^;]+)/);
+    if (cfCookie) append('clickid', cfCookie[2]);
+    append('fbp', getCookie('_fbp'));
+    append('fbc', getCookie('_fbc'));
     window.location.href = url;
   } else {
     alert('Checkout is not available. Please try again.');
