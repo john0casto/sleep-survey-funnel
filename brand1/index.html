@@ -257,7 +257,7 @@
 <nav class="navbar">
   <div class="container nav-inner">
     <a href="/home/" class="nav-logo"><img src="/logo.png" alt="Health Renewal Rx"></a>
-    <a href="https://priorityjusticeassist.com/cf/click" class="nav-cta">Take the Quiz</a>
+    <a href="/survey.html" class="nav-cta">Take the Quiz</a>
   </div>
 </nav>
 
@@ -267,7 +267,7 @@
     <div>
       <h1>Prescription Sleep Medication &mdash; Delivered to Your Door</h1>
       <p class="hero-subtitle">Get a personalized sleep treatment plan from a licensed physician, without leaving home. 100% online. No insurance required.</p>
-      <a href="https://priorityjusticeassist.com/cf/click" class="btn btn-lg">
+      <a href="/survey.html" class="btn btn-lg">
         Take the Sleep Quiz
         <svg viewBox="0 0 20 20"><path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/></svg>
       </a>
@@ -437,7 +437,7 @@
 <section class="cta-banner">
   <h2>Ready to Sleep Better?</h2>
   <p>Take our free 2-minute quiz to see if prescription sleep medication is right for you.</p>
-  <a href="https://priorityjusticeassist.com/cf/click" class="btn btn-lg">
+  <a href="/survey.html" class="btn btn-lg">
     Start Your Free Assessment
     <svg viewBox="0 0 20 20"><path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/></svg>
   </a>
@@ -453,7 +453,7 @@
       </div>
       <div class="footer-col">
         <h4>Quick Links</h4>
-        <a href="https://priorityjusticeassist.com/cf/click">Take the Quiz</a>
+        <a href="/survey.html">Take the Quiz</a>
         <a href="#how-it-works">How It Works</a>
         <a href="mailto:support@healthrenewalrx.com">Contact Us</a>
       </div>
@@ -515,13 +515,13 @@ window.addEventListener('scroll', function() {
 
 // In preview mode, redirect CTAs to survey with preview=true (skip ClickFlare)
 if (window._isPreview) {
-  document.querySelectorAll('a[href*="priorityjusticeassist.com/cf/click"]').forEach(a => {
+  document.querySelectorAll('a[href="/survey.html"]').forEach(a => {
     a.href = '/survey.html?preview=true';
   });
 }
 
 // Track CTA clicks
-document.querySelectorAll('a[href*="priorityjusticeassist.com/cf/click"]').forEach(btn => {
+document.querySelectorAll('a[href="/survey.html"]').forEach(btn => {
   btn.addEventListener('click', function() {
     if (window._isPreview) return;
     trackFunnelStep('brand_cta');
