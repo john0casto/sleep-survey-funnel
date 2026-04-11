@@ -835,14 +835,19 @@ async function selectPlan(planId) {
   const firstName = getUrlParam('first') || '';
   const lastName = getUrlParam('last') || '';
   const state = getUrlParam('state') || '';
+  const dob = getUrlParam('dob') || '';
+  const gender = (getUrlParam('gender') || '').toLowerCase().charAt(0);
   const hashedUserData = {
     em: await hashSHA256(email),
     ph: await hashSHA256(phone),
     fn: await hashSHA256(firstName),
     ln: await hashSHA256(lastName),
     st: await hashSHA256(state),
-    country: await hashSHA256('us')
+    country: await hashSHA256('us'),
+    db: dob ? await hashSHA256(dob) : undefined,
+    ge: gender ? await hashSHA256(gender) : undefined
   };
+  Object.keys(hashedUserData).forEach(k => hashedUserData[k] === undefined && delete hashedUserData[k]);
   fbq('track', 'AddToCart', { content_name: planId }, { eventID: eid });
   fireCapiEvent('AddToCart', eid, hashedUserData, { content_name: planId });
 
@@ -861,6 +866,8 @@ async function selectPlan(planId) {
     if (cfCookie) append('clickid', cfCookie[2]);
     append('fbp', getCookie('_fbp'));
     append('fbc', getCookie('_fbc'));
+    append('dob', getUrlParam('dob'));
+    append('gender', getUrlParam('gender'));
     window.location.href = url;
   } else {
     alert('Checkout is not available. Please try again.');

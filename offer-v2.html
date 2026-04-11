@@ -1393,14 +1393,19 @@ setInterval(updateTimer, 1000);
 async function selectPlan(planId) {
   trackFunnelStep('offer_checkout');
   const eid = generateEventId();
+  const _dob = getUrlParam('dob') || '';
+  const _gender = (getUrlParam('gender') || '').toLowerCase().charAt(0);
   const hashedUserData = {
     em: await hashSHA256(getUrlParam('email') || ''),
     ph: await hashSHA256((getUrlParam('phone') || '').replace(/\D/g, '')),
     fn: await hashSHA256(getUrlParam('first') || ''),
     ln: await hashSHA256(getUrlParam('last') || ''),
     st: await hashSHA256(getUrlParam('state') || ''),
-    country: await hashSHA256('us')
+    country: await hashSHA256('us'),
+    db: _dob ? await hashSHA256(_dob) : undefined,
+    ge: _gender ? await hashSHA256(_gender) : undefined
   };
+  Object.keys(hashedUserData).forEach(k => hashedUserData[k] === undefined && delete hashedUserData[k]);
   fbq('track', 'AddToCart', { content_name: planId }, { eventID: eid });
   fireCapiEvent('AddToCart', eid, hashedUserData, { content_name: planId });
   fireClickFlareConversion(49.99, eid);
@@ -1417,6 +1422,8 @@ async function selectPlan(planId) {
     if (cfCookie) append('clickid', cfCookie[2]);
     append('fbp', getCookie('_fbp'));
     append('fbc', getCookie('_fbc'));
+    append('dob', getUrlParam('dob'));
+    append('gender', getUrlParam('gender'));
     window.location.href = url;
   } else {
     alert('Checkout is not available. Please try again.');

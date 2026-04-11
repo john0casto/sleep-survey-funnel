@@ -10,7 +10,7 @@ function sha256(v) {
   return crypto.createHash('sha256').update(String(v).trim().toLowerCase()).digest('hex');
 }
 
-async function fireMetaPurchase({ amount, orderId, email, phone, firstName, lastName, state, fbp, fbc, clientIp, userAgent }) {
+async function fireMetaPurchase({ amount, orderId, email, phone, firstName, lastName, state, dob, gender, fbp, fbc, clientIp, userAgent }) {
   const userData = {
     em: sha256(email),
     ph: phone ? sha256(String(phone).replace(/\D/g, '')) : undefined,
@@ -18,6 +18,8 @@ async function fireMetaPurchase({ amount, orderId, email, phone, firstName, last
     ln: sha256(lastName),
     st: sha256(state),
     country: sha256('us'),
+    db: dob ? sha256(dob) : undefined,
+    ge: gender ? sha256(String(gender).toLowerCase().charAt(0)) : undefined,
     fbp,
     fbc,
     client_ip_address: clientIp,
@@ -80,6 +82,8 @@ export default async function handler(req, res) {
     const lastName = params.last || params.lastName || '';
     const phone = params.phone || '';
     const state = params.state || '';
+    const dob = params.dob || '';
+    const gender = params.gender || '';
     const clickId = params.clickid || params.cf_click_id || '';
     const fbp = params.fbp || '';
     const fbc = params.fbc || '';
@@ -119,7 +123,7 @@ export default async function handler(req, res) {
 
     // Fire Meta CAPI Purchase + ClickFlare conversion in parallel
     await Promise.all([
-      fireMetaPurchase({ amount, orderId, email, phone, firstName, lastName, state, fbp, fbc, clientIp, userAgent }),
+      fireMetaPurchase({ amount, orderId, email, phone, firstName, lastName, state, dob, gender, fbp, fbc, clientIp, userAgent }),
       fireCfConversion({ amount, clickId, orderId }),
     ]);
 

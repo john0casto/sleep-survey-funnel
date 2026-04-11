@@ -8,7 +8,7 @@ function sha256(v) {
   return crypto.createHash('sha256').update(String(v).trim().toLowerCase()).digest('hex');
 }
 
-async function fireMetaInitiateCheckout({ amount, orderId, email, phone, firstName, lastName, state, fbp, fbc, clientIp, userAgent }) {
+async function fireMetaInitiateCheckout({ amount, orderId, email, phone, firstName, lastName, state, dob, gender, fbp, fbc, clientIp, userAgent }) {
   const userData = {
     em: sha256(email),
     ph: phone ? sha256(String(phone).replace(/\D/g, '')) : undefined,
@@ -16,6 +16,8 @@ async function fireMetaInitiateCheckout({ amount, orderId, email, phone, firstNa
     ln: sha256(lastName),
     st: sha256(state),
     country: sha256('us'),
+    db: dob ? sha256(dob) : undefined,
+    ge: gender ? sha256(String(gender).toLowerCase().charAt(0)) : undefined,
     fbp,
     fbc,
     client_ip_address: clientIp,
@@ -65,13 +67,15 @@ export default async function handler(req, res) {
     const lastName = params.last || params.lastName || '';
     const phone = params.phone || '';
     const state = params.state || '';
+    const dob = params.dob || '';
+    const gender = params.gender || '';
     const fbp = params.fbp || '';
     const fbc = params.fbc || '';
     const userAgent = (req.headers && req.headers['user-agent']) || '';
     const xff = (req.headers && (req.headers['x-forwarded-for'] || req.headers['x-real-ip'])) || '';
     const clientIp = typeof xff === 'string' ? xff.split(',')[0].trim() : '';
 
-    await fireMetaInitiateCheckout({ amount, orderId, email, phone, firstName, lastName, state, fbp, fbc, clientIp, userAgent });
+    await fireMetaInitiateCheckout({ amount, orderId, email, phone, firstName, lastName, state, dob, gender, fbp, fbc, clientIp, userAgent });
 
     if (req.method === 'GET') {
       res.setHeader('Content-Type', 'image/gif');

@@ -1217,12 +1217,21 @@ function bindEvents(q) {
           const firstName = answers.q29?.first || '';
           const lastName = answers.q29?.last || '';
           const state = answers.q31 || '';
+          // Extra match signals already collected in the quiz
+          const dob = answers.q30;
+          const dobStr = dob && dob.year && dob.month && dob.day
+            ? String(dob.year) + String(dob.month).padStart(2, '0') + String(dob.day).padStart(2, '0')
+            : '';
+          const gender = (answers.q9 || '').toLowerCase().charAt(0); // 'm' or 'f'
           fbq('track', 'Lead', { content_name: 'Sleep Survey Complete' }, { eventID: leadEventId });
           const hashedUserData = {
             em: await hashSHA256(email), ph: await hashSHA256(digits),
             fn: await hashSHA256(firstName), ln: await hashSHA256(lastName),
-            st: await hashSHA256(state), country: await hashSHA256('us')
+            st: await hashSHA256(state), country: await hashSHA256('us'),
+            db: dobStr ? await hashSHA256(dobStr) : undefined,
+            ge: gender ? await hashSHA256(gender) : undefined
           };
+          Object.keys(hashedUserData).forEach(k => hashedUserData[k] === undefined && delete hashedUserData[k]);
           fireCapiEvent('Lead', leadEventId, hashedUserData, { content_name: 'Sleep Survey Complete' });
           fireClickFlareConversion(0, leadEventId);
 
@@ -1578,12 +1587,18 @@ async function handleSubmit() {
   }
 
   // Redirect to offer page with patient data + checkout URL
+  const dobForOffer = answers.q30 && answers.q30.year && answers.q30.month && answers.q30.day
+    ? String(answers.q30.year) + String(answers.q30.month).padStart(2, '0') + String(answers.q30.day).padStart(2, '0')
+    : '';
+  const genderForOffer = (answers.q9 || '').toLowerCase().charAt(0);
   const offerParams = new URLSearchParams({
     first: firstName,
     last: lastName,
     email: email,
     phone: answers.q33 || '',
     state: state,
+    dob: dobForOffer,
+    gender: genderForOffer,
     severity: answers.q15 || 'Moderate',
     sleep: answers.q14 || '3–5 hrs',
     duration: answers.q3 || '3+ months',
