@@ -60,7 +60,7 @@ async function fireMetaPurchase({ amount, orderId, email, phone, firstName, last
 
 async function fireCfConversion({ amount, clickId, orderId }) {
   if (!clickId) return;
-  const url = `${CF_CONVERSION_BASE}?click_id=${encodeURIComponent(clickId)}&payout=${encodeURIComponent(amount)}&txid=${encodeURIComponent(orderId || '')}`;
+  const url = `${CF_CONVERSION_BASE}?click_id=${encodeURIComponent(clickId)}&ct=purchase&payout=${encodeURIComponent(amount)}&txid=${encodeURIComponent(orderId || '')}`;
   try {
     await fetch(url, { method: 'GET' });
   } catch (e) {
