@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Renewal Rx - Prescription Sleep Medication Delivered to Your Door</title>
+  <meta name="description" content="Get prescription sleep medication from licensed physicians, 100% online. Take our 2-minute quiz and start sleeping better.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Facebook Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1630969037933313');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1630969037933313&ev=PageView&noscript=1"/></noscript>
+
+  <script>
+    const FB_PIXEL_ID = '1630969037933313';
+    const FB_CAPI_TOKEN = 'EAAOrQQDYtRsBRFODGWcVBXE88blRBHmZAvfl5LfNmnc07mjnx1htvaEHCq9RIFfJDPKNfCmOvozx4cU73OVynC56HDQwkpsWc1CePQTJT0HfoxL82y3xR1ifPjp7jZCcjai1PT4vbzzKEd00InrWWYZA0j2A8Iowsv8oux7HrsXjMhZB7vcLduYT4IUdNWlMUAZDZD';
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    function getUrlParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+    function generateEventId() {
+      return 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+    }
+    async function fireCapiEvent(eventName, eventId, userData, customData) {
+      const fbp = getCookie('_fbp');
+      const fbc = getCookie('_fbc') || (getUrlParam('fbclid') ? 'fb.1.' + Date.now() + '.' + getUrlParam('fbclid') : null);
+      const serverEvent = {
+        event_name: eventName,
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId,
+        event_source_url: window.location.href,
+        action_source: 'website',
+        user_data: { client_ip_address: null, client_user_agent: navigator.userAgent, fbp, fbc, ...userData },
+        custom_data: customData || {}
+      };
+      try {
+        await fetch(`https://graph.facebook.com/v21.0/${FB_PIXEL_ID}/events?access_token=${FB_CAPI_TOKEN}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: [serverEvent] })
+        });
+      } catch (e) { console.warn('CAPI event failed:', e); }
+    }
+    (async () => { fireCapiEvent('PageView', generateEventId(), {}); })();
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1a1a2e;
+      background: #fff;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; display: block; }
+
+    /* ── Layout ── */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 80px 0; }
+    .section-light { background: #f8f9fa; }
+    .section-header { text-align: center; margin-bottom: 48px; }
+    .section-header h2 { font-size: 36px; font-weight: 700; margin-bottom: 12px; }
+    .section-header p { font-size: 18px; color: #555; max-width: 560px; margin: 0 auto; }
+
+    /* ── Nav ── */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff; border-bottom: 1px solid #e5e7eb;
+      padding: 16px 0;
+    }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+    .nav-logo img { height: 44px; }
+    .nav-cta {
+      background: #c4a882; color: #fff;
+      padding: 12px 28px; border-radius: 10px;
+      font-weight: 600; font-size: 15px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-cta:hover { background: #b08d57; transform: translateY(-1px); }
+
+    /* ── Hero ── */
+    .hero { background: linear-gradient(135deg, #f8f9fa, #f0eeeb); padding: 80px 0; }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: center;
+    }
+    .hero h1 { font-size: 48px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
+    .hero-subtitle { font-size: 18px; color: #555; line-height: 1.7; margin-bottom: 32px; }
+    .hero-img {
+      border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      width: 100%; object-fit: cover;
+    }
+    .hero-note { font-size: 14px; color: #888; margin-top: 16px; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #c4a882; color: #fff;
+      border: none; border-radius: 12px; cursor: pointer;
+      font-family: inherit; font-weight: 700;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { background: #b08d57; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(196,168,130,0.35); }
+    .btn-lg { padding: 18px 40px; font-size: 18px; }
+    .btn-md { padding: 16px 36px; font-size: 16px; }
+    .btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+    /* ── How It Works ── */
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .step-card {
+      background: #f8f9fa; border-radius: 16px;
+      padding: 40px 32px; text-align: center;
+    }
+    .step-number {
+      width: 56px; height: 56px;
+      background: #c4a882; color: #fff;
+      border-radius: 50%; font-size: 24px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .step-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+    .step-card p { font-size: 15px; color: #555; }
+
+    /* ── Benefits ── */
+    .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .benefit-card {
+      background: #fff; border-radius: 16px;
+      padding: 32px 24px; text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .benefit-icon {
+      width: 64px; height: 64px;
+      background: #f5f0e8; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .benefit-icon svg { width: 32px; height: 32px; fill: #c4a882; }
+    .benefit-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .benefit-card p { font-size: 14px; color: #555; }
+
+    /* ── Trust Bar ── */
+    .trust-bar {
+      background: #fff; border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb; padding: 40px 0;
+    }
+    .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+    .trust-item svg { width: 40px; height: 40px; fill: #c4a882; margin: 0 auto 12px; display: block; }
+    .trust-item strong { display: block; font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .trust-item span { font-size: 13px; color: #888; }
+
+    /* ── Testimonials ── */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testimonial-card {
+      background: #f8f9fa; border-radius: 16px; padding: 32px;
+    }
+    .testimonial-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .testimonial-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0;
+    }
+    .testimonial-avatar-letter {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: #c4a882; color: #fff; font-weight: 700; font-size: 18px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .testimonial-name { font-size: 15px; font-weight: 600; }
+    .testimonial-badge { font-size: 12px; color: #2d6a4f; font-weight: 500; }
+    .testimonial-stars { margin-left: auto; color: #f5a623; font-size: 16px; letter-spacing: 2px; }
+    .testimonial-text { font-size: 15px; color: #555; line-height: 1.7; font-style: italic; }
+
+    /* ── CTA Banner ── */
+    .cta-banner {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      padding: 80px 24px; text-align: center; color: #fff;
+    }
+    .cta-banner h2 { font-size: 36px; font-weight: 700; margin-bottom: 16px; }
+    .cta-banner p { color: rgba(255,255,255,0.8); font-size: 18px; max-width: 560px; margin: 0 auto 32px; }
+
+    /* ── Footer ── */
+    .site-footer { background: #1a1a2e; color: rgba(255,255,255,0.7); padding: 64px 0 32px; }
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 40px; padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer-brand img { height: 40px; filter: brightness(1.5); margin-bottom: 16px; }
+    .footer-brand p { font-size: 14px; line-height: 1.7; }
+    .footer-col h4 {
+      color: #fff; font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block; color: rgba(255,255,255,0.6);
+      font-size: 14px; margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: #c4a882; }
+    .footer-col p { font-size: 14px; line-height: 1.7; }
+    .footer-bottom {
+      padding-top: 32px; text-align: center;
+      font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.7;
+    }
+    .footer-bottom p { margin-bottom: 12px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 48px 0; }
+      .section-header h2 { font-size: 26px; }
+      .section-header p { font-size: 16px; }
+      .hero { padding: 48px 0; }
+      .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero h1 { font-size: 32px; }
+      .hero-subtitle { font-size: 16px; }
+      .nav-logo img { height: 36px; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .doctors-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; gap: 32px; }
+      .cta-banner h2 { font-size: 26px; }
+      .cta-banner p { font-size: 16px; }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+      .hero h1 { font-size: 28px; }
+      .btn-lg { padding: 16px 32px; font-size: 16px; width: 100%; justify-content: center; }
+      .trust-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="navbar">
+  <div class="container nav-inner">
+    <a href="/home/" class="nav-logo"><img src="/logo.png" alt="Health Renewal Rx"></a>
+    <a href="https://priorityjusticeassist.com/cf/click" class="nav-cta">Take the Quiz</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <h1>Prescription Sleep Medication &mdash; Delivered to Your Door</h1>
+      <p class="hero-subtitle">Get a personalized sleep treatment plan from a licensed physician, without leaving home. 100% online. No insurance required.</p>
+      <a href="https://priorityjusticeassist.com/cf/click" class="btn btn-lg">
+        Take the Sleep Quiz
+        <svg viewBox="0 0 20 20"><path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/></svg>
+      </a>
+      <p class="hero-note">Takes only 2 minutes. Free to start.</p>
+    </div>
+    <div>
+      <img src="/hero.jpg" alt="Restful sleep" class="hero-img">
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="section" id="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <h2>How It Works</h2>
+      <p>Simple, convenient, and 100% online</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Take the Quiz</h3>
+        <p>Answer a few quick questions about your sleep patterns and health history. It takes less than 2 minutes.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Doctor Reviews</h3>
+        <p>A board-certified physician reviews your assessment and creates a personalized treatment plan.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Get Your Medication</h3>
+        <p>Your prescription sleep medication is shipped fast and discreetly to your door.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BENEFITS ── -->
+<section class="section section-light">
+  <div class="container">
+    <div class="section-header">
+      <h2>Why Choose Health Renewal Rx</h2>
+      <p>Everything you need for better sleep &mdash; included</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24"><path d="M4.5 12.75a.75.75 0 000 1.5h3.75a.75.75 0 000-1.5H4.5zm0-3a.75.75 0 000 1.5h9.75a.75.75 0 000-1.5H4.5zm0-3a.75.75 0 000 1.5h9.75a.75.75 0 000-1.5H4.5zm14.03 3.22a.75.75 0 10-1.06 1.06L19.19 12.75h-4.44a.75.75 0 000 1.5h4.44l-1.72 1.72a.75.75 0 101.06 1.06l3-3a.75.75 0 000-1.06l-3-3z"/></svg>
+        </div>
+        <h3>Prescription Medication</h3>
+        <p>FDA-approved sleep medications prescribed specifically for your needs by a licensed physician.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h2v-4h4v-2h-4V6h-2v4H7v2h4v4z"/></svg>
+        </div>
+        <h3>Physician Consult</h3>
+        <p>Board-certified physicians review your health profile and create a personalized treatment plan.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12zM7 9h2v2H7V9zm4 0h2v2h-2V9zm4 0h2v2h-2V9z"/></svg>
+        </div>
+        <h3>1:1 Medical Support</h3>
+        <p>Get dedicated support from your care team. Message your provider anytime with questions.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+        </div>
+        <h3>Personalized Plan</h3>
+        <p>Your treatment is tailored to your unique sleep patterns, health history, and lifestyle.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM19.5 9.5L21 12h-3l1.5-2.5zM6 18.5c.83 0 1.5-.67 1.5-1.5S6.83 15.5 6 15.5 4.5 16.17 4.5 17 5.17 18.5 6 18.5zM20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM3 13V6h12v7H3z"/></svg>
+        </div>
+        <h3>Fast & Discreet Shipping</h3>
+        <p>Your medication arrives quickly in unmarked packaging. Free shipping on every order.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        </div>
+        <h3>No Insurance Required</h3>
+        <p>Transparent pricing with no hidden fees. No insurance paperwork, no co-pays, no surprises.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST BAR ── -->
+<section class="trust-bar">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        <strong>Licensed Providers</strong>
+        <span>Board-certified physicians</span>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+        <strong>100% Online</strong>
+        <span>No office visits needed</span>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.21c.28-.26.36-.65.25-1C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1zM12 3v10l3-3h6V3h-9z"/></svg>
+        <strong>24/7 Support</strong>
+        <span>Help whenever you need it</span>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M18 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM19.5 9.5L21 12h-3l1.5-2.5zM6 18.5c.83 0 1.5-.67 1.5-1.5S6.83 15.5 6 15.5 4.5 16.17 4.5 17 5.17 18.5 6 18.5zM20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM3 13V6h12v7H3z"/></svg>
+        <strong>Fast & Discreet</strong>
+        <span>Shipped to your door</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>What Our Patients Say</h2>
+      <p>Real results from real patients</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-top">
+          <img src="/testimonial-sarah.png" alt="Sarah M." class="testimonial-avatar">
+          <div>
+            <div class="testimonial-name">Sarah M.</div>
+            <div class="testimonial-badge">&#10003; Verified patient</div>
+          </div>
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        </div>
+        <p class="testimonial-text">"I had struggled with insomnia for over 3 years. Within the first week of starting my prescription, I was falling asleep in under 20 minutes. I finally feel like a normal person again."</p>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-top">
+          <img src="/testimonial-michael.png" alt="Michael T." class="testimonial-avatar">
+          <div>
+            <div class="testimonial-name">Michael T.</div>
+            <div class="testimonial-badge">&#10003; Verified patient</div>
+          </div>
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        </div>
+        <p class="testimonial-text">"The entire process was seamless. I answered the questions, got approved the same day, and had my medication within 3 days. I'm sleeping 7+ hours now for the first time in years."</p>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-top">
+          <div class="testimonial-avatar-letter">J</div>
+          <div>
+            <div class="testimonial-name">Jennifer R.</div>
+            <div class="testimonial-badge">&#10003; Verified patient</div>
+          </div>
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        </div>
+        <p class="testimonial-text">"I was skeptical at first, but the doctor was thorough and the medication has been life-changing. My anxiety around bedtime is gone. I wake up refreshed and energized."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA BANNER ── -->
+<section class="cta-banner">
+  <h2>Ready to Sleep Better?</h2>
+  <p>Take our free 2-minute quiz to see if prescription sleep medication is right for you.</p>
+  <a href="https://priorityjusticeassist.com/cf/click" class="btn btn-lg">
+    Start Your Free Assessment
+    <svg viewBox="0 0 20 20"><path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/></svg>
+  </a>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="/logo.png" alt="Health Renewal Rx">
+        <p>Prescription sleep medication delivered to your door. Licensed physicians, personalized treatment, 100% online.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="https://priorityjusticeassist.com/cf/click">Take the Quiz</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="mailto:support@healthrenewalrx.com">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">HIPAA Notice</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>support@healthrenewalrx.com</p>
+        <p style="margin-top:8px;">123 Wellness Blvd, Suite 200<br>Newark, DE 19702</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p><strong>Medical Disclaimer:</strong> The information on this site is not intended to be a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider. Individual results may vary. Prescription products require an online consultation with a physician who will determine if a prescription is appropriate.</p>
+      <p>&copy; 2026 Health Renewal Rx. All rights reserved.</p>
+      <p>This site is not a part of Facebook or Meta Platforms, Inc. Additionally, this site is not endorsed by Facebook in any way. Facebook is a trademark of Meta Platforms, Inc.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Funnel Tracking ──
+window._isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+(function() {
+  const SK = 'funnel_session_id';
+  const tracked = new Set();
+  function getSid() {
+    let s = sessionStorage.getItem(SK);
+    if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem(SK,s); }
+    return s;
+  }
+  window.trackFunnelStep = function(step) {
+    if (window._isPreview) return;
+    const sid = getSid();
+    const key = sid + ':' + step;
+    if (tracked.has(key)) return;
+    tracked.add(key);
+    try {
+      fetch('/api/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session: sid, step: step, ts: Date.now() })
+      }).catch(() => {});
+    } catch(e) {}
+  };
+})();
+trackFunnelStep('brand_view');
+
+// Track scroll depth
+let scrollTracked50 = false;
+window.addEventListener('scroll', function() {
+  if (scrollTracked50) return;
+  const scrollPct = (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100;
+  if (scrollPct >= 50) { scrollTracked50 = true; trackFunnelStep('brand_scroll_50'); }
+});
+
+// In preview mode, redirect CTAs to survey with preview=true (skip ClickFlare)
+if (window._isPreview) {
+  document.querySelectorAll('a[href*="priorityjusticeassist.com/cf/click"]').forEach(a => {
+    a.href = '/survey.html?preview=true';
+  });
+}
+
+// Track CTA clicks
+document.querySelectorAll('a[href*="priorityjusticeassist.com/cf/click"]').forEach(btn => {
+  btn.addEventListener('click', function() {
+    if (window._isPreview) return;
+    trackFunnelStep('brand_cta');
+    const eid = generateEventId();
+    if (window.fbq) fbq('trackCustom', 'CTAClick', { content_name: 'Brand CTA' }, { eventID: eid });
+    fireCapiEvent('ViewContent', eid, {}, { content_name: 'Brand CTA Click' });
+  });
+});
+</script>
+
+</body>
+</html>

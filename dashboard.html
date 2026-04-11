@@ -256,6 +256,7 @@
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('quiz')">Quiz Funnel</button>
     <button class="tab-btn" onclick="switchTab('advertorial')">Advertorial</button>
+    <button class="tab-btn" onclick="switchTab('brand')">Brand</button>
     <button class="tab-btn" onclick="switchTab('leads')">Leads</button>
     <button class="tab-btn" onclick="switchTab('sales')">Sales</button>
     <button class="tab-btn" onclick="switchTab('answers')">Answer Breakdown</button>
@@ -304,6 +305,27 @@
     </div>
   </div>
 
+  <!-- BRAND TAB -->
+  <div class="tab-content" id="tab-brand">
+    <div class="table-panel">
+      <h2>Brand Page Funnel Performance</h2>
+      <table class="funnel-table" id="brandTable">
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>Visitors</th>
+            <th class="bar-cell"></th>
+            <th>Clicked Through</th>
+            <th>Click %</th>
+            <th>Dropped Off</th>
+            <th>Drop % (of total)</th>
+          </tr>
+        </thead>
+        <tbody id="brandTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- LEADS TAB -->
   <div class="tab-content" id="tab-leads">
     <div class="table-panel">
@@ -348,6 +370,11 @@
   <!-- SPLIT TESTS TAB -->
   <div class="tab-content" id="tab-splittests">
     <div class="table-panel">
+      <h2>Lander Split Test</h2>
+      <p style="font-size:13px;color:#888;margin-bottom:24px;">Brand page vs Advertorial head-to-head. Sessions are assigned by the <code>/start</code> splitter; metrics are derived from <code>brand_view</code> / <code>adv_view</code> events.</p>
+      <div id="landerSplitContent"></div>
+    </div>
+    <div class="table-panel" style="margin-top:24px;">
       <h2>Offer Page Split Tests</h2>
       <p style="font-size:13px;color:#888;margin-bottom:24px;">Compare conversion performance across offer page variants. Variants are detected automatically from event data.</p>
       <div id="splitTestContent"></div>
@@ -438,6 +465,17 @@ const ADV_STEPS = [
   { id: 'adv_view', label: 'Page View', section: 'Advertorial' },
   { id: 'adv_scroll_50', label: 'Scrolled 50%' },
   { id: 'adv_cta', label: 'CTA Click' },
+  { id: 'q1', label: 'Quiz Started', section: 'Quiz' },
+  { id: 'q34', label: 'Quiz Completed' },
+  { id: 'offer_view', label: 'Sales Page', section: 'Conversion' },
+  { id: 'offer_checkout', label: 'Checkout Started' },
+  { id: 'offer_sale', label: 'Sale' },
+];
+
+const BRAND_STEPS = [
+  { id: 'brand_view', label: 'Page View', section: 'Brand' },
+  { id: 'brand_scroll_50', label: 'Scrolled 50%' },
+  { id: 'brand_cta', label: 'CTA Click' },
   { id: 'q1', label: 'Quiz Started', section: 'Quiz' },
   { id: 'q34', label: 'Quiz Completed' },
   { id: 'offer_view', label: 'Sales Page', section: 'Conversion' },
@@ -1020,11 +1058,139 @@ async function refreshDashboard() {
   const sales = getFilteredSales();
   renderFunnelTable(QUIZ_STEPS, events, sales, 'quizTableBody');
   renderFunnelTable(ADV_STEPS, events, sales, 'advTableBody');
+  renderFunnelTable(BRAND_STEPS, events, sales, 'brandTableBody');
   renderSummary(events, sales);
   renderLeads();
   renderSales();
   renderAnswerBreakdown();
+  renderLanderSplit();
   renderSplitTests();
+}
+
+function renderLanderSplit() {
+  const events = getFilteredEvents();
+  const sales = getFilteredSales();
+  const container = document.getElementById('landerSplitContent');
+  if (!container) return;
+
+  // Collect sessions per lander variant from entry events
+  const brandSessions = new Set();
+  const advSessions = new Set();
+  const brandCtaSessions = new Set();
+  const advCtaSessions = new Set();
+  events.forEach(e => {
+    if (e.step === 'brand_view' && e.session) brandSessions.add(e.session);
+    if (e.step === 'adv_view' && e.session) advSessions.add(e.session);
+    if (e.step === 'brand_cta' && e.session) brandCtaSessions.add(e.session);
+    if (e.step === 'adv_cta' && e.session) advCtaSessions.add(e.session);
+  });
+
+  // Assign every session to a lander (brand wins tie-breaker if both fired)
+  const sessionLander = {};
+  advSessions.forEach(s => { sessionLander[s] = 'adv'; });
+  brandSessions.forEach(s => { sessionLander[s] = 'brand'; });
+
+  // Count sales per lander (from offer_sale events and recorded sales)
+  const brandSales = new Set();
+  const advSales = new Set();
+  let brandRevenue = 0, advRevenue = 0;
+  events.forEach(e => {
+    if (e.step !== 'offer_sale' || !e.session) return;
+    const l = sessionLander[e.session];
+    if (l === 'brand') brandSales.add(e.session);
+    else if (l === 'adv') advSales.add(e.session);
+  });
+  sales.forEach(s => {
+    const l = sessionLander[s.session];
+    const amt = s.amount || 0;
+    if (l === 'brand') { brandSales.add(s.session || ('s_' + s.ts)); brandRevenue += amt; }
+    else if (l === 'adv') { advSales.add(s.session || ('s_' + s.ts)); advRevenue += amt; }
+  });
+
+  const makeMetrics = (name, views, ctas, saleCount, revenue, color) => {
+    const ctr = views > 0 ? (ctas / views * 100) : 0;
+    const convRate = views > 0 ? (saleCount / views * 100) : 0;
+    const epc = views > 0 ? (revenue / views) : 0;
+    return { name, views, checkouts: ctas, sales: saleCount, revenue, ctr, convRate, epc, color };
+  };
+  const metrics = [
+    makeMetrics('brand', brandSessions.size, brandCtaSessions.size, brandSales.size, brandRevenue, 'split-colors-0'),
+    makeMetrics('adv', advSessions.size, advCtaSessions.size, advSales.size, advRevenue, 'split-colors-1'),
+  ];
+
+  if (metrics.every(m => m.views === 0)) {
+    container.innerHTML = '<div class="split-empty"><div style="font-size:48px;opacity:0.3;margin-bottom:16px;">&#9878;</div><h3>No lander split data yet</h3><p>Send traffic through <code>/start</code> to populate this comparison.</p></div>';
+    return;
+  }
+
+  // Pick winner by conv rate (need 20+ views)
+  const qualified = metrics.filter(m => m.views >= 20);
+  let winnerName = null;
+  if (qualified.length >= 2) {
+    qualified.sort((a, b) => b.convRate - a.convRate);
+    winnerName = qualified[0].name;
+  }
+
+  const labelFor = n => n === 'brand' ? 'Brand Page' : 'Advertorial';
+
+  let html = '<div class="split-overview">';
+  metrics.forEach(m => {
+    const isWinner = m.name === winnerName;
+    const other = metrics.find(x => x.name !== m.name);
+    const confidence = getConfidence(m, other && other.views >= 20 ? other : null);
+    html += `
+      <div class="variant-card ${isWinner ? 'winner' : ''}">
+        <div class="variant-badge">${isWinner ? 'WINNER' : m.name.toUpperCase()}</div>
+        <div class="variant-name">${labelFor(m.name)}</div>
+        <div class="variant-metrics">
+          <div class="variant-metric">
+            <div class="vm-label">Views</div>
+            <div class="vm-value">${m.views.toLocaleString()}</div>
+          </div>
+          <div class="variant-metric">
+            <div class="vm-label">CTA Clicks</div>
+            <div class="vm-value">${m.checkouts.toLocaleString()}</div>
+            <div class="vm-sub">${m.ctr.toFixed(1)}% CTR</div>
+          </div>
+          <div class="variant-metric ${isWinner ? 'highlight' : ''}">
+            <div class="vm-label">Sales</div>
+            <div class="vm-value">${m.sales.toLocaleString()}</div>
+            <div class="vm-sub">${m.convRate.toFixed(1)}% conv rate</div>
+          </div>
+          <div class="variant-metric ${isWinner ? 'highlight' : ''}">
+            <div class="vm-label">Revenue</div>
+            <div class="vm-value">$${m.revenue.toLocaleString()}</div>
+            <div class="vm-sub">$${m.epc.toFixed(2)} EPC</div>
+          </div>
+        </div>
+        ${confidence ? `<div class="confidence-badge ${confidence.cls}">${confidence.label}</div>` : ''}
+      </div>`;
+  });
+  html += '</div>';
+
+  const compMetrics = [
+    { label: 'CTR to Quiz', key: 'ctr', fmt: v => v.toFixed(1) + '%' },
+    { label: 'Conv. Rate', key: 'convRate', fmt: v => v.toFixed(1) + '%' },
+    { label: 'EPC', key: 'epc', fmt: v => '$' + v.toFixed(2) },
+    { label: 'Revenue', key: 'revenue', fmt: v => '$' + v.toLocaleString() },
+  ];
+  html += '<div class="split-comparison"><h3>Head-to-Head Comparison</h3>';
+  compMetrics.forEach(cm => {
+    const maxVal = Math.max(...metrics.map(m => m[cm.key]), 0.01);
+    html += `<div class="comp-row"><div class="comp-label">${cm.label}</div><div class="comp-bars">`;
+    metrics.forEach(m => {
+      const pct = maxVal > 0 ? (m[cm.key] / maxVal * 100) : 0;
+      html += `<div class="comp-bar-row">
+        <div class="comp-bar-name">${labelFor(m.name)}</div>
+        <div class="comp-bar-wrap"><div class="comp-bar-fill ${m.color}" style="width:${pct}%"></div></div>
+        <div class="comp-bar-val">${cm.fmt(m[cm.key])}</div>
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+  html += '</div>';
+
+  container.innerHTML = html;
 }
 
 // ============================================================================

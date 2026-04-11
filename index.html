@@ -671,14 +671,20 @@
 <script>
 // ── Funnel Tracking ──
 (function() {
-  const SK = 'funnel_session_id', EK = 'funnel_events';
+  const SK = 'funnel_session_id';
+  const tracked = new Set();
   function getSid() { let s = sessionStorage.getItem(SK); if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); sessionStorage.setItem(SK,s); } return s; }
   window.trackFunnelStep = function(step) {
+    const sid = getSid();
+    const key = sid + ':' + step;
+    if (tracked.has(key)) return;
+    tracked.add(key);
     try {
-      const evts = JSON.parse(localStorage.getItem(EK)||'[]'), sid = getSid();
-      if (evts.some(e => e.session===sid && e.step===step)) return;
-      evts.push({session:sid, step:step, ts:Date.now()});
-      localStorage.setItem(EK, JSON.stringify(evts));
+      fetch('/api/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session: sid, step: step, ts: Date.now() })
+      }).catch(() => {});
     } catch(e) {}
   };
 })();
