@@ -38,16 +38,33 @@
     function generateEventId() {
       return 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
     }
+    async function hashSHA256(v) {
+      if (!v) return undefined;
+      const buf = new TextEncoder().encode(String(v).trim().toLowerCase());
+      const h = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    function getSessionId() {
+      try {
+        let s = sessionStorage.getItem('funnel_session_id');
+        if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); sessionStorage.setItem('funnel_session_id', s); }
+        return s;
+      } catch (e) { return null; }
+    }
     async function fireCapiEvent(eventName, eventId, userData, customData) {
       const fbp = getCookie('_fbp');
       const fbc = getCookie('_fbc') || (getUrlParam('fbclid') ? 'fb.1.' + Date.now() + '.' + getUrlParam('fbclid') : null);
+      const sid = getSessionId();
+      const [country, externalId] = await Promise.all([hashSHA256('us'), hashSHA256(sid)]);
+      const defaults = { country, external_id: externalId };
+      Object.keys(defaults).forEach(k => defaults[k] === undefined && delete defaults[k]);
       const serverEvent = {
         event_name: eventName,
         event_time: Math.floor(Date.now() / 1000),
         event_id: eventId,
         event_source_url: window.location.href,
         action_source: 'website',
-        user_data: { client_ip_address: null, client_user_agent: navigator.userAgent, fbp, fbc, ...userData },
+        user_data: { client_user_agent: navigator.userAgent, fbp, fbc, ...defaults, ...userData },
         custom_data: customData || {}
       };
       try {

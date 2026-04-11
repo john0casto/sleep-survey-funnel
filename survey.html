@@ -64,10 +64,23 @@
       return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
+    function getSessionId() {
+      try {
+        let s = sessionStorage.getItem('funnel_session_id');
+        if (!s) { s = 'ses_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); sessionStorage.setItem('funnel_session_id', s); }
+        return s;
+      } catch (e) { return null; }
+    }
+
     async function fireCapiEvent(eventName, eventId, userData, customData) {
       if (window._isPreview) return;
       const fbp = getCookie('_fbp');
       const fbc = getCookie('_fbc') || (getUrlParam('fbclid') ? 'fb.1.' + Date.now() + '.' + getUrlParam('fbclid') : null);
+      const sid = getSessionId();
+      const [country, externalId] = await Promise.all([hashSHA256('us'), hashSHA256(sid)]);
+      const defaults = {};
+      if (country) defaults.country = country;
+      if (externalId) defaults.external_id = externalId;
 
       const serverEvent = {
         event_name: eventName,
@@ -76,10 +89,10 @@
         event_source_url: window.location.href,
         action_source: 'website',
         user_data: {
-          client_ip_address: null,
           client_user_agent: navigator.userAgent,
           fbp: fbp,
           fbc: fbc,
+          ...defaults,
           ...userData
         },
         custom_data: customData || {}
