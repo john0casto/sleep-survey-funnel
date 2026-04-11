@@ -255,8 +255,7 @@
   <!-- TABS -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('quiz')">Quiz Funnel</button>
-    <button class="tab-btn" onclick="switchTab('advertorial')">Advertorial</button>
-    <button class="tab-btn" onclick="switchTab('brand')">Brand</button>
+    <button class="tab-btn" onclick="switchTab('lander')">Lander</button>
     <button class="tab-btn" onclick="switchTab('leads')">Leads</button>
     <button class="tab-btn" onclick="switchTab('sales')">Sales</button>
     <button class="tab-btn" onclick="switchTab('answers')">Answer Breakdown</button>
@@ -284,31 +283,15 @@
     </div>
   </div>
 
-  <!-- ADVERTORIAL TAB -->
-  <div class="tab-content" id="tab-advertorial">
+  <!-- LANDER TAB -->
+  <div class="tab-content" id="tab-lander">
     <div class="table-panel">
-      <h2>Advertorial Funnel Performance</h2>
-      <table class="funnel-table" id="advTable">
-        <thead>
-          <tr>
-            <th>Step</th>
-            <th>Visitors</th>
-            <th class="bar-cell"></th>
-            <th>Clicked Through</th>
-            <th>Click %</th>
-            <th>Dropped Off</th>
-            <th>Drop % (of total)</th>
-          </tr>
-        </thead>
-        <tbody id="advTableBody"></tbody>
-      </table>
+      <h2>Lander Split Test</h2>
+      <p style="font-size:13px;color:#888;margin-bottom:24px;">Brand page vs Advertorial head-to-head. Sessions are assigned by the <code>/start</code> splitter; metrics are derived from <code>brand_view</code> / <code>adv_view</code> events.</p>
+      <div id="landerSplitContent"></div>
     </div>
-  </div>
-
-  <!-- BRAND TAB -->
-  <div class="tab-content" id="tab-brand">
-    <div class="table-panel">
-      <h2>Brand Page Funnel Performance</h2>
+    <div class="table-panel" style="margin-top:24px;">
+      <h2>Brand Page Funnel</h2>
       <table class="funnel-table" id="brandTable">
         <thead>
           <tr>
@@ -322,6 +305,23 @@
           </tr>
         </thead>
         <tbody id="brandTableBody"></tbody>
+      </table>
+    </div>
+    <div class="table-panel" style="margin-top:24px;">
+      <h2>Advertorial Funnel</h2>
+      <table class="funnel-table" id="advTable">
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>Visitors</th>
+            <th class="bar-cell"></th>
+            <th>Clicked Through</th>
+            <th>Click %</th>
+            <th>Dropped Off</th>
+            <th>Drop % (of total)</th>
+          </tr>
+        </thead>
+        <tbody id="advTableBody"></tbody>
       </table>
     </div>
   </div>
@@ -370,11 +370,6 @@
   <!-- SPLIT TESTS TAB -->
   <div class="tab-content" id="tab-splittests">
     <div class="table-panel">
-      <h2>Lander Split Test</h2>
-      <p style="font-size:13px;color:#888;margin-bottom:24px;">Brand page vs Advertorial head-to-head. Sessions are assigned by the <code>/start</code> splitter; metrics are derived from <code>brand_view</code> / <code>adv_view</code> events.</p>
-      <div id="landerSplitContent"></div>
-    </div>
-    <div class="table-panel" style="margin-top:24px;">
       <h2>Offer Page Split Tests</h2>
       <p style="font-size:13px;color:#888;margin-bottom:24px;">Compare conversion performance across offer page variants. Variants are detected automatically from event data.</p>
       <div id="splitTestContent"></div>
