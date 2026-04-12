@@ -28,7 +28,7 @@
   .container { max-width: 1400px; margin: 0 auto; padding: 24px 32px; }
 
   /* ── SUMMARY CARDS ── */
-  .summary-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; margin-bottom: 24px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(9, 1fr); gap: 10px; margin-bottom: 24px; }
   .summary-card { background: #fff; border-radius: 12px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
   .summary-card .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-bottom: 8px; font-weight: 600; }
   .summary-card .value { font-size: 28px; font-weight: 700; color: #1a1a2e; }
@@ -259,6 +259,11 @@
       <div class="label">Sale</div>
       <div class="value" id="sumSales">0</div>
       <div class="sub" id="sumConvRate">0% of QA</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Ad Spend</div>
+      <div class="value" id="sumSpend">$0</div>
+      <div class="sub" id="sumSpendSub">not synced yet</div>
     </div>
     <div class="summary-card">
       <div class="label">Revenue</div>
@@ -507,7 +512,7 @@ const BRAND_STEPS = [
 // DATA LAYER (server-backed via Vercel KV)
 // ============================================================================
 
-let _allEvents = [], _allSales = [], _allLeads = [];
+let _allEvents = [], _allSales = [], _allLeads = [], _allSpend = [];
 
 async function fetchDashboardData() {
   try {
@@ -516,9 +521,28 @@ async function fetchDashboardData() {
     _allEvents = data.events || [];
     _allSales = data.sales || [];
     _allLeads = data.leads || [];
+    _allSpend = data.spend || [];
   } catch (e) {
     console.warn('Failed to fetch dashboard data:', e);
   }
+}
+
+// Spend records are keyed by date (YYYY-MM-DD) not ts, so we filter differently
+function getFilteredSpend() {
+  const range = document.getElementById('dateRange').value;
+  if (range === 'all') return _allSpend;
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  if (range === 'today') {
+    return _allSpend.filter(s => s.date === todayStr);
+  }
+  const days = range === '7d' ? 7 : 30;
+  const cutoff = new Date(now.getTime() - days * 86400000).toISOString().slice(0, 10);
+  return _allSpend.filter(s => s.date >= cutoff && s.date <= todayStr);
+}
+
+function totalSpendInRange() {
+  return getFilteredSpend().reduce((sum, s) => sum + (parseFloat(s.spend) || 0), 0);
 }
 
 function filterByRange(arr) {
@@ -658,32 +682,44 @@ function renderSummary(events, sales) {
   const saleSessions = new Set([...sales.map(s => s.session), ...events.filter(e => e.step === 'offer_sale').map(e => e.session)]);
   const saleCount = saleSessions.size;
   const revenue = sales.reduce((sum, s) => sum + (s.amount || 0), 0);
+  const spend = totalSpendInRange();
 
   const pct = (num, den) => den > 0 ? (num / den * 100).toFixed(1) + '%' : '0%';
+  const cpa = (count) => count > 0 && spend > 0 ? '$' + (spend / count).toFixed(2) : '—';
 
   document.getElementById('sumLpVisitors').textContent = lpVisitors.toLocaleString();
-  document.getElementById('sumLpVisitorsSub').textContent = 'brand + adv';
+  document.getElementById('sumLpVisitorsSub').textContent = spend > 0 ? cpa(lpVisitors) + ' / visitor' : 'brand + adv';
 
   document.getElementById('sumVisitors').textContent = visitors.toLocaleString();
-  document.getElementById('sumVisitorsSub').textContent = pct(visitors, lpVisitors) + ' of LP';
+  document.getElementById('sumVisitorsSub').textContent = (spend > 0 ? cpa(visitors) + ' / quiz start' : pct(visitors, lpVisitors) + ' of LP');
 
   document.getElementById('sumCompletions').textContent = completions.toLocaleString();
-  document.getElementById('sumCompletionRate').textContent = pct(completions, visitors) + ' completion rate';
+  document.getElementById('sumCompletionRate').textContent = (spend > 0 ? cpa(completions) + ' / completion' : pct(completions, visitors) + ' completion rate');
 
   document.getElementById('sumAddToCart').textContent = addToCart.toLocaleString();
-  document.getElementById('sumAddToCartRate').textContent = pct(addToCart, completions) + ' of completions';
+  document.getElementById('sumAddToCartRate').textContent = (spend > 0 ? cpa(addToCart) + ' / ATC' : pct(addToCart, completions) + ' of completions');
 
   document.getElementById('sumInitChk').textContent = initChk.toLocaleString();
-  document.getElementById('sumInitChkRate').textContent = pct(initChk, addToCart) + ' of ATC';
+  document.getElementById('sumInitChkRate').textContent = (spend > 0 ? cpa(initChk) + ' / IC' : pct(initChk, addToCart) + ' of ATC');
 
   document.getElementById('sumQa').textContent = qa.toLocaleString();
-  document.getElementById('sumQaRate').textContent = pct(qa, initChk > 0 ? initChk : addToCart) + ' of ' + (initChk > 0 ? 'IC' : 'ATC');
+  document.getElementById('sumQaRate').textContent = (spend > 0 ? cpa(qa) + ' / QA' : pct(qa, initChk > 0 ? initChk : addToCart) + ' of ' + (initChk > 0 ? 'IC' : 'ATC'));
 
   document.getElementById('sumSales').textContent = saleCount.toLocaleString();
-  document.getElementById('sumConvRate').textContent = pct(saleCount, qa > 0 ? qa : addToCart) + ' of ' + (qa > 0 ? 'QA' : 'ATC');
+  document.getElementById('sumConvRate').textContent = (spend > 0 ? cpa(saleCount) + ' CPA' : pct(saleCount, qa > 0 ? qa : addToCart) + ' of ' + (qa > 0 ? 'QA' : 'ATC'));
 
   document.getElementById('sumRevenue').textContent = '$' + revenue.toLocaleString();
-  document.getElementById('sumEPC').textContent = lpVisitors > 0 ? ('$' + (revenue / lpVisitors).toFixed(2) + ' EPC') : '$0.00 EPC';
+  const roas = spend > 0 ? (revenue / spend).toFixed(2) + 'x ROAS' : (lpVisitors > 0 ? '$' + (revenue / lpVisitors).toFixed(2) + ' EPC' : '$0.00 EPC');
+  document.getElementById('sumEPC').textContent = roas;
+
+  // Ad Spend card
+  const spendEl = document.getElementById('sumSpend');
+  if (spendEl) {
+    spendEl.textContent = '$' + spend.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const profit = revenue - spend;
+    const profitStr = (profit >= 0 ? '+$' : '-$') + Math.abs(profit).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('sumSpendSub').textContent = spend > 0 ? profitStr + ' profit' : 'not synced yet';
+  }
 }
 
 // ============================================================================

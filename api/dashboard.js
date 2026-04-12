@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // DELETE = reset all data
+  // DELETE = reset all tracking data (spend is NOT cleared — pulled from Meta API)
   if (req.method === 'DELETE') {
     await kv.del('funnel:events', 'funnel:sales', 'funnel:leads', 'funnel:initiates', 'funnel:ic_seen');
     return res.status(200).json({ ok: true });
@@ -20,6 +20,7 @@ export default async function handler(req, res) {
     const salesRaw = await kv.lrange('funnel:sales', 0, -1) || [];
     const leadsRaw = await kv.lrange('funnel:leads', 0, -1) || [];
     const initiatesRaw = await kv.lrange('funnel:initiates', 0, -1) || [];
+    const spendHash = (await kv.hgetall('funnel:spend')) || {};
 
     // Parse — lrange may return strings or already-parsed objects
     const parse = (item) => typeof item === 'string' ? JSON.parse(item) : item;
@@ -27,10 +28,11 @@ export default async function handler(req, res) {
     const sales = salesRaw.map(parse);
     const leads = leadsRaw.map(parse);
     const initiates = initiatesRaw.map(parse);
+    const spend = Object.values(spendHash).map(parse);
 
-    res.status(200).json({ events, sales, leads, initiates });
+    res.status(200).json({ events, sales, leads, initiates, spend });
   } catch (e) {
     console.error('Dashboard data error:', e);
-    res.status(500).json({ error: 'Internal error', events: [], sales: [], leads: [], initiates: [] });
+    res.status(500).json({ error: 'Internal error', events: [], sales: [], leads: [], initiates: [], spend: [] });
   }
 }
