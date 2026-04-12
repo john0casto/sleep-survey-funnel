@@ -9,10 +9,17 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { session, first, last, email, phone, state, answers, ts } = req.body;
+    const { session, first, last, email, phone, state, answers, clickid, fbp, fbc, fbclid, ts } = req.body;
     if (!session) return res.status(400).json({ error: 'Missing session' });
 
-    const lead = { session, first, last, email, phone, state, answers, ts: ts || Date.now() };
+    const lead = {
+      session, first, last, email, phone, state, answers,
+      clickid: clickid || '',
+      fbp: fbp || '',
+      fbc: fbc || '',
+      fbclid: fbclid || '',
+      ts: ts || Date.now()
+    };
 
     await kv.rpush('funnel:leads', JSON.stringify(lead));
 

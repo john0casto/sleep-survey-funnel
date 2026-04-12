@@ -107,10 +107,19 @@ export default async function handler(req, res) {
       }
     }
 
-    // Save to dashboard
+    // Save to dashboard — funnel event + full initiate record for later lookup
     const session = params.session_id || params.session || 'ic_' + (orderId || Date.now());
+    const ts = Date.now();
     await kv.rpush('funnel:events', JSON.stringify({
-      session, step: 'offer_initiate_checkout', ts: Date.now()
+      session, step: 'offer_initiate_checkout', ts
+    }));
+    await kv.rpush('funnel:initiates', JSON.stringify({
+      session, orderId, amount,
+      email, firstName, lastName, phone, state, dob, gender,
+      clickid: clickId || '',
+      fbp: fbp || '',
+      fbc: fbc || '',
+      ts
     }));
 
     // Fire Meta CAPI + ClickFlare in parallel

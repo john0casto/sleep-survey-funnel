@@ -1561,6 +1561,10 @@ async function handleSubmit() {
   if (!window._isPreview) {
     try {
       const sid = typeof getFunnelSessionId === 'function' ? getFunnelSessionId() : 'unknown';
+      // Pull tracking identifiers from cookies / URL so we can re-fire
+      // events later if needed (clickid for CF, fbp/fbc for Meta)
+      const cfCookie = document.cookie.match(/(^| )cf_click_id=([^;]+)/);
+      const clickidVal = cfCookie ? decodeURIComponent(cfCookie[2]) : '';
       fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1568,7 +1572,11 @@ async function handleSubmit() {
           session: sid, ts: Date.now(),
           first: firstName, last: lastName,
           email: email, phone: answers.q33 || '', state: state,
-          answers: JSON.parse(JSON.stringify(answers))
+          answers: JSON.parse(JSON.stringify(answers)),
+          clickid: clickidVal,
+          fbp: getCookie('_fbp') || '',
+          fbc: getCookie('_fbc') || '',
+          fbclid: getUrlParam('fbclid') || ''
         })
       }).catch(() => {});
     } catch(e) { console.warn('Failed to save lead:', e); }

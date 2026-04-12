@@ -113,6 +113,9 @@ export default async function handler(req, res) {
     const sale = {
       amount, source, session, orderId,
       email, firstName, lastName, phone, state,
+      clickid: clickId || '',
+      fbp: fbp || '',
+      fbc: fbc || '',
       ts: Date.now()
     };
 
