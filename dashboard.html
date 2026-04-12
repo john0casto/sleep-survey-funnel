@@ -276,6 +276,8 @@
             <th>Click %</th>
             <th>Dropped Off</th>
             <th>Drop % (of total)</th>
+            <th>DQ</th>
+            <th>DQ %</th>
           </tr>
         </thead>
         <tbody id="quizTableBody"></tbody>
@@ -411,6 +413,8 @@
 // ============================================================================
 
 const QUIZ_STEPS = [
+  // Landing Page
+  { id: 'lander_view', label: 'Landing Page', section: 'Landing Page' },
   // Screening
   { id: 'q1', label: 'Sleep Struggles', section: 'Screening' },
   { id: 'q2', label: 'Sleep Problems' },
@@ -526,7 +530,7 @@ function countUniqueSessions(events, stepId, sessionGate) {
 // RENDER FUNNEL TABLE
 // ============================================================================
 
-function renderFunnelTable(steps, events, sales, tbodyId, gateStepId) {
+function renderFunnelTable(steps, events, sales, tbodyId, gateStepId, showDQ) {
   const tbody = document.getElementById(tbodyId);
   tbody.innerHTML = '';
 
@@ -562,11 +566,13 @@ function renderFunnelTable(steps, events, sales, tbodyId, gateStepId) {
   const totalVisitors = counts[steps[0]?.id] || 0;
 
   steps.forEach((step, i) => {
+    const colspan = showDQ ? 9 : 7;
+
     // Section header
     if (step.section) {
       const sectionRow = document.createElement('tr');
       sectionRow.className = 'section-label';
-      sectionRow.innerHTML = `<td colspan="7">${step.section}</td>`;
+      sectionRow.innerHTML = `<td colspan="${colspan}">${step.section}</td>`;
       tbody.appendChild(sectionRow);
     }
 
@@ -578,14 +584,19 @@ function renderFunnelTable(steps, events, sales, tbodyId, gateStepId) {
     const dropPctTotal = totalVisitors > 0 ? (droppedOff / totalVisitors * 100) : 0;
     const barWidth = maxCount > 0 ? (visitors / maxCount * 100) : 0;
 
+    // DQ count for this step
+    const dqCount = showDQ ? countUniqueSessions(events, 'dq_' + step.id, gate) : 0;
+    const dqPct = visitors > 0 ? (dqCount / visitors * 100) : 0;
+
     // Last step has no "next" so show differently
     const isLast = !nextStep;
 
     const clickPctClass = clickPct >= 90 ? 'pct-green' : clickPct >= 70 ? 'pct-orange' : clickPct > 0 ? 'pct-red' : 'pct-gray';
     const dropPctClass = dropPctTotal === 0 ? 'pct-green' : dropPctTotal <= 5 ? 'pct-orange' : 'pct-red';
+    const dqPctClass = dqCount === 0 ? 'pct-gray' : dqPct >= 10 ? 'pct-red' : 'pct-orange';
 
     const tr = document.createElement('tr');
-    tr.innerHTML = `
+    let rowHtml = `
       <td>${step.label}</td>
       <td>${visitors.toLocaleString()}</td>
       <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill" style="width:${barWidth}%"></div></div></td>
@@ -594,6 +605,13 @@ function renderFunnelTable(steps, events, sales, tbodyId, gateStepId) {
       <td>${isLast ? '—' : droppedOff.toLocaleString()}</td>
       <td class="${isLast ? 'pct-gray' : (droppedOff === 0 ? 'pct-green' : dropPctClass)}">${isLast ? '—' : dropPctTotal.toFixed(1) + '%'}</td>
     `;
+    if (showDQ) {
+      rowHtml += `
+        <td>${dqCount > 0 ? dqCount.toLocaleString() : '—'}</td>
+        <td class="${dqPctClass}">${dqCount > 0 ? dqPct.toFixed(1) + '%' : '—'}</td>
+      `;
+    }
+    tr.innerHTML = rowHtml;
     tbody.appendChild(tr);
   });
 }
@@ -1065,7 +1083,16 @@ async function refreshDashboard() {
   await fetchDashboardData();
   const events = getFilteredEvents();
   const sales = getFilteredSales();
-  renderFunnelTable(QUIZ_STEPS, events, sales, 'quizTableBody');
+  // Inject synthetic lander_view events for quiz funnel (union of brand_view + adv_view)
+  const quizEvents = [...events];
+  const _landerSeen = new Set();
+  events.forEach(e => {
+    if ((e.step === 'brand_view' || e.step === 'adv_view') && e.session && !_landerSeen.has(e.session)) {
+      _landerSeen.add(e.session);
+      quizEvents.push({ session: e.session, step: 'lander_view', ts: e.ts });
+    }
+  });
+  renderFunnelTable(QUIZ_STEPS, quizEvents, sales, 'quizTableBody', null, true);
   renderFunnelTable(ADV_STEPS, events, sales, 'advTableBody', 'adv_view');
   renderFunnelTable(BRAND_STEPS, events, sales, 'brandTableBody', 'brand_view');
   renderSummary(events, sales);

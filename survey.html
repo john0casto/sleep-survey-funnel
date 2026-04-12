@@ -1165,7 +1165,7 @@ function bindEvents(q) {
         goNext(q);
       });
       document.getElementById('declineBtn')?.addEventListener('click', () => {
-        showDQ("You have chosen not to continue. If you change your mind, you can restart the assessment.");
+        showDQ("You have chosen not to continue. If you change your mind, you can restart the assessment.", q.id);
       });
       break;
     case 'name_form':
@@ -1267,7 +1267,7 @@ function handleSingleSelect(q, value, e) {
     fireCapiEvent('ViewContent', eid, {}, { content_name: 'Sleep Survey Started' });
   }
 
-  if (q.dqOn && value === q.dqOn) { setTimeout(() => showDQ(q.dqMessage), 400); return; }
+  if (q.dqOn && value === q.dqOn) { setTimeout(() => showDQ(q.dqMessage, q.id), 400); return; }
   setTimeout(() => goNext(q), 400);
 }
 
@@ -1330,7 +1330,8 @@ function goBack() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function showDQ(message) {
+function showDQ(message, questionId) {
+  if (questionId) trackFunnelStep('dq_' + questionId);
   document.getElementById('questionCard').innerHTML = `<div class="dq-screen">
     <h2>Thank You for Your Interest</h2>
     <p>${message}</p>
