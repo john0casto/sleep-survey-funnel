@@ -108,10 +108,14 @@ export default async function handler(req, res) {
     }
 
     // Save to dashboard — funnel event + full initiate record for later lookup
+    // Distinguish between "Partial" stage (just started filling form) and
+    // "QA Pending" stage (actually submitted card info).
     const session = params.session_id || params.session || 'ic_' + (orderId || Date.now());
     const ts = Date.now();
+    const stage = (params.stage || '').toLowerCase();
+    const step = stage === 'qa_pending' ? 'offer_qa_pending' : 'offer_initiate_checkout';
     await kv.rpush('funnel:events', JSON.stringify({
-      session, step: 'offer_initiate_checkout', ts
+      session, step, ts
     }));
     await kv.rpush('funnel:initiates', JSON.stringify({
       session, orderId, amount,

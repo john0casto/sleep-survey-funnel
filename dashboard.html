@@ -28,7 +28,7 @@
   .container { max-width: 1400px; margin: 0 auto; padding: 24px 32px; }
 
   /* ── SUMMARY CARDS ── */
-  .summary-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; margin-bottom: 24px; }
   .summary-card { background: #fff; border-radius: 12px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
   .summary-card .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; margin-bottom: 8px; font-weight: 600; }
   .summary-card .value { font-size: 28px; font-weight: 700; color: #1a1a2e; }
@@ -88,7 +88,7 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 1024px) {
-    .summary-grid { grid-template-columns: repeat(3, 1fr); }
+    .summary-grid { grid-template-columns: repeat(4, 1fr); }
   }
   @media (max-width: 768px) {
     .summary-grid { grid-template-columns: repeat(2, 1fr); }
@@ -226,24 +226,39 @@
   <!-- SUMMARY CARDS -->
   <div class="summary-grid">
     <div class="summary-card">
-      <div class="label">Quiz Visitors</div>
-      <div class="value" id="sumVisitors">0</div>
-      <div class="sub" id="sumVisitorsSub">unique sessions</div>
+      <div class="label">LP Visitors</div>
+      <div class="value" id="sumLpVisitors">0</div>
+      <div class="sub" id="sumLpVisitorsSub">brand + adv</div>
     </div>
     <div class="summary-card">
-      <div class="label">Quiz Completions</div>
+      <div class="label">Quiz Visitors</div>
+      <div class="value" id="sumVisitors">0</div>
+      <div class="sub" id="sumVisitorsSub">0% of LP</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Quiz Completion</div>
       <div class="value" id="sumCompletions">0</div>
       <div class="sub" id="sumCompletionRate">0% completion rate</div>
     </div>
     <div class="summary-card">
-      <div class="label">Leads</div>
-      <div class="value" id="sumLeads">0</div>
-      <div class="sub" id="sumLeadRate">0% of visitors</div>
+      <div class="label">Add To Cart</div>
+      <div class="value" id="sumAddToCart">0</div>
+      <div class="sub" id="sumAddToCartRate">0% of completions</div>
     </div>
     <div class="summary-card">
-      <div class="label">Sales</div>
+      <div class="label">Initiated Checkout</div>
+      <div class="value" id="sumInitChk">0</div>
+      <div class="sub" id="sumInitChkRate">0% of ATC</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">QA</div>
+      <div class="value" id="sumQa">0</div>
+      <div class="sub" id="sumQaRate">0% of IC</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Sale</div>
       <div class="value" id="sumSales">0</div>
-      <div class="sub" id="sumConvRate">0% conversion</div>
+      <div class="sub" id="sumConvRate">0% of QA</div>
     </div>
     <div class="summary-card">
       <div class="label">Revenue</div>
@@ -456,8 +471,9 @@ const QUIZ_STEPS = [
   { id: 'q34', label: 'HIPAA Consent' },
   // Conversion
   { id: 'offer_view', label: 'Sales Page', section: 'Conversion' },
-  { id: 'offer_checkout', label: 'Checkout Started' },
-  { id: 'offer_initiate_checkout', label: 'CC Checkout' },
+  { id: 'offer_checkout', label: 'Add to Cart' },
+  { id: 'offer_initiate_checkout', label: 'Initiated Checkout' },
+  { id: 'offer_qa_pending', label: 'QA' },
   { id: 'offer_sale', label: 'Sale' },
 ];
 
@@ -468,8 +484,9 @@ const ADV_STEPS = [
   { id: 'q1', label: 'Quiz Started', section: 'Quiz' },
   { id: 'q34', label: 'Quiz Completed' },
   { id: 'offer_view', label: 'Sales Page', section: 'Conversion' },
-  { id: 'offer_checkout', label: 'Checkout Started' },
-  { id: 'offer_initiate_checkout', label: 'CC Checkout' },
+  { id: 'offer_checkout', label: 'Add to Cart' },
+  { id: 'offer_initiate_checkout', label: 'Initiated Checkout' },
+  { id: 'offer_qa_pending', label: 'QA' },
   { id: 'offer_sale', label: 'Sale' },
 ];
 
@@ -480,8 +497,9 @@ const BRAND_STEPS = [
   { id: 'q1', label: 'Quiz Started', section: 'Quiz' },
   { id: 'q34', label: 'Quiz Completed' },
   { id: 'offer_view', label: 'Sales Page', section: 'Conversion' },
-  { id: 'offer_checkout', label: 'Checkout Started' },
-  { id: 'offer_initiate_checkout', label: 'CC Checkout' },
+  { id: 'offer_checkout', label: 'Add to Cart' },
+  { id: 'offer_initiate_checkout', label: 'Initiated Checkout' },
+  { id: 'offer_qa_pending', label: 'QA' },
   { id: 'offer_sale', label: 'Sale' },
 ];
 
@@ -624,23 +642,48 @@ function renderFunnelTable(steps, events, sales, tbodyId, gateStepId, showDQ) {
 // ============================================================================
 
 function renderSummary(events, sales) {
+  // LP Visitors = unique sessions that hit brand_view OR adv_view
+  const lpSessions = new Set();
+  events.forEach(e => {
+    if ((e.step === 'brand_view' || e.step === 'adv_view') && e.session) lpSessions.add(e.session);
+  });
+  const lpVisitors = lpSessions.size;
+
   const visitors = countUniqueSessions(events, 'q1');
   const completions = countUniqueSessions(events, 'q34');
-  const leads = completions; // everyone who finishes HIPAA is a lead
+  const addToCart = countUniqueSessions(events, 'offer_checkout');
+  const initChk = countUniqueSessions(events, 'offer_initiate_checkout');
+  const qa = countUniqueSessions(events, 'offer_qa_pending');
   // Deduplicate: count unique sessions across both sales records and offer_sale events
   const saleSessions = new Set([...sales.map(s => s.session), ...events.filter(e => e.step === 'offer_sale').map(e => e.session)]);
   const saleCount = saleSessions.size;
   const revenue = sales.reduce((sum, s) => sum + (s.amount || 0), 0);
 
+  const pct = (num, den) => den > 0 ? (num / den * 100).toFixed(1) + '%' : '0%';
+
+  document.getElementById('sumLpVisitors').textContent = lpVisitors.toLocaleString();
+  document.getElementById('sumLpVisitorsSub').textContent = 'brand + adv';
+
   document.getElementById('sumVisitors').textContent = visitors.toLocaleString();
+  document.getElementById('sumVisitorsSub').textContent = pct(visitors, lpVisitors) + ' of LP';
+
   document.getElementById('sumCompletions').textContent = completions.toLocaleString();
-  document.getElementById('sumCompletionRate').textContent = visitors > 0 ? ((completions / visitors * 100).toFixed(1) + '% completion rate') : '0% completion rate';
-  document.getElementById('sumLeads').textContent = leads.toLocaleString();
-  document.getElementById('sumLeadRate').textContent = visitors > 0 ? ((leads / visitors * 100).toFixed(1) + '% of visitors') : '0% of visitors';
+  document.getElementById('sumCompletionRate').textContent = pct(completions, visitors) + ' completion rate';
+
+  document.getElementById('sumAddToCart').textContent = addToCart.toLocaleString();
+  document.getElementById('sumAddToCartRate').textContent = pct(addToCart, completions) + ' of completions';
+
+  document.getElementById('sumInitChk').textContent = initChk.toLocaleString();
+  document.getElementById('sumInitChkRate').textContent = pct(initChk, addToCart) + ' of ATC';
+
+  document.getElementById('sumQa').textContent = qa.toLocaleString();
+  document.getElementById('sumQaRate').textContent = pct(qa, initChk > 0 ? initChk : addToCart) + ' of ' + (initChk > 0 ? 'IC' : 'ATC');
+
   document.getElementById('sumSales').textContent = saleCount.toLocaleString();
-  document.getElementById('sumConvRate').textContent = visitors > 0 ? ((saleCount / visitors * 100).toFixed(1) + '% conversion') : '0% conversion';
+  document.getElementById('sumConvRate').textContent = pct(saleCount, qa > 0 ? qa : addToCart) + ' of ' + (qa > 0 ? 'QA' : 'ATC');
+
   document.getElementById('sumRevenue').textContent = '$' + revenue.toLocaleString();
-  document.getElementById('sumEPC').textContent = visitors > 0 ? ('$' + (revenue / visitors).toFixed(2) + ' EPC') : '$0.00 EPC';
+  document.getElementById('sumEPC').textContent = lpVisitors > 0 ? ('$' + (revenue / lpVisitors).toFixed(2) + ' EPC') : '$0.00 EPC';
 }
 
 // ============================================================================
