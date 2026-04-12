@@ -95,19 +95,16 @@ export default async function handler(req, res) {
     const xff = (req.headers && (req.headers['x-forwarded-for'] || req.headers['x-real-ip'])) || '';
     const clientIp = typeof xff === 'string' ? xff.split(',')[0].trim() : '';
 
-    // Deduplicate by order_id within a 30-day window.
-    // Covers the full SMS/email follow-up cycle (1-15 days). If CC fires
-    // Partial on day 1 and New Sale on day 12 for the same order, the
-    // second call is silently skipped. After 30 days the key auto-expires.
-    // A genuinely new purchase creates a new order_id so it fires normally.
+    // Deduplicate by order_id. CC reuses the same order_id when a partial
+    // customer returns to complete — so Partial and New Sale for the same
+    // order share an ID. One InitiateCheckout per order, period. New
+    // purchases always get a new order_id from CC so they fire normally.
     if (orderId) {
-      const dedupeKey = `ic_dedup:${orderId}`;
-      const already = await kv.get(dedupeKey);
-      if (already) {
+      const added = await kv.sadd('funnel:ic_seen', orderId);
+      if (!added) {
         if (req.method === 'GET') return respondPixel(res);
         return res.status(200).json({ ok: true, duplicate: true });
       }
-      await kv.set(dedupeKey, '1', { ex: 2592000 });
     }
 
     // Save to dashboard
